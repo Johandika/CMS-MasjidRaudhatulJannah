@@ -4,13 +4,35 @@ import {
   redirect,
 } from "react-router-dom";
 import Home from "../pages/Home";
-import JadwalKajian from "../pages/JadwalKajian";
-import JadwalTahsin from "../pages/JadwalTahsin";
+import Kajian from "../pages/Kajian";
+import Tahsin from "../pages/Tahsin";
 import Layout from "../components/layout/Layout";
-import Donasi from "../pages/Donasi";
-import Kegiatan from "../pages/Kegiatan";
+import Rekening from "../pages/Rekening";
+import Divisi from "../pages/Divisi";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+    loader: () => {
+      if (localStorage.getItem("authorization")) {
+        throw redirect("/");
+      }
+      return null;
+    },
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    loader: () => {
+      if (localStorage.getItem("authorization")) {
+        throw redirect("/");
+      }
+      return null;
+    },
+  },
   {
     path: "/",
     element: <Layout />,
@@ -20,20 +42,20 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/jadwalkajian",
-        element: <JadwalKajian />,
+        path: "/kajian",
+        element: <Kajian />,
       },
       {
-        path: "/jadwaltahsin",
-        element: <JadwalTahsin />,
+        path: "/tahsin",
+        element: <Tahsin />,
       },
       {
-        path: "/donasi",
-        element: <Donasi />,
+        path: "/rekening",
+        element: <Rekening />,
       },
       {
-        path: "/kegiatan",
-        element: <Kegiatan />,
+        path: "/divisi",
+        element: <Divisi />,
       },
     ],
   },

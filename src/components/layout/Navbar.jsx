@@ -22,6 +22,7 @@ import {
   ReadOutlined,
   AreaChartOutlined,
   ReconciliationOutlined,
+  ClusterOutlined,
 } from "@ant-design/icons";
 
 export const dataSidebar = [
@@ -31,24 +32,24 @@ export const dataSidebar = [
     link: "/",
   },
   {
-    name: "Jadwal Tahsin",
+    name: "Tahsin",
     icon: <ReadOutlined />,
-    link: "/jadwaltahsin",
+    link: "/tahsin",
   },
   {
-    name: "Jadwal Kajian",
+    name: "Kajian",
     icon: <ReconciliationOutlined />,
-    link: "/jadwalkajian",
+    link: "/kajian",
   },
   {
-    name: "Donasi",
+    name: "Divisi",
+    icon: <ClusterOutlined />,
+    link: "/divisi",
+  },
+  {
+    name: "Rekening",
     icon: <BookOutlined />,
-    link: "/donasi",
-  },
-  {
-    name: "Kegiatan",
-    icon: <FileDoneOutlined />,
-    link: "/kegiatan",
+    link: "/rekening",
   },
   {
     name: "Keluar",
