@@ -5,7 +5,7 @@ const BaseUrl = "http://localhost:3000";
 export function fetchDivisi() {
   return async (dispatch) => {
     try {
-      const dataDivisi = await axios({
+      const { data } = await axios({
         url: `${BaseUrl}/divisi`,
         method: "GET",
         headers: {
@@ -13,11 +13,9 @@ export function fetchDivisi() {
         },
       });
 
-      console.log(dataDivisi);
-
       dispatch({
         type: "Fetch/GetAllDivisi",
-        payload: dataDivisi,
+        payload: data,
       });
     } catch (error) {
       console.log(error);

@@ -5,7 +5,7 @@ const BaseUrl = "http://localhost:3000";
 export function fetchRekening() {
   return async (dispatch) => {
     try {
-      const dataRekening = await axios({
+      const { data } = await axios({
         url: `${BaseUrl}/rekening`,
         method: "GET",
         headers: {
@@ -15,7 +15,7 @@ export function fetchRekening() {
 
       dispatch({
         type: "Fetch/GetAllRekening",
-        payload: dataRekening,
+        payload: data,
       });
     } catch (error) {
       console.log(error);
