@@ -11,188 +11,247 @@ import {
   FetchKelasTahsinDewasa,
 } from "../store/action/kelasTahsin";
 
+import {
+  FetchPesertaTahsinAnak,
+  FetchPesertaTahsinDewasa,
+} from "../store/action/pesertaTahsin";
+
 const ColumsPengajar = [
   {
     title: "Nama",
-    dataIndex: "nama",
-    key: "nama",
+    render: (data) => {
+      return data.nama;
+    },
   },
   {
     title: "Telepon",
-    dataIndex: "telepon",
-    key: "telepon",
+    render: (data) => {
+      return data.telepon;
+    },
   },
   {
     title: "Alamat",
-    dataIndex: "alamat",
-    key: "alamat",
+    render: (data) => {
+      return data.alamat;
+    },
   },
   {
     title: "Pekerjaan",
-    dataIndex: "pekerjaan",
-    key: "pekerjaan",
+    render: (data) => {
+      return data.pekerjaan;
+    },
   },
   {
     title: "Umur",
-    dataIndex: "umur",
-    key: "umur",
+    render: (data) => {
+      return `${data.umur} Tahun`;
+    },
   },
   {
     title: "Status Aktif",
-    dataIndex: "status_aktif",
-    key: "status_aktif",
+    render: (data) => {
+      if (data.status_aktif == true) {
+        return <Tag color="success">Aktif</Tag>;
+      } else {
+        return <Tag color="error">Tidak Aktif</Tag>;
+      }
+    },
   },
 ];
 
 const ColumsKelasAnak = [
   {
     title: "Kelas",
-    dataIndex: "kelas",
-    key: "kelas",
+    render: (data) => {
+      return data.kelas;
+    },
   },
   {
     title: "Pengajar",
-    dataIndex: "PengajarTahsinId",
-    key: "PengajarTahsinId",
+    render: (data) => {
+      return data.PengajarTahsin.nama;
+    },
   },
   {
     title: "Hari",
-    dataIndex: "hari",
-    key: "hari",
+    render: (data) => {
+      return data.Jadwal.hari;
+    },
   },
   {
     title: "Catatan",
-    dataIndex: "catatan",
-    key: "catatan",
+    render: (data) => {
+      return data.catatan;
+    },
   },
   {
     title: "Kuota",
-    dataIndex: "kuota",
-    key: "kuota",
+    render: (data) => {
+      return data.kuota;
+    },
   },
   {
     title: "Status Aktif",
-    dataIndex: "status_aktif",
-    key: "status_aktif",
+    render: (data) => {
+      if (data.status_aktif == true) {
+        return <Tag color="success">Aktif</Tag>;
+      } else {
+        return <Tag color="error">Tidak Aktif</Tag>;
+      }
+    },
   },
 ];
 
 const ColumsKelasDewasa = [
   {
     title: "Kelas",
-    dataIndex: "kelas",
-    key: "kelas",
+    render: (data) => {
+      return data.kelas;
+    },
   },
   {
     title: "Pengajar",
-    dataIndex: "PengajarTahsinId",
-    key: "PengajarTahsinId",
+    render: (data) => {
+      return data.PengajarTahsin.nama;
+    },
   },
   {
     title: "Hari",
-    dataIndex: "hari",
-    key: "hari",
+    render: (data) => {
+      return data.Jadwal.hari;
+    },
   },
   {
     title: "Catatan",
-    dataIndex: "catatan",
-    key: "catatan",
+    render: (data) => {
+      return data.catatan;
+    },
   },
   {
     title: "Kuota",
-    dataIndex: "kuota",
-    key: "kuota",
+    render: (data) => {
+      return data.kuota;
+    },
   },
   {
     title: "Status Aktif",
-    dataIndex: "status_aktif",
-    key: "status_aktif",
+    render: (data) => {
+      if (data.status_aktif == true) {
+        return <Tag color="success">Aktif</Tag>;
+      } else {
+        return <Tag color="error">Tidak Aktif</Tag>;
+      }
+    },
   },
 ];
 
 const ColumsPesertAnak = [
   {
     title: "Nama Anak",
-    dataIndex: "nama_anak",
-    key: "nama_anak",
+    render: (data) => {
+      return data.nama_anak;
+    },
   },
   {
     title: "Nama Ayah",
-    dataIndex: "nama_ayah",
-    key: "nama_ayah",
+    render: (data) => {
+      return data.nama_ayah;
+    },
   },
   {
     title: "Nama Ibu",
-    dataIndex: "nama_ibu",
-    key: "nama_ibu",
+    render: (data) => {
+      return data.nama_ibu;
+    },
   },
   {
     title: "Telepon",
-    dataIndex: "telepon",
-    key: "telepon",
+    render: (data) => {
+      return data.telepon;
+    },
   },
   {
     title: "Alamat",
-    dataIndex: "alamat",
-    key: "alamat",
+    render: (data) => {
+      return data.alamat;
+    },
   },
   {
     title: "Kelas",
-    dataIndex: "kelas",
-    key: "kelas",
+    render: (data) => {
+      return data.KelasTahsinAnak.kelas;
+    },
   },
   {
     title: "Baca Quran",
-    dataIndex: "baca_quran",
-    key: "baca_quran",
+    render: (data) => {
+      if (data.baca_quran == true) {
+        return "Bisa";
+      } else {
+        return "Belum Bisa";
+      }
+    },
   },
   {
     title: "Status Aktif",
-    dataIndex: "status_aktif",
-    key: "status_aktif",
+    render: (data) => {
+      if (data.status_aktif == true) {
+        return <Tag color="success">Aktif</Tag>;
+      } else {
+        return <Tag color="error">Tidak Aktif</Tag>;
+      }
+    },
   },
 ];
-const dataPesertaAnak = [];
 
 const ColumsPesertaDewasa = [
   {
     title: "Nama",
-    dataIndex: "nama",
-    key: "nama",
+    render: (data) => {
+      return data.nama;
+    },
   },
   {
     title: "Telepon",
-    dataIndex: "telepon",
-    key: "telepon",
+    render: (data) => {
+      return data.telepon;
+    },
   },
   {
     title: "Alamat",
-    dataIndex: "alamat",
-    key: "alamat",
+    render: (data) => {
+      return data.alamat;
+    },
   },
   {
     title: "Pekerjaan",
-    dataIndex: "pekerjaan",
-    key: "pekerjaan",
+    render: (data) => {
+      return data.pekerjaan;
+    },
   },
   {
     title: "Umur",
-    dataIndex: "umur",
-    key: "umur",
+    render: (data) => {
+      return `${data.umur} Tahun`;
+    },
   },
   {
     title: "Kelas",
-    dataIndex: "kelas",
-    key: "kelas",
+    render: (data) => {
+      return data.KelasTahsinDewasa.kelas;
+    },
   },
   {
     title: "Status Aktif",
-    dataIndex: "status_aktif",
-    key: "status_aktif",
+    render: (data) => {
+      if (data.status_aktif == true) {
+        return <Tag color="success">Aktif</Tag>;
+      } else {
+        return <Tag color="error">Tidak Aktif</Tag>;
+      }
+    },
   },
 ];
-
-const dataPesertaDewasa = [];
 
 const Kajian = () => {
   const dispatch = useDispatch();
@@ -201,11 +260,19 @@ const Kajian = () => {
     (state) => state.KelasTahsinReducer
   );
   const { KelasTahsinAnaks } = useSelector((state) => state.KelasTahsinReducer);
+  const { PesertaTahsinDewasas } = useSelector(
+    (state) => state.PesertaTahsinReducer
+  );
+  const { PesertaTahsinAnaks } = useSelector(
+    (state) => state.PesertaTahsinReducer
+  );
 
   useEffect(() => {
     dispatch(fetchPengajar());
     dispatch(FetchKelasTahsinDewasa());
     dispatch(FetchKelasTahsinAnak());
+    dispatch(FetchPesertaTahsinAnak());
+    dispatch(FetchPesertaTahsinDewasa());
   }, []);
 
   return (
@@ -367,7 +434,7 @@ const Kajian = () => {
                 <div>
                   <Table
                     columns={ColumsPesertAnak}
-                    dataSource={dataPesertaAnak}
+                    dataSource={PesertaTahsinAnaks.data}
                     pagination={false}
                     scroll={{
                       y: 440,
@@ -408,7 +475,7 @@ const Kajian = () => {
                 <div>
                   <Table
                     columns={ColumsPesertaDewasa}
-                    dataSource={dataPesertaDewasa}
+                    dataSource={PesertaTahsinDewasas.data}
                     pagination={false}
                     scroll={{
                       y: 440,
