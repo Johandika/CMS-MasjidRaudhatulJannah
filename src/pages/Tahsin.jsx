@@ -1,14 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Space, Table, Tag, Input, Tabs, Button, Tooltip } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  Space,
+  Table,
+  Tag,
+  Input,
+  Tabs,
+  Button,
+  Select,
+  Tooltip,
+  InputNumber,
+} from "antd";
+import { PlusOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 const { Search } = Input;
+const { Option } = Select;
 
-import { fetchPengajar } from "../store/action/pengajar";
+import { addPengajar, fetchPengajar } from "../store/action/pengajar";
 import {
   FetchKelasTahsinAnak,
   FetchKelasTahsinDewasa,
+  addKelasAnak,
 } from "../store/action/kelasTahsin";
 
 import {
@@ -275,6 +287,59 @@ const Kajian = () => {
     dispatch(FetchPesertaTahsinDewasa());
   }, []);
 
+  const Hari = [
+    { id: 1, nama: "Senin" },
+    { id: 2, nama: "Selasa" },
+    { id: 3, nama: "Rabu" },
+    { id: 4, nama: "Kamis" },
+    { id: 5, nama: "Jumat" },
+    { id: 6, nama: "Sabtu" },
+    { id: 7, nama: "Ahad" },
+  ];
+
+  const [tabs, setTabs] = useState("");
+
+  const [namaPengajar, setNamaPengajar] = useState("");
+  const [teleponPengajar, setTeleponPengajar] = useState("");
+  const [umurPengajar, setUmurPengajar] = useState("");
+  const [alamatPengajar, setAlamatPengajar] = useState("");
+  const [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
+
+  const submitPengajar = () => {
+    dispatch(
+      addPengajar({
+        nama: namaPengajar,
+        telepon: teleponPengajar,
+        alamat: alamatPengajar,
+        pekerjaan: pekerjaanPengajar,
+        umur: umurPengajar,
+      })
+    );
+
+    setTabs("");
+  };
+
+  const [kelasAnak, setKelasAnak] = useState("");
+  const [hariKelasAnak, setHariKelasAnak] = useState("");
+  const [pengajarKelasAnak, setPengajarKelasAnak] = useState("");
+  const [kuotaKelasAnak, setKuotaKelasAnak] = useState(0);
+  const [catatanKelasAnak, setCatatanKelasAnak] = useState("");
+
+  const submitKelasAnak = () => {
+    dispatch(
+      addKelasAnak({
+        hari: hariKelasAnak,
+        kelas: kelasAnak,
+        catatan: catatanKelasAnak,
+        kuota: kuotaKelasAnak,
+        PengajarTahsinId: pengajarKelasAnak,
+        jumlah_peserta: 0,
+      })
+    );
+
+    setTabs("");
+  };
+
   return (
     <div className="w-full h-full px-5">
       <Tabs
@@ -286,204 +351,697 @@ const Kajian = () => {
           {
             label: "Pengajar",
             key: "1",
-            children: (
-              <div className="w-full flex flex-col gap-5">
-                <div className="w-full flex justify-between">
-                  <Search
-                    placeholder="Masukkan Nama / Telepon"
-                    // onSearch={onSearch}
-                    size="large"
-                    style={{
-                      width: 400,
-                    }}
-                  />
+            children:
+              tabs == "TambahPengajar" ? (
+                <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
+                  {/* Header */}
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftOutlined
+                      className=" text-[20px]"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                    />
+                    <p className="font-semibold text-[16px]">Tambah Pengajar</p>
+                  </div>
 
-                  <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
+                  {/* Inputan */}
+                  <div className="w-full flex flex-wrap justify-between">
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="namaPengajar">Nama</label>
+                      <Input
+                        value={namaPengajar}
+                        onChange={(e) => setNamaPengajar(e.target.value)}
+                        className=""
+                        id="namaPengajar"
+                        size="large"
+                        placeholder="Masukkan Nama Pengajar"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="teleponPengajar">Telepon</label>
+                      <Input
+                        value={teleponPengajar}
+                        onChange={(e) => setTeleponPengajar(e.target.value)}
+                        className=""
+                        id="teleponPengajar"
+                        size="large"
+                        placeholder="Masukkan Telepon Pengajar"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="pekerjaanPengajar">Pekerjaan</label>
+                      <Input
+                        value={pekerjaanPengajar}
+                        onChange={(e) => setPekerjaanPengajar(e.target.value)}
+                        className=""
+                        id="pekerjaanPengajar"
+                        size="large"
+                        placeholder="Masukkan Pekerjaan Pengajar"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="umurPengajar">Umur</label>
+                      <Input
+                        value={umurPengajar}
+                        onChange={(e) => setUmurPengajar(e.target.value)}
+                        className=""
+                        id="umurPengajar"
+                        size="large"
+                        placeholder="Masukkan Umur Pengajar"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="alamatPengajar">Alamat</label>
+                      <Input.TextArea
+                        value={alamatPengajar}
+                        onChange={(e) => setAlamatPengajar(e.target.value)}
+                        className=""
+                        id="alamatPengajar"
+                        size="large"
+                        placeholder="Masukkan Alamat Pengajar"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 justify-end">
                     <Button
-                      size="large"
-                      icon={<PlusOutlined />}
-                      className="bg-primaryLight text-white"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                      type="default"
+                      className="text-primaryDark border-primaryDark"
                     >
-                      Pengajar
+                      Batal
                     </Button>
-                  </Tooltip>
+                    <Button
+                      type="primary"
+                      className="bg-primaryDark"
+                      onClick={() => {
+                        submitPengajar();
+                      }}
+                    >
+                      Simpan
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Table
-                    columns={ColumsPengajar}
-                    dataSource={Pengajars.data}
-                    pagination={false}
-                    scroll={{
-                      y: 440,
-                    }}
-                  />
+              ) : (
+                <div className="w-full flex flex-col gap-5">
+                  <div className="w-full flex justify-between">
+                    <Search
+                      placeholder="Masukkan Nama / Telepon"
+                      // onSearch={onSearch}
+                      size="large"
+                      style={{
+                        width: 400,
+                      }}
+                    />
+
+                    <Tooltip
+                      placement="top"
+                      title={"Tambahkan Pengajar Tahsin"}
+                    >
+                      <Button
+                        size="large"
+                        icon={<PlusOutlined />}
+                        className="bg-primaryLight text-white"
+                        onClick={() => {
+                          setTabs("TambahPengajar");
+                        }}
+                      >
+                        Pengajar
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <Table
+                      columns={ColumsPengajar}
+                      dataSource={Pengajars.data}
+                      pagination={false}
+                      scroll={{
+                        y: 440,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ),
+              ),
           },
           {
             label: "Kelas Anak",
             key: "2",
-            children: (
-              <div className="w-full flex flex-col gap-5">
-                <div className="w-full flex justify-between">
-                  <Search
-                    placeholder="Masukkan Nama / Telepon"
-                    // onSearch={onSearch}
-                    size="large"
-                    style={{
-                      width: 400,
-                    }}
-                  />
+            children:
+              tabs == "TambahKelasAnak" ? (
+                <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
+                  {/* Header */}
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftOutlined
+                      className=" text-[20px]"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                    />
+                    <p className="font-semibold text-[16px]">
+                      Tambah Kelas Anak
+                    </p>
+                  </div>
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Kelas Tahsin Anak"}
-                  >
+                  {/* Inputan */}
+                  <div className="w-full flex flex-wrap justify-between">
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="kelasAnak">Nama Kelas</label>
+                      <Input
+                        value={kelasAnak}
+                        className=""
+                        id="kelasAnak"
+                        size="large"
+                        placeholder="Masukkan Nama Kelas Tahsin Anak"
+                        onChange={(e) => setKelasAnak(e.target.value)}
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5 flex flex-col">
+                      <label htmlFor="pengajarTahsinAnak">
+                        Pengajar Tahsin
+                      </label>
+                      {Pengajars && Pengajars.data.length > 0 ? (
+                        <Select
+                          id="pengajarTahsinAnak"
+                          size="large"
+                          placeholder="Pilih Pengajar Tahsin"
+                          onChange={(value) => setPengajarKelasAnak(value)}
+                        >
+                          {Pengajars.data.map((pengajar) => (
+                            <Option key={pengajar.id} value={pengajar.id}>
+                              {pengajar.nama}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) : (
+                        <div>Loading Pengajars...</div>
+                      )}
+                    </div>
+
+                    <div className="w-[45%] mb-5 flex flex-col">
+                      <label htmlFor="jadwalTahsinAnak">Jadwal Tahsin</label>
+                      {Hari && Hari.length > 0 ? (
+                        <Select
+                          id="jadwalTahsinAnak"
+                          size="large"
+                          placeholder="Pilih Jadwal Kelas Tahsin"
+                          onChange={(value) => setHariKelasAnak(value)}
+                        >
+                          {Hari.map((hari) => (
+                            <Option key={hari.id} value={hari.nama}>
+                              {hari.nama}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) : (
+                        <div>Loading Hari...</div>
+                      )}
+                    </div>
+
+                    <div className="w-[45%] mb-5 flex flex-col">
+                      <label htmlFor="kuotaKelasAnak">Kuota Kelas Tahsin</label>
+                      <InputNumber
+                        value={kuotaKelasAnak}
+                        onChange={(value) => setKuotaKelasAnak(value)}
+                        className="w-full"
+                        id="kuotaKelasAnak"
+                        size="large"
+                        placeholder="Masukkan Kuota Kelas Tahsin"
+                      />
+                    </div>
+
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="catatanKelasAnak">Catatan</label>
+                      <Input.TextArea
+                        value={catatanKelasAnak}
+                        onChange={(e) => setCatatanKelasAnak(e.target.value)}
+                        className=""
+                        id="catatanKelasAnak"
+                        size="large"
+                        placeholder="Masukkan Catatan"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 justify-end">
                     <Button
-                      size="large"
-                      icon={<PlusOutlined />}
-                      className="bg-primaryLight text-white"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                      type="default"
+                      className="text-primaryDark border-primaryDark"
                     >
-                      Kelas Tahsin
+                      Batal
                     </Button>
-                  </Tooltip>
+                    <Button
+                      type="primary"
+                      className="bg-primaryDark"
+                      onClick={() => submitKelasAnak()}
+                    >
+                      Simpan
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Table
-                    columns={ColumsKelasAnak}
-                    dataSource={KelasTahsinAnaks.data}
-                    pagination={false}
-                    scroll={{
-                      y: 440,
-                    }}
-                  />
+              ) : (
+                <div className="w-full flex flex-col gap-5">
+                  <div className="w-full flex justify-between">
+                    <Search
+                      placeholder="Masukkan Nama / Telepon"
+                      size="large"
+                      style={{
+                        width: 400,
+                      }}
+                    />
+
+                    <Tooltip
+                      placement="top"
+                      title={"Tambahkan Kelas Tahsin Anak"}
+                    >
+                      <Button
+                        onClick={() => {
+                          setTabs("TambahKelasAnak");
+                        }}
+                        size="large"
+                        icon={<PlusOutlined />}
+                        className="bg-primaryLight text-white"
+                      >
+                        Kelas Anak
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <Table
+                      columns={ColumsKelasAnak}
+                      dataSource={KelasTahsinAnaks.data}
+                      pagination={false}
+                      scroll={{
+                        y: 440,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ),
+              ),
           },
           {
-            label: "Kelas  Dewasa",
+            label: "Kelas Dewasa",
             key: "3",
-            children: (
-              <div className="w-full flex flex-col gap-5">
-                <div className="w-full flex justify-between">
-                  <Search
-                    placeholder="Masukkan Nama / Telepon"
-                    // onSearch={onSearch}
-                    size="large"
-                    style={{
-                      width: 400,
-                    }}
-                  />
+            children:
+              tabs == "TambahKelasDewasa" ? (
+                <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
+                  {/* Header */}
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftOutlined
+                      className=" text-[20px]"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                    />
+                    <p className="font-semibold text-[16px]">
+                      Tambah Kelas Dewasa
+                    </p>
+                  </div>
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Kelas Tahsin Dewasa"}
-                  >
+                  {/* Inputan */}
+                  <div className="w-full flex flex-wrap justify-between">
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="kelasDewasa">Nama Kelas</label>
+                      <Input
+                        className=""
+                        id="kelasDewasa"
+                        size="large"
+                        placeholder="Masukkan Nama Kelas Tahsin Dewasa"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="pengajarTahsinDewasa">
+                        Pengajar Tahsin
+                      </label>
+                      <Input
+                        className=""
+                        id="pengajarTahsinDewasa"
+                        size="large"
+                        placeholder="Masukkan Pengajar Tahsin"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="catatanKelasDewasa">Catatan</label>
+                      <Input.TextArea
+                        className=""
+                        id="catatanKelasDewasa"
+                        size="large"
+                        placeholder="Masukkan Catatan"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="kuotaKelasDewasa">
+                        Kuota Kelas Tahsin
+                      </label>
+                      <Input
+                        className=""
+                        id="kuotaKelasDewasa"
+                        size="large"
+                        placeholder="Masukkan Kuota Kelas Tahsin"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 justify-end">
                     <Button
-                      size="large"
-                      icon={<PlusOutlined />}
-                      className="bg-primaryLight text-white"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                      type="default"
+                      className="text-primaryDark border-primaryDark"
                     >
-                      Kelas Tahsin
+                      Batal
                     </Button>
-                  </Tooltip>
+                    <Button type="primary" className="bg-primaryDark">
+                      Simpan
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Table
-                    columns={ColumsKelasDewasa}
-                    dataSource={KelasTahsinDewasas.data}
-                    pagination={false}
-                    scroll={{
-                      y: 440,
-                    }}
-                  />
+              ) : (
+                <div className="w-full flex flex-col gap-5">
+                  <div className="w-full flex justify-between">
+                    <Search
+                      placeholder="Masukkan Nama / Telepon"
+                      size="large"
+                      style={{
+                        width: 400,
+                      }}
+                    />
+
+                    <Tooltip
+                      placement="top"
+                      title={"Tambahkan Kelas Tahsin Dewasa"}
+                    >
+                      <Button
+                        onClick={() => {
+                          setTabs("TambahKelasDewasa");
+                        }}
+                        size="large"
+                        icon={<PlusOutlined />}
+                        className="bg-primaryLight text-white"
+                      >
+                        Kelas Dewasa
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <Table
+                      columns={ColumsKelasDewasa}
+                      dataSource={KelasTahsinDewasas.data}
+                      pagination={false}
+                      scroll={{
+                        y: 440,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ),
+              ),
           },
           {
             label: "Peserta Anak",
             key: "4",
-            children: (
-              <div className="w-full flex flex-col gap-5">
-                <div className="w-full flex justify-between">
-                  <Search
-                    placeholder="Masukkan Nama / Telepon"
-                    // onSearch={onSearch}
-                    size="large"
-                    style={{
-                      width: 400,
-                    }}
-                  />
+            children:
+              tabs == "TambahPesertaAnak" ? (
+                <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
+                  {/* Header */}
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftOutlined
+                      className=" text-[20px]"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                    />
+                    <p className="font-semibold text-[16px]">
+                      Tambah Peserta Anak
+                    </p>
+                  </div>
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Peserta Tahsin Anak"}
-                  >
+                  {/* Inputan */}
+                  <div className="w-full flex flex-wrap justify-between">
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="namaAyahAnak">Nama Ayah</label>
+                      <Input
+                        className=""
+                        id="namaAyahAnak"
+                        size="large"
+                        placeholder="Masukkan Nama Ayah"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="namaIbuAnak">Nama Ibu</label>
+                      <Input
+                        className=""
+                        id="namaIbuAnak"
+                        size="large"
+                        placeholder="Masukkan Nama Ibu"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="namaAnak">Nama Anak</label>
+                      <Input
+                        className=""
+                        id="namaAnak"
+                        size="large"
+                        placeholder="Masukkan Nama Anak"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="umurAnak">Umur Anak</label>
+                      <Input
+                        className=""
+                        id="umurAnak"
+                        size="large"
+                        placeholder="Masukkan Umur Anak"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="teleponPesertaAnak">Telepon</label>
+                      <Input
+                        className=""
+                        id="teleponPesertaAnak"
+                        size="large"
+                        placeholder="Masukkan Telepon"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="kelasTahsinAnak">Kelas Tahsin Anak</label>
+                      <Input
+                        className=""
+                        id="kelasTahsinAnak"
+                        size="large"
+                        placeholder="Masukkan Kelas Tahsin Anak"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="alamatPesertaAnak">Alamat</label>
+                      <Input.TextArea
+                        className=""
+                        id="alamatPesertaAnak"
+                        size="large"
+                        placeholder="Masukkan Alamat"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="bisaBacaQuran">Bisa Baca Al-Quran</label>
+                      <Input
+                        className=""
+                        id="bisaBacaQuran"
+                        size="large"
+                        placeholder="Apakah Bisa Baca Al-Quran"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 justify-end">
                     <Button
-                      size="large"
-                      icon={<PlusOutlined />}
-                      className="bg-primaryLight text-white"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                      type="default"
+                      className="text-primaryDark border-primaryDark"
                     >
-                      Peserta Tahsin
+                      Batal
                     </Button>
-                  </Tooltip>
+                    <Button type="primary" className="bg-primaryDark">
+                      Simpan
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Table
-                    columns={ColumsPesertAnak}
-                    dataSource={PesertaTahsinAnaks.data}
-                    pagination={false}
-                    scroll={{
-                      y: 440,
-                    }}
-                  />
+              ) : (
+                <div className="w-full flex flex-col gap-5">
+                  <div className="w-full flex justify-between">
+                    <Search
+                      placeholder="Masukkan Nama / Telepon"
+                      // onSearch={onSearch}
+                      size="large"
+                      style={{
+                        width: 400,
+                      }}
+                    />
+
+                    <Tooltip
+                      placement="top"
+                      title={"Tambahkan Peserta Tahsin Anak"}
+                    >
+                      <Button
+                        onClick={() => {
+                          setTabs("TambahPesertaAnak");
+                        }}
+                        size="large"
+                        icon={<PlusOutlined />}
+                        className="bg-primaryLight text-white"
+                      >
+                        Peserta Anak
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <Table
+                      columns={ColumsPesertAnak}
+                      dataSource={PesertaTahsinAnaks.data}
+                      pagination={false}
+                      scroll={{
+                        y: 440,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ),
+              ),
           },
           {
             label: "Peserta Dewasa",
             key: "5",
-            children: (
-              <div className="w-full flex flex-col gap-5">
-                <div className="w-full flex justify-between">
-                  <Search
-                    placeholder="Masukkan Nama / Telepon"
-                    // onSearch={onSearch}
-                    size="large"
-                    style={{
-                      width: 400,
-                    }}
-                  />
+            children:
+              tabs == "TambahPesertaDewasa" ? (
+                <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
+                  {/* Header */}
+                  <div className="flex gap-2 items-center">
+                    <ArrowLeftOutlined
+                      className=" text-[20px]"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                    />
+                    <p className="font-semibold text-[16px]">
+                      Tambah Peserta Dewasa
+                    </p>
+                  </div>
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Peserta Tahsin Dewasa"}
-                  >
+                  {/* Inputan */}
+                  <div className="w-full flex flex-wrap justify-between">
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="namaPesertaDewasa">Nama</label>
+                      <Input
+                        className=""
+                        id="namaPesertaDewasa"
+                        size="large"
+                        placeholder="Masukkan Nama"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="umurPesertaDewasa">Umur</label>
+                      <Input
+                        className=""
+                        id="umurPesertaDewasa"
+                        size="large"
+                        placeholder="Masukkan Umur"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="pekerjaanDewasa">Pekerjaan</label>
+                      <Input
+                        className=""
+                        id="pekerjaanDewasa"
+                        size="large"
+                        placeholder="Masukkan Pekerjaan"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="teleponPesertaDewasa">Telepon</label>
+                      <Input
+                        className=""
+                        id="teleponPesertaDewasa"
+                        size="large"
+                        placeholder="Masukkan Telepon"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="alamatPesertaDewasa">Alamat</label>
+                      <Input.TextArea
+                        className=""
+                        id="alamatPesertaDewasa"
+                        size="large"
+                        placeholder="Masukkan Alamat"
+                      />
+                    </div>
+                    <div className="w-[45%] mb-5">
+                      <label htmlFor="kelasTahsinDewasa">
+                        Kelas Tahsin Anak
+                      </label>
+                      <Input
+                        className=""
+                        id="kelasTahsinDewasa"
+                        size="large"
+                        placeholder="Masukkan Kelas Tahsin"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-3 justify-end">
                     <Button
-                      size="large"
-                      icon={<PlusOutlined />}
-                      className="bg-primaryLight text-white"
+                      onClick={() => {
+                        setTabs("");
+                      }}
+                      type="default"
+                      className="text-primaryDark border-primaryDark"
                     >
-                      Peserta Tahsin
+                      Batal
                     </Button>
-                  </Tooltip>
+                    <Button type="primary" className="bg-primaryDark">
+                      Simpan
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Table
-                    columns={ColumsPesertaDewasa}
-                    dataSource={PesertaTahsinDewasas.data}
-                    pagination={false}
-                    scroll={{
-                      y: 440,
-                    }}
-                  />
+              ) : (
+                <div className="w-full flex flex-col gap-5">
+                  <div className="w-full flex justify-between">
+                    <Search
+                      placeholder="Masukkan Nama / Telepon"
+                      // onSearch={onSearch}
+                      size="large"
+                      style={{
+                        width: 400,
+                      }}
+                    />
+
+                    <Tooltip
+                      placement="top"
+                      title={"Tambahkan Peserta Tahsin Dewasa"}
+                    >
+                      <Button
+                        onClick={() => {
+                          setTabs("TambahPesertaDewasa");
+                        }}
+                        size="large"
+                        icon={<PlusOutlined />}
+                        className="bg-primaryLight text-white"
+                      >
+                        Peserta Dewasa
+                      </Button>
+                    </Tooltip>
+                  </div>
+                  <div>
+                    <Table
+                      columns={ColumsPesertaDewasa}
+                      dataSource={PesertaTahsinDewasas.data}
+                      pagination={false}
+                      scroll={{
+                        y: 440,
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ),
+              ),
           },
         ]}
       />
