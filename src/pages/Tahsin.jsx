@@ -11,8 +11,18 @@ import {
   Select,
   Tooltip,
   InputNumber,
+  Menu,
+  Dropdown,
 } from "antd";
-import { PlusOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  InfoCircleOutlined,
+  ArrowLeftOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  DownCircleOutlined,
+} from "@ant-design/icons";
+
 const { Search } = Input;
 const { Option } = Select;
 
@@ -67,6 +77,51 @@ const ColumsPengajar = [
       } else {
         return <Tag color="error">Tidak Aktif</Tag>;
       }
+    },
+  },
+  {
+    title: "Action",
+    fixed: "right",
+    align: "center",
+    width: 75,
+    render: (data) => {
+      const handleMenuClick = (e) => {
+        if (e.key === "detail") {
+          console.log(`Detail untuk ${data.nama}`);
+        } else if (e.key === "edit") {
+          console.log(`Edit data ${data.nama}`);
+        } else if (e.key === "delete") {
+          console.log(`Hapus data ${data.nama}`);
+        }
+      };
+
+      const menu = (
+        <Menu onClick={handleMenuClick}>
+          <Menu.Item key="detail">
+            <InfoCircleOutlined /> Detail
+          </Menu.Item>
+          <Menu.Item key="edit">
+            <EditOutlined /> Edit
+          </Menu.Item>
+          <Menu.Item key="delete" style={{ color: "red" }}>
+            <DeleteOutlined />
+            Hapus
+          </Menu.Item>
+        </Menu>
+      );
+
+      return (
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <a
+            className="ant-dropdown-link"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <DownCircleOutlined className="text-lg text-slate-500" />
+          </a>
+        </Dropdown>
+      );
     },
   },
 ];
@@ -479,6 +534,7 @@ const Kajian = () => {
                       pagination={false}
                       scroll={{
                         y: 440,
+                        x: 1200,
                       }}
                     />
                   </div>
