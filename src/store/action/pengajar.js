@@ -21,7 +21,7 @@ export function fetchPengajar() {
   };
 }
 
-export function addPengajar(body) {
+export function addPengajar(body, setValues = () => {}) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -33,8 +33,26 @@ export function addPengajar(body) {
         data: body,
       });
 
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function deletePengajar(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
       dispatch(fetchPengajar());
-      message.loading("Loading...", 1, () => {
+      message.loading("Loading", 1, () => {
         message.success(data.message);
       });
     } catch (error) {

@@ -42,6 +42,8 @@ export function fetchKajianRutin() {
   };
 }
 
+export function addKajianRutin() {}
+
 export function fetchKajianTablighAkbar() {
   return async (dispatch) => {
     try {

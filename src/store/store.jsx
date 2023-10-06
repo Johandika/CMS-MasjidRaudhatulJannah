@@ -8,6 +8,7 @@ import RekeningReducer from "./reducer/rekening";
 import KelasTahsinReducer from "./reducer/kelasTahsin";
 import PesertaTahsinReducer from "./reducer/pesertaTahsin";
 import UstadzReducer from "./reducer/ustadz";
+import TabsReducer from "./reducer/tabs";
 
 let reducer = combineReducers({
   PengajarReducer,
@@ -17,6 +18,7 @@ let reducer = combineReducers({
   KelasTahsinReducer,
   PesertaTahsinReducer,
   UstadzReducer,
+  TabsReducer,
 });
 
 const store = createStore(reducer, applyMiddleware(thunk));

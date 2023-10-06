@@ -68,7 +68,7 @@ const Sidebar = () => {
     <div className="w-full h-screen bg-primaryLight px-5  flex flex-col">
       {/* Logo */}
       <div className="flex  items-center  h-[100px] ">
-        <p className="font-black font-poppins text-2xl text-white">
+        <p className="font-black font-poppins text-xl text-white">
           Raudhatul Jannah
         </p>
       </div>
@@ -80,7 +80,7 @@ const Sidebar = () => {
             <Link
               to={el.link}
               key={index}
-              className={`text-white text-lg font-poppins px-3 py-2 cursor-pointer flex items-center gap-3 mb-1 ${
+              className={`text-white text-md font-poppins px-3 py-2 cursor-pointer flex items-center gap-3 mb-1 ${
                 activeMenu === el.name
                   ? "bg-primaryDark rounded-lg font-semibold "
                   : "hover:bg-primary hover:rounded-lg"

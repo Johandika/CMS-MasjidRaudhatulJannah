@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 import {
   Space,
@@ -13,7 +14,10 @@ import {
   InputNumber,
   Menu,
   Dropdown,
+  message,
+  Popconfirm,
 } from "antd";
+
 import {
   PlusOutlined,
   InfoCircleOutlined,
@@ -26,7 +30,11 @@ import {
 const { Search } = Input;
 const { Option } = Select;
 
-import { addPengajar, fetchPengajar } from "../store/action/pengajar";
+import {
+  addPengajar,
+  deletePengajar,
+  fetchPengajar,
+} from "../store/action/pengajar";
 import {
   FetchKelasTahsinAnak,
   FetchKelasTahsinDewasa,
@@ -85,18 +93,35 @@ const ColumsPengajar = [
     align: "center",
     width: 75,
     render: (data) => {
-      const handleMenuClick = (e) => {
+      const dispatch = useDispatch();
+      const handleMenuClick = (e, id) => {
         if (e.key === "detail") {
           console.log(`Detail untuk ${data.nama}`);
         } else if (e.key === "edit") {
-          console.log(`Edit data ${data.nama}`);
+          console.log("mantap");
         } else if (e.key === "delete") {
-          console.log(`Hapus data ${data.nama}`);
+          Swal.fire({
+            text: "Apakah Anda Mau Menghapus?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Submit",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatch(deletePengajar(id));
+              Swal.fire(
+                "Berhasil!",
+                "Berhasil Menghapus Data Pengajar",
+                "success"
+              );
+            }
+          });
         }
       };
 
       const menu = (
-        <Menu onClick={handleMenuClick}>
+        <Menu onClick={(e) => handleMenuClick(e, data.id)}>
           <Menu.Item key="detail">
             <InfoCircleOutlined /> Detail
           </Menu.Item>
@@ -321,6 +346,7 @@ const ColumsPesertaDewasa = [
 ];
 
 const Kajian = () => {
+  const [tabs, setTabs] = useState("");
   const dispatch = useDispatch();
   const { Pengajars } = useSelector((state) => state.PengajarReducer);
   const { KelasTahsinDewasas } = useSelector(
@@ -352,8 +378,6 @@ const Kajian = () => {
     { id: 7, nama: "Ahad" },
   ];
 
-  const [tabs, setTabs] = useState("");
-
   const [namaPengajar, setNamaPengajar] = useState("");
   const [teleponPengajar, setTeleponPengajar] = useState("");
   const [umurPengajar, setUmurPengajar] = useState("");
@@ -369,9 +393,20 @@ const Kajian = () => {
         pekerjaan: pekerjaanPengajar,
         umur: umurPengajar,
       })
-    );
-
-    setTabs("");
+    )
+      .then((data) =>
+        message.loading("Loading", 1, () => {
+          if (data.statusCode == 200) {
+            message.success(data.message, 1, () => {
+              dispatch(fetchPengajar());
+              setTabs("");
+            });
+          } else {
+            message.error(data.response.data.message);
+          }
+        })
+      )
+      .catch((error) => console.log(error));
   };
 
   const [kelasAnak, setKelasAnak] = useState("");
@@ -591,7 +626,7 @@ const Kajian = () => {
                           ))}
                         </Select>
                       ) : (
-                        <div>Loading Pengajars...</div>
+                        <div>Pengajar Tahsin Belum Ada</div>
                       )}
                     </div>
 
@@ -728,16 +763,26 @@ const Kajian = () => {
                         placeholder="Masukkan Nama Kelas Tahsin Dewasa"
                       />
                     </div>
-                    <div className="w-[45%] mb-5">
-                      <label htmlFor="pengajarTahsinDewasa">
+                    <div className="w-[45%] mb-5 flex flex-col">
+                      <label htmlFor="pengajarTahsinAnak">
                         Pengajar Tahsin
                       </label>
-                      <Input
-                        className=""
-                        id="pengajarTahsinDewasa"
-                        size="large"
-                        placeholder="Masukkan Pengajar Tahsin"
-                      />
+                      {Pengajars && Pengajars.data.length > 0 ? (
+                        <Select
+                          id="pengajarTahsinAnak"
+                          size="large"
+                          placeholder="Pilih Pengajar Tahsin"
+                          onChange={(value) => setPengajarKelasAnak(value)}
+                        >
+                          {Pengajars.data.map((pengajar) => (
+                            <Option key={pengajar.id} value={pengajar.id}>
+                              {pengajar.nama}
+                            </Option>
+                          ))}
+                        </Select>
+                      ) : (
+                        <div>Pengajar Tahsin Belum Ada</div>
+                      )}
                     </div>
                     <div className="w-[45%] mb-5">
                       <label htmlFor="catatanKelasDewasa">Catatan</label>
