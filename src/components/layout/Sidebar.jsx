@@ -67,7 +67,7 @@ const Sidebar = () => {
   return (
     <div className="w-full h-screen bg-primaryLight px-5  flex flex-col">
       {/* Logo */}
-      <div className="flex  items-center  h-[100px] ">
+      <div className="flex  items-center  h-[75px] ">
         <p className="font-black font-poppins text-xl text-white">
           Raudhatul Jannah
         </p>
@@ -100,7 +100,7 @@ const Sidebar = () => {
             return (
               <div
                 key={index}
-                className="text-white text-lg  font-poppins px-3 py-2 cursor-pointer hover:bg-[#041059] hover:rounded-lg  flex items-center gap-3 "
+                className="text-white text-md  font-poppins px-3 py-2 cursor-pointer hover:bg-[#041059] hover:rounded-lg  flex items-center gap-3 "
                 onClick={() => {
                   message.loading("Loading...", 1, () => {
                     localStorage.clear();

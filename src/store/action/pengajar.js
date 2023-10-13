@@ -7,7 +7,7 @@ export function fetchPengajar() {
     try {
       const { data } = await axios.get(`${BaseUrl}/pengajarTahsin`, {
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -21,7 +21,28 @@ export function fetchPengajar() {
   };
 }
 
-export function addPengajar(body, setValues = () => {}) {
+export function getOnePengajar(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        method: "GET",
+        headers: {
+          api_key: "masjidraudhatuljannah",
+        },
+      });
+
+      dispatch({
+        type: "Fetch/GetOnePengajar",
+        payload: data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function addPengajar(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -31,6 +52,25 @@ export function addPengajar(body, setValues = () => {}) {
           authorization: localStorage.getItem("authorization"),
         },
         data: body,
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function editPengajar(id, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        method: "PATCH",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
       });
 
       return data;

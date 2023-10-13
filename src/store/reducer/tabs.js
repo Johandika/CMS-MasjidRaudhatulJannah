@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
 
 const initialState = {
-  Tabs: "",
+  TabsValues: "",
 };
 
 function TabsReducer(state = initialState, action) {
@@ -9,7 +9,7 @@ function TabsReducer(state = initialState, action) {
     case "SET_TAB_VALUE":
       return {
         ...state,
-        Tabs: action.payload,
+        TabsValues: action.payload,
       };
     default:
       return state;

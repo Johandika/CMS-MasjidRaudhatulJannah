@@ -33,7 +33,9 @@ const { Option } = Select;
 import {
   addPengajar,
   deletePengajar,
+  editPengajar,
   fetchPengajar,
+  getOnePengajar,
 } from "../store/action/pengajar";
 import {
   FetchKelasTahsinAnak,
@@ -45,40 +47,47 @@ import {
   FetchPesertaTahsinAnak,
   FetchPesertaTahsinDewasa,
 } from "../store/action/pesertaTahsin";
+import { setTabsValue } from "../store/action/tabs";
 
 const ColumsPengajar = [
   {
     title: "Nama",
+    align: "center",
     render: (data) => {
       return data.nama;
     },
   },
   {
     title: "Telepon",
+    align: "center",
     render: (data) => {
       return data.telepon;
     },
   },
   {
     title: "Alamat",
+    align: "center",
     render: (data) => {
       return data.alamat;
     },
   },
   {
     title: "Pekerjaan",
+    align: "center",
     render: (data) => {
       return data.pekerjaan;
     },
   },
   {
     title: "Umur",
+    align: "center",
     render: (data) => {
       return `${data.umur} Tahun`;
     },
   },
   {
     title: "Status Aktif",
+    align: "center",
     render: (data) => {
       if (data.status_aktif == true) {
         return <Tag color="success">Aktif</Tag>;
@@ -98,7 +107,8 @@ const ColumsPengajar = [
         if (e.key === "detail") {
           console.log(`Detail untuk ${data.nama}`);
         } else if (e.key === "edit") {
-          console.log("mantap");
+          dispatch(setTabsValue("EditPengajar"));
+          dispatch(getOnePengajar(id));
         } else if (e.key === "delete") {
           Swal.fire({
             text: "Apakah Anda Mau Menghapus?",
@@ -346,19 +356,19 @@ const ColumsPesertaDewasa = [
 ];
 
 const Kajian = () => {
-  const [tabs, setTabs] = useState("");
   const dispatch = useDispatch();
-  const { Pengajars } = useSelector((state) => state.PengajarReducer);
-  const { KelasTahsinDewasas } = useSelector(
+
+  const { TabsValues } = useSelector((state) => state.TabsReducer);
+  const { Pengajars, Pengajar } = useSelector((state) => state.PengajarReducer);
+  const { KelasTahsinDewasas, KelasTahsinAnaks } = useSelector(
     (state) => state.KelasTahsinReducer
   );
-  const { KelasTahsinAnaks } = useSelector((state) => state.KelasTahsinReducer);
-  const { PesertaTahsinDewasas } = useSelector(
-    (state) => state.PesertaTahsinReducer
-  );
-  const { PesertaTahsinAnaks } = useSelector(
-    (state) => state.PesertaTahsinReducer
-  );
+  const {
+    PesertaTahsinAnaks,
+    PesertaTahsinAnak,
+    PesertaTahsinDewasa,
+    PesertaTahsinDewasas,
+  } = useSelector((state) => state.PesertaTahsinReducer);
 
   useEffect(() => {
     dispatch(fetchPengajar());
@@ -366,7 +376,7 @@ const Kajian = () => {
     dispatch(FetchKelasTahsinAnak());
     dispatch(FetchPesertaTahsinAnak());
     dispatch(FetchPesertaTahsinDewasa());
-  }, []);
+  }, [TabsValues]);
 
   const Hari = [
     { id: 1, nama: "Senin" },
@@ -378,28 +388,46 @@ const Kajian = () => {
     { id: 7, nama: "Ahad" },
   ];
 
-  const [namaPengajar, setNamaPengajar] = useState("");
-  const [teleponPengajar, setTeleponPengajar] = useState("");
-  const [umurPengajar, setUmurPengajar] = useState("");
-  const [alamatPengajar, setAlamatPengajar] = useState("");
-  const [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
+  let [namaPengajar, setNamaPengajar] = useState("");
+  let [teleponPengajar, setTeleponPengajar] = useState("");
+  let [umurPengajar, setUmurPengajar] = useState("");
+  let [alamatPengajar, setAlamatPengajar] = useState("");
+  let [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
 
-  const submitPengajar = () => {
-    dispatch(
-      addPengajar({
-        nama: namaPengajar,
-        telepon: teleponPengajar,
-        alamat: alamatPengajar,
-        pekerjaan: pekerjaanPengajar,
-        umur: umurPengajar,
-      })
-    )
+  useEffect(() => {
+    if (Pengajar) {
+      setNamaPengajar(Pengajar?.data?.nama);
+      setTeleponPengajar(Pengajar?.data?.telepon);
+      setAlamatPengajar(Pengajar?.data?.alamat);
+      setUmurPengajar(Pengajar?.data?.umur);
+      setPekerjaanPengajar(Pengajar?.data?.pekerjaan);
+    }
+  }, [Pengajar]);
+
+  useEffect(() => {
+    setNamaPengajar("");
+    setTeleponPengajar("");
+    setAlamatPengajar("");
+    setUmurPengajar("");
+    setPekerjaanPengajar("");
+  }, [TabsValues]);
+
+  const actionPengajar = (id) => {
+    let datap = {
+      nama: namaPengajar,
+      telepon: teleponPengajar,
+      alamat: alamatPengajar,
+      pekerjaan: pekerjaanPengajar,
+      umur: umurPengajar,
+    };
+
+    dispatch(id ? editPengajar(id, datap) : addPengajar(datap))
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 200) {
             message.success(data.message, 1, () => {
               dispatch(fetchPengajar());
-              setTabs("");
+              handleChangeTabs("");
             });
           } else {
             message.error(data.response.data.message);
@@ -430,29 +458,38 @@ const Kajian = () => {
     setTabs("");
   };
 
+  const handleChangeTabs = (value) => {
+    dispatch(setTabsValue(value));
+  };
+
   return (
     <div className="w-full h-full px-5">
       <Tabs
         className=""
         type="line"
-        size="large"
         defaultActiveKey="1"
         items={[
           {
             label: "Pengajar",
             key: "1",
             children:
-              tabs == "TambahPengajar" ? (
+              TabsValues == "TambahPengajar" || TabsValues == "EditPengajar" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-3 items-center">
                     <ArrowLeftOutlined
-                      className=" text-[20px]"
+                      className=" text-[16px]"
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                     />
-                    <p className="font-semibold text-[16px]">Tambah Pengajar</p>
+                    <p className="font-semibold text-[16px] ">
+                      {TabsValues == "TambahPengajar"
+                        ? "Tambah Pengajar"
+                        : TabsValues == "EditPengajar"
+                        ? "Edit Pengajar"
+                        : ""}
+                    </p>
                   </div>
 
                   {/* Inputan */}
@@ -462,9 +499,8 @@ const Kajian = () => {
                       <Input
                         value={namaPengajar}
                         onChange={(e) => setNamaPengajar(e.target.value)}
-                        className=""
+                        className="mt-[5px]"
                         id="namaPengajar"
-                        size="large"
                         placeholder="Masukkan Nama Pengajar"
                       />
                     </div>
@@ -473,9 +509,8 @@ const Kajian = () => {
                       <Input
                         value={teleponPengajar}
                         onChange={(e) => setTeleponPengajar(e.target.value)}
-                        className=""
+                        className="mt-[5px]"
                         id="teleponPengajar"
-                        size="large"
                         placeholder="Masukkan Telepon Pengajar"
                       />
                     </div>
@@ -484,9 +519,8 @@ const Kajian = () => {
                       <Input
                         value={pekerjaanPengajar}
                         onChange={(e) => setPekerjaanPengajar(e.target.value)}
-                        className=""
+                        className="mt-[5px]"
                         id="pekerjaanPengajar"
-                        size="large"
                         placeholder="Masukkan Pekerjaan Pengajar"
                       />
                     </div>
@@ -495,9 +529,8 @@ const Kajian = () => {
                       <Input
                         value={umurPengajar}
                         onChange={(e) => setUmurPengajar(e.target.value)}
-                        className=""
+                        className="mt-[5px]"
                         id="umurPengajar"
-                        size="large"
                         placeholder="Masukkan Umur Pengajar"
                       />
                     </div>
@@ -506,9 +539,9 @@ const Kajian = () => {
                       <Input.TextArea
                         value={alamatPengajar}
                         onChange={(e) => setAlamatPengajar(e.target.value)}
-                        className=""
+                        className="mt-[5px]"
+                        rows={5}
                         id="alamatPengajar"
-                        size="large"
                         placeholder="Masukkan Alamat Pengajar"
                       />
                     </div>
@@ -516,7 +549,7 @@ const Kajian = () => {
                   <div className="flex gap-3 justify-end">
                     <Button
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                       type="default"
                       className="text-primaryDark border-primaryDark"
@@ -526,9 +559,13 @@ const Kajian = () => {
                     <Button
                       type="primary"
                       className="bg-primaryDark"
-                      onClick={() => {
-                        submitPengajar();
-                      }}
+                      onClick={
+                        TabsValues == "TambahPengajar"
+                          ? () => actionPengajar()
+                          : TabsValues == "EditPengajar"
+                          ? () => actionPengajar(Pengajar.data.id)
+                          : null
+                      }
                     >
                       Simpan
                     </Button>
@@ -540,7 +577,6 @@ const Kajian = () => {
                     <Search
                       placeholder="Masukkan Nama / Telepon"
                       // onSearch={onSearch}
-                      size="large"
                       style={{
                         width: 400,
                       }}
@@ -551,11 +587,10 @@ const Kajian = () => {
                       title={"Tambahkan Pengajar Tahsin"}
                     >
                       <Button
-                        size="large"
                         icon={<PlusOutlined />}
                         className="bg-primaryLight text-white"
                         onClick={() => {
-                          setTabs("TambahPengajar");
+                          handleChangeTabs("TambahPengajar");
                         }}
                       >
                         Pengajar
@@ -567,8 +602,9 @@ const Kajian = () => {
                       columns={ColumsPengajar}
                       dataSource={Pengajars.data}
                       pagination={false}
+                      size="small"
                       scroll={{
-                        y: 440,
+                        y: 400,
                         x: 1200,
                       }}
                     />
@@ -580,14 +616,14 @@ const Kajian = () => {
             label: "Kelas Anak",
             key: "2",
             children:
-              tabs == "TambahKelasAnak" ? (
+              TabsValues == "TambahKelasAnak" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
                   <div className="flex gap-2 items-center">
                     <ArrowLeftOutlined
                       className=" text-[20px]"
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                     />
                     <p className="font-semibold text-[16px]">
@@ -710,7 +746,7 @@ const Kajian = () => {
                     >
                       <Button
                         onClick={() => {
-                          setTabs("TambahKelasAnak");
+                          handleChangeTabs("TambahKelasAnak");
                         }}
                         size="large"
                         icon={<PlusOutlined />}
@@ -726,7 +762,7 @@ const Kajian = () => {
                       dataSource={KelasTahsinAnaks.data}
                       pagination={false}
                       scroll={{
-                        y: 440,
+                        y: 400,
                       }}
                     />
                   </div>
@@ -737,14 +773,14 @@ const Kajian = () => {
             label: "Kelas Dewasa",
             key: "3",
             children:
-              tabs == "TambahKelasDewasa" ? (
+              TabsValues == "TambahKelasDewasa" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
                   <div className="flex gap-2 items-center">
                     <ArrowLeftOutlined
                       className=" text-[20px]"
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                     />
                     <p className="font-semibold text-[16px]">
@@ -837,7 +873,7 @@ const Kajian = () => {
                     >
                       <Button
                         onClick={() => {
-                          setTabs("TambahKelasDewasa");
+                          handleChangeTabs("TambahKelasDewasa");
                         }}
                         size="large"
                         icon={<PlusOutlined />}
@@ -853,7 +889,7 @@ const Kajian = () => {
                       dataSource={KelasTahsinDewasas.data}
                       pagination={false}
                       scroll={{
-                        y: 440,
+                        y: 400,
                       }}
                     />
                   </div>
@@ -864,14 +900,14 @@ const Kajian = () => {
             label: "Peserta Anak",
             key: "4",
             children:
-              tabs == "TambahPesertaAnak" ? (
+              TabsValues == "TambahPesertaAnak" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
                   <div className="flex gap-2 items-center">
                     <ArrowLeftOutlined
                       className=" text-[20px]"
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                     />
                     <p className="font-semibold text-[16px]">
@@ -987,7 +1023,7 @@ const Kajian = () => {
                     >
                       <Button
                         onClick={() => {
-                          setTabs("TambahPesertaAnak");
+                          handleChangeTabs("TambahPesertaAnak");
                         }}
                         size="large"
                         icon={<PlusOutlined />}
@@ -1003,7 +1039,7 @@ const Kajian = () => {
                       dataSource={PesertaTahsinAnaks.data}
                       pagination={false}
                       scroll={{
-                        y: 440,
+                        y: 400,
                       }}
                     />
                   </div>
@@ -1014,14 +1050,14 @@ const Kajian = () => {
             label: "Peserta Dewasa",
             key: "5",
             children:
-              tabs == "TambahPesertaDewasa" ? (
+              TabsValues == "TambahPesertaDewasa" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
                   <div className="flex gap-2 items-center">
                     <ArrowLeftOutlined
                       className=" text-[20px]"
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                     />
                     <p className="font-semibold text-[16px]">
@@ -1121,7 +1157,7 @@ const Kajian = () => {
                     >
                       <Button
                         onClick={() => {
-                          setTabs("TambahPesertaDewasa");
+                          handleChangeTabs("TambahPesertaDewasa");
                         }}
                         size="large"
                         icon={<PlusOutlined />}
@@ -1137,7 +1173,7 @@ const Kajian = () => {
                       dataSource={PesertaTahsinDewasas.data}
                       pagination={false}
                       scroll={{
-                        y: 440,
+                        y: 400,
                       }}
                     />
                   </div>

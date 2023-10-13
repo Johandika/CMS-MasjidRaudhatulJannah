@@ -11,6 +11,12 @@ function PengajarReducer(state = initialState, actions) {
         Pengajars: actions.payload,
       };
 
+    case "Fetch/GetOnePengajar":
+      return {
+        ...state,
+        Pengajar: actions.payload,
+      };
+
     default:
       return state;
   }
