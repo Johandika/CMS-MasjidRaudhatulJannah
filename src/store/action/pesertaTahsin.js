@@ -1,7 +1,7 @@
 import axios from "axios";
 const BaseUrl = "http://localhost:3000";
 
-export function FetchPesertaTahsinAnak() {
+export function getAllPesertaTahsinAnak() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -21,7 +21,7 @@ export function FetchPesertaTahsinAnak() {
   };
 }
 
-export function FetchPesertaTahsinDewasa() {
+export function getAllPesertaTahsinDewasa() {
   return async (dispatch) => {
     try {
       const { data } = await axios({

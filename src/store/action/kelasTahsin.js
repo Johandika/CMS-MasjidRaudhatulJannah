@@ -2,7 +2,7 @@ const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 import { message } from "antd";
 
-export function FetchKelasTahsinDewasa() {
+export function getAllKelasTahsinDewasa() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -22,7 +22,7 @@ export function FetchKelasTahsinDewasa() {
   };
 }
 
-export function FetchKelasTahsinAnak() {
+export function getAllKelasTahsinAnak() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -43,10 +43,9 @@ export function FetchKelasTahsinAnak() {
   };
 }
 
-export function getOneKelasAnak(id) {
+export function getOneKelasTahsinAnak(id) {
   return async (dispatch) => {
     try {
-      console.log(id);
       const { data } = await axios({
         url: `${BaseUrl}/kelasTahsinAnak/${id}`,
         method: "GET",
@@ -66,7 +65,7 @@ export function getOneKelasAnak(id) {
   };
 }
 
-export function addKelasAnak(body) {
+export function addKelasTahsinAnak(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -85,7 +84,7 @@ export function addKelasAnak(body) {
   };
 }
 
-export function editKelasAnak(id, body) {
+export function editKelasTahsinAnak(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -96,13 +95,15 @@ export function editKelasAnak(id, body) {
           authorization: localStorage.getItem("authorization"),
         },
       });
+
+      return data;
     } catch (error) {
       return error;
     }
   };
 }
 
-export function deleteKelasAnak(id) {
+export function deleteKelasTahsinAnak(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({

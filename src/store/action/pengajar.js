@@ -2,7 +2,7 @@ const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 import { message } from "antd";
 
-export function fetchPengajar() {
+export function getAllPengajar() {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${BaseUrl}/pengajarTahsin`, {
