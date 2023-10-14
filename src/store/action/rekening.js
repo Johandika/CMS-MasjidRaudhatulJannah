@@ -9,7 +9,7 @@ export function fetchRekening() {
         url: `${BaseUrl}/rekening`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 

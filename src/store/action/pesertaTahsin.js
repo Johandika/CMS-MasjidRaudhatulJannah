@@ -8,7 +8,7 @@ export function FetchPesertaTahsinAnak() {
         url: `${BaseUrl}/pesertaTahsinAnak`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -28,7 +28,7 @@ export function FetchPesertaTahsinDewasa() {
         url: `${BaseUrl}/pesertaTahsinDewasa`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 

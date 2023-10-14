@@ -8,7 +8,7 @@ export function fetchKategoriKajian() {
         url: `${BaseUrl}/kategoriKajian`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -29,7 +29,7 @@ export function fetchKajianRutin() {
         url: `${BaseUrl}/kajian/rutin`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({

@@ -18,6 +18,12 @@ function KelasTahsinReducer(state = initialState, actions) {
         KelasTahsinAnaks: actions.payload,
       };
 
+    case "Fetch/GetOneKelasTahsinAnak":
+      return {
+        ...state,
+        KelasTahsinAnak: actions.payload,
+      };
+
     default: {
       return state;
     }

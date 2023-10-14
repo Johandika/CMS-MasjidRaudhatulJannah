@@ -9,7 +9,7 @@ export function fetchUstadz() {
         url: `${BaseUrl}/ustadz`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 

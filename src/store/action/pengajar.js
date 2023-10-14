@@ -91,10 +91,7 @@ export function deletePengajar(id) {
         },
       });
 
-      dispatch(fetchPengajar());
-      message.loading("Loading", 1, () => {
-        message.success(data.message);
-      });
+      return data;
     } catch (error) {
       console.log(error);
     }

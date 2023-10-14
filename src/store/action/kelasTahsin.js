@@ -9,7 +9,7 @@ export function FetchKelasTahsinDewasa() {
         url: `${BaseUrl}/kelasTahsinDewasa`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -29,7 +29,7 @@ export function FetchKelasTahsinAnak() {
         url: `${BaseUrl}/kelasTahsinAnak`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -43,24 +43,78 @@ export function FetchKelasTahsinAnak() {
   };
 }
 
+export function getOneKelasAnak(id) {
+  return async (dispatch) => {
+    try {
+      console.log(id);
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        method: "GET",
+        headers: {
+          api_key: "masjidraudhatuljannah",
+        },
+      });
+      dispatch({
+        type: "Fetch/GetOneKelasTahsinAnak",
+        payload: data,
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
 export function addKelasAnak(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
         url: `${BaseUrl}/kelasTahsinAnak`,
         method: "POST",
+        data: body,
         headers: {
           authorization: localStorage.getItem("authorization"),
         },
-        data: body,
       });
 
-      dispatch(FetchKelasTahsinAnak());
-      message.loading("Loading...", 1, () => {
-        message.success(data.message);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function editKelasAnak(id, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        method: "PATCH",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
       });
     } catch (error) {
-      console.log(error);
+      return error;
+    }
+  };
+}
+
+export function deleteKelasAnak(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+      return data;
+    } catch (error) {
+      return error;
     }
   };
 }

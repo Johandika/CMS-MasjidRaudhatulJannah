@@ -41,6 +41,9 @@ import {
   FetchKelasTahsinAnak,
   FetchKelasTahsinDewasa,
   addKelasAnak,
+  deleteKelasAnak,
+  editKelasAnak,
+  getOneKelasAnak,
 } from "../store/action/kelasTahsin";
 
 import {
@@ -119,12 +122,16 @@ const ColumsPengajar = [
             confirmButtonText: "Submit",
           }).then((result) => {
             if (result.isConfirmed) {
-              dispatch(deletePengajar(id));
-              Swal.fire(
-                "Berhasil!",
-                "Berhasil Menghapus Data Pengajar",
-                "success"
-              );
+              dispatch(deletePengajar(id)).then((data) => {
+                message.loading("Loading", 1, () => {
+                  if (data.statusCode == 200) {
+                    message.success(data.message);
+                    dispatch(fetchPengajar());
+                  } else {
+                    message.error(data.response.data.message);
+                  }
+                });
+              });
             }
           });
         }
@@ -164,36 +171,42 @@ const ColumsPengajar = [
 const ColumsKelasAnak = [
   {
     title: "Kelas",
+    align: "center",
     render: (data) => {
       return data.kelas;
     },
   },
   {
     title: "Pengajar",
+    align: "center",
     render: (data) => {
       return data.PengajarTahsin.nama;
     },
   },
   {
     title: "Hari",
+    align: "center",
     render: (data) => {
       return data.Jadwal.hari;
     },
   },
   {
     title: "Catatan",
+    align: "center",
     render: (data) => {
       return data.catatan;
     },
   },
   {
     title: "Kuota",
+    align: "center",
     render: (data) => {
       return data.kuota;
     },
   },
   {
     title: "Status Aktif",
+    align: "center",
     render: (data) => {
       if (data.status_aktif == true) {
         return <Tag color="success">Aktif</Tag>;
@@ -202,41 +215,114 @@ const ColumsKelasAnak = [
       }
     },
   },
+  {
+    title: "Action",
+    fixed: "right",
+    align: "center",
+    width: 75,
+    render: (data) => {
+      const dispatch = useDispatch();
+      const handleMenuClick = (e, id) => {
+        if (e.key === "detail") {
+          dispatch(getOneKelasAnak(id));
+        } else if (e.key === "edit") {
+          dispatch(setTabsValue("EditKelasAnak"));
+          dispatch(getOneKelasAnak(id));
+        } else if (e.key === "delete") {
+          Swal.fire({
+            text: "Apakah Anda Mau Menghapus?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Submit",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              dispatch(deleteKelasAnak(id)).then((data) => {
+                message.loading("Loading", 1, () => {
+                  if (data.statusCode == 200) {
+                    message.success(data.message);
+                    dispatch(FetchKelasTahsinAnak());
+                  } else {
+                    message.error(data.response.data.message);
+                  }
+                });
+              });
+            }
+          });
+        }
+      };
+
+      const menu = (
+        <Menu onClick={(e) => handleMenuClick(e, data.id)}>
+          <Menu.Item key="detail">
+            <InfoCircleOutlined /> Detail
+          </Menu.Item>
+          <Menu.Item key="edit">
+            <EditOutlined /> Edit
+          </Menu.Item>
+          <Menu.Item key="delete" style={{ color: "red" }}>
+            <DeleteOutlined />
+            Hapus
+          </Menu.Item>
+        </Menu>
+      );
+
+      return (
+        <Dropdown overlay={menu} trigger={["click"]}>
+          <a
+            className="ant-dropdown-link"
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <DownCircleOutlined className="text-lg text-slate-500" />
+          </a>
+        </Dropdown>
+      );
+    },
+  },
 ];
 
 const ColumsKelasDewasa = [
   {
     title: "Kelas",
+    align: "center",
     render: (data) => {
       return data.kelas;
     },
   },
   {
     title: "Pengajar",
+    align: "center",
     render: (data) => {
       return data.PengajarTahsin.nama;
     },
   },
   {
     title: "Hari",
+    align: "center",
     render: (data) => {
       return data.Jadwal.hari;
     },
   },
   {
     title: "Catatan",
+    align: "center",
     render: (data) => {
       return data.catatan;
     },
   },
   {
     title: "Kuota",
+    align: "center",
     render: (data) => {
       return data.kuota;
     },
   },
   {
     title: "Status Aktif",
+    align: "center",
     render: (data) => {
       if (data.status_aktif == true) {
         return <Tag color="success">Aktif</Tag>;
@@ -250,42 +336,49 @@ const ColumsKelasDewasa = [
 const ColumsPesertAnak = [
   {
     title: "Nama Anak",
+    align: "center",
     render: (data) => {
       return data.nama_anak;
     },
   },
   {
     title: "Nama Ayah",
+    align: "center",
     render: (data) => {
       return data.nama_ayah;
     },
   },
   {
     title: "Nama Ibu",
+    align: "center",
     render: (data) => {
       return data.nama_ibu;
     },
   },
   {
     title: "Telepon",
+    align: "center",
     render: (data) => {
       return data.telepon;
     },
   },
   {
     title: "Alamat",
+    align: "center",
     render: (data) => {
       return data.alamat;
     },
   },
   {
     title: "Kelas",
+    align: "center",
     render: (data) => {
       return data.KelasTahsinAnak.kelas;
     },
   },
   {
     title: "Baca Quran",
+    align: "center",
     render: (data) => {
       if (data.baca_quran == true) {
         return "Bisa";
@@ -296,6 +389,7 @@ const ColumsPesertAnak = [
   },
   {
     title: "Status Aktif",
+    align: "center",
     render: (data) => {
       if (data.status_aktif == true) {
         return <Tag color="success">Aktif</Tag>;
@@ -309,42 +403,49 @@ const ColumsPesertAnak = [
 const ColumsPesertaDewasa = [
   {
     title: "Nama",
+    align: "center",
     render: (data) => {
       return data.nama;
     },
   },
   {
     title: "Telepon",
+    align: "center",
     render: (data) => {
       return data.telepon;
     },
   },
   {
     title: "Alamat",
+    align: "center",
     render: (data) => {
       return data.alamat;
     },
   },
   {
     title: "Pekerjaan",
+    align: "center",
     render: (data) => {
       return data.pekerjaan;
     },
   },
   {
     title: "Umur",
+    align: "center",
     render: (data) => {
       return `${data.umur} Tahun`;
     },
   },
   {
     title: "Kelas",
+    align: "center",
     render: (data) => {
       return data.KelasTahsinDewasa.kelas;
     },
   },
   {
     title: "Status Aktif",
+    align: "center",
     render: (data) => {
       if (data.status_aktif == true) {
         return <Tag color="success">Aktif</Tag>;
@@ -360,7 +461,7 @@ const Kajian = () => {
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
   const { Pengajars, Pengajar } = useSelector((state) => state.PengajarReducer);
-  const { KelasTahsinDewasas, KelasTahsinAnaks } = useSelector(
+  const { KelasTahsinDewasas, KelasTahsinAnaks, KelasTahsinAnak } = useSelector(
     (state) => state.KelasTahsinReducer
   );
   const {
@@ -395,13 +496,11 @@ const Kajian = () => {
   let [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
 
   useEffect(() => {
-    if (Pengajar) {
-      setNamaPengajar(Pengajar?.data?.nama);
-      setTeleponPengajar(Pengajar?.data?.telepon);
-      setAlamatPengajar(Pengajar?.data?.alamat);
-      setUmurPengajar(Pengajar?.data?.umur);
-      setPekerjaanPengajar(Pengajar?.data?.pekerjaan);
-    }
+    setNamaPengajar(Pengajar?.data?.nama);
+    setTeleponPengajar(Pengajar?.data?.telepon);
+    setAlamatPengajar(Pengajar?.data?.alamat);
+    setUmurPengajar(Pengajar?.data?.umur);
+    setPekerjaanPengajar(Pengajar?.data?.pekerjaan);
   }, [Pengajar]);
 
   useEffect(() => {
@@ -413,7 +512,7 @@ const Kajian = () => {
   }, [TabsValues]);
 
   const actionPengajar = (id) => {
-    let datap = {
+    let dataPengajar = {
       nama: namaPengajar,
       telepon: teleponPengajar,
       alamat: alamatPengajar,
@@ -421,10 +520,10 @@ const Kajian = () => {
       umur: umurPengajar,
     };
 
-    dispatch(id ? editPengajar(id, datap) : addPengajar(datap))
+    dispatch(id ? editPengajar(id, dataPengajar) : addPengajar(dataPengajar))
       .then((data) =>
         message.loading("Loading", 1, () => {
-          if (data.statusCode == 200) {
+          if (data.statusCode == 201) {
             message.success(data.message, 1, () => {
               dispatch(fetchPengajar());
               handleChangeTabs("");
@@ -443,20 +542,47 @@ const Kajian = () => {
   const [kuotaKelasAnak, setKuotaKelasAnak] = useState(0);
   const [catatanKelasAnak, setCatatanKelasAnak] = useState("");
 
-  const submitKelasAnak = () => {
-    dispatch(
-      addKelasAnak({
-        hari: hariKelasAnak,
-        kelas: kelasAnak,
-        catatan: catatanKelasAnak,
-        kuota: kuotaKelasAnak,
-        PengajarTahsinId: pengajarKelasAnak,
-        jumlah_peserta: 0,
-      })
-    );
+  const actionKelasTahsinAnak = (id) => {
+    let dataKelas = {
+      hari: hariKelasAnak,
+      kelas: kelasAnak,
+      catatan: catatanKelasAnak,
+      kuota: kuotaKelasAnak,
+      PengajarTahsinId: pengajarKelasAnak,
+      jumlah_peserta: 0,
+    };
 
-    setTabs("");
+    dispatch(id ? editKelasAnak(id, dataKelas) : addKelasAnak(dataKelas)).then(
+      (data) => {
+        message
+          .loading("Loading", 1, () => {
+            if (data.statusCode == 201) {
+              message.success(data.message, 1, () => {
+                dispatch(fetchPengajar());
+                handleChangeTabs("");
+              });
+            } else {
+              message.error(data.response.data.message);
+            }
+          })
+          .catch((error) => console.log(error));
+      }
+    );
   };
+
+  console.log(KelasTahsinAnak);
+
+  useEffect(() => {
+    setKelasAnak(KelasTahsinAnak?.data?.kelas);
+  }, [KelasTahsinAnak]);
+
+  useEffect(() => {
+    setKelasAnak("");
+    setHariKelasAnak("");
+    setPengajarKelasAnak("");
+    setKuotaKelasAnak("");
+    setCatatanKelasAnak("");
+  }, [TabsValues]);
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
@@ -616,18 +742,23 @@ const Kajian = () => {
             label: "Kelas Anak",
             key: "2",
             children:
-              TabsValues == "TambahKelasAnak" ? (
+              TabsValues == "TambahKelasAnak" ||
+              TabsValues == "EditKelasAnak" ? (
                 <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
                   {/* Header */}
                   <div className="flex gap-2 items-center">
                     <ArrowLeftOutlined
-                      className=" text-[20px]"
+                      className=" text-[16px]"
                       onClick={() => {
                         handleChangeTabs("");
                       }}
                     />
                     <p className="font-semibold text-[16px]">
-                      Tambah Kelas Anak
+                      {TabsValues == "TambahKelasAnak"
+                        ? "Tambah kelas Tahsin Anak"
+                        : TabsValues == "EditKelasAnak"
+                        ? "Edit Kelas Tahsin Anak"
+                        : ""}
                     </p>
                   </div>
 
@@ -637,9 +768,9 @@ const Kajian = () => {
                       <label htmlFor="kelasAnak">Nama Kelas</label>
                       <Input
                         value={kelasAnak}
+                        autoComplete="off"
                         className=""
                         id="kelasAnak"
-                        size="large"
                         placeholder="Masukkan Nama Kelas Tahsin Anak"
                         onChange={(e) => setKelasAnak(e.target.value)}
                       />
@@ -651,7 +782,6 @@ const Kajian = () => {
                       {Pengajars && Pengajars.data.length > 0 ? (
                         <Select
                           id="pengajarTahsinAnak"
-                          size="large"
                           placeholder="Pilih Pengajar Tahsin"
                           onChange={(value) => setPengajarKelasAnak(value)}
                         >
@@ -671,7 +801,6 @@ const Kajian = () => {
                       {Hari && Hari.length > 0 ? (
                         <Select
                           id="jadwalTahsinAnak"
-                          size="large"
                           placeholder="Pilih Jadwal Kelas Tahsin"
                           onChange={(value) => setHariKelasAnak(value)}
                         >
@@ -693,7 +822,6 @@ const Kajian = () => {
                         onChange={(value) => setKuotaKelasAnak(value)}
                         className="w-full"
                         id="kuotaKelasAnak"
-                        size="large"
                         placeholder="Masukkan Kuota Kelas Tahsin"
                       />
                     </div>
@@ -701,11 +829,12 @@ const Kajian = () => {
                     <div className="w-[45%] mb-5">
                       <label htmlFor="catatanKelasAnak">Catatan</label>
                       <Input.TextArea
+                        rows={4}
+                        autoComplete="off"
                         value={catatanKelasAnak}
                         onChange={(e) => setCatatanKelasAnak(e.target.value)}
                         className=""
                         id="catatanKelasAnak"
-                        size="large"
                         placeholder="Masukkan Catatan"
                       />
                     </div>
@@ -713,7 +842,7 @@ const Kajian = () => {
                   <div className="flex gap-3 justify-end">
                     <Button
                       onClick={() => {
-                        setTabs("");
+                        handleChangeTabs("");
                       }}
                       type="default"
                       className="text-primaryDark border-primaryDark"
@@ -723,7 +852,7 @@ const Kajian = () => {
                     <Button
                       type="primary"
                       className="bg-primaryDark"
-                      onClick={() => submitKelasAnak()}
+                      onClick={() => actionKelasTahsinAnak()}
                     >
                       Simpan
                     </Button>
@@ -734,7 +863,6 @@ const Kajian = () => {
                   <div className="w-full flex justify-between">
                     <Search
                       placeholder="Masukkan Nama / Telepon"
-                      size="large"
                       style={{
                         width: 400,
                       }}
@@ -748,7 +876,6 @@ const Kajian = () => {
                         onClick={() => {
                           handleChangeTabs("TambahKelasAnak");
                         }}
-                        size="large"
                         icon={<PlusOutlined />}
                         className="bg-primaryLight text-white"
                       >
@@ -758,6 +885,7 @@ const Kajian = () => {
                   </div>
                   <div>
                     <Table
+                      size="small"
                       columns={ColumsKelasAnak}
                       dataSource={KelasTahsinAnaks.data}
                       pagination={false}

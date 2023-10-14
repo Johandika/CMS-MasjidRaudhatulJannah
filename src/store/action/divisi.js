@@ -9,7 +9,7 @@ export function fetchDivisi() {
         url: `${BaseUrl}/divisi`,
         method: "GET",
         headers: {
-          authorization: localStorage.getItem("authorization"),
+          api_key: "masjidraudhatuljannah",
         },
       });
 
