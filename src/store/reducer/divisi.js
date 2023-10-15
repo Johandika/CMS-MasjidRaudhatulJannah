@@ -11,6 +11,12 @@ function DivisiReducer(state = initialState, actions) {
         Divisis: actions.payload,
       };
 
+    case "Fetch/GetOneDivisi":
+      return {
+        ...state,
+        Divisi: actions.payload,
+      };
+
     default:
       return state;
   }

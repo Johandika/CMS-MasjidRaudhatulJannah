@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { setTabsValue } from "../store/action/tabs";
@@ -24,6 +24,7 @@ const Kajian = () => {
     <div className="w-full h-full px-5">
       <Tabs
         className=""
+        size="large"
         type="line"
         defaultActiveKey="1"
         items={[

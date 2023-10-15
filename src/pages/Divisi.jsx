@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Tabs } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDivisi } from "../store/action/divisi";
+import { getAllDivisi } from "../store/action/divisi";
 
 const Divisi = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const Divisi = () => {
   const { Divisis } = useSelector((state) => state.DivisiReducer);
 
   useEffect(() => {
-    dispatch(fetchDivisi());
+    dispatch(getAllDivisi());
   }, []);
   return (
     <div className="w-full h-full px-5">

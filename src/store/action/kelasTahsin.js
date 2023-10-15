@@ -12,6 +12,7 @@ export function getAllKelasTahsinDewasa() {
           api_key: "masjidraudhatuljannah",
         },
       });
+      console.log(data);
       dispatch({
         type: "Fetch/GetAllKelasTahsinDewasa",
         payload: data,
@@ -33,6 +34,7 @@ export function getAllKelasTahsinAnak() {
         },
       });
 
+      console.log(data);
       dispatch({
         type: "Fetch/GetAllKelasTahsinAnak",
         payload: data,

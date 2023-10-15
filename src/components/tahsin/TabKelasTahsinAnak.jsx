@@ -50,7 +50,7 @@ const ColumsKelasAnak = [
     title: "Kelas",
     align: "center",
     render: (data) => {
-      return data.kelas;
+      return data?.kelas;
     },
   },
   {
@@ -146,7 +146,7 @@ const ColumsKelasAnak = [
       );
 
       return (
-        <Dropdown overlay={menu} trigger={["click"]}>
+        <Dropdown menu={menu} trigger={["click"]}>
           <a
             className="ant-dropdown-link"
             onClick={(e) => {
@@ -213,7 +213,7 @@ const TabKelasTahsinAnak = () => {
   }, [KelasTahsinAnak]);
 
   useEffect(() => {
-    getAllKelasTahsinAnak();
+    dispatch(getAllKelasTahsinAnak());
 
     setKelasAnak("");
     setHariKelasAnak("");
@@ -376,7 +376,7 @@ const TabKelasTahsinAnak = () => {
             <Table
               size="small"
               columns={ColumsKelasAnak}
-              dataSource={KelasTahsinAnaks.data}
+              dataSource={KelasTahsinAnaks?.data}
               pagination={false}
               scroll={{
                 y: 480,
