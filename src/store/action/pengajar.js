@@ -41,7 +41,7 @@ export function getOnePengajar(id) {
   };
 }
 
-export function addPengajar(body) {
+export function createPengajar(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
@@ -60,7 +60,7 @@ export function addPengajar(body) {
   };
 }
 
-export function editPengajar(id, body) {
+export function updatePengajar(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({

@@ -30,9 +30,9 @@ const { Search } = Input;
 const { Option } = Select;
 
 import {
-  addPengajar,
+  createPengajar,
   deletePengajar,
-  editPengajar,
+  updatePengajar,
   getAllPengajar,
   updateStatusPengajar,
   getOnePengajar,
@@ -131,7 +131,7 @@ const ColumsPengajar = [
       const dispatch = useDispatch();
       const handleMenuClick = (e, id) => {
         if (e.key === "edit") {
-          dispatch(setTabsValue("EditPengajar"));
+          dispatch(setTabsValue("updatePengajar"));
           dispatch(getOnePengajar(id));
         } else if (e.key === "delete") {
           Swal.fire({
@@ -229,7 +229,9 @@ const TabPengajar = () => {
       umur: umurPengajar,
     };
 
-    dispatch(id ? editPengajar(id, dataPengajar) : addPengajar(dataPengajar))
+    dispatch(
+      id ? updatePengajar(id, dataPengajar) : createPengajar(dataPengajar)
+    )
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
@@ -250,7 +252,7 @@ const TabPengajar = () => {
   };
   return (
     <div>
-      {TabsValues === "TambahPengajar" || TabsValues === "EditPengajar" ? (
+      {TabsValues === "TambahPengajar" || TabsValues === "updatePengajar" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -263,7 +265,7 @@ const TabPengajar = () => {
             <p className="font-semibold text-[16px]">
               {TabsValues === "TambahPengajar"
                 ? "Tambah Pengajar"
-                : TabsValues === "EditPengajar"
+                : TabsValues === "updatePengajar"
                 ? "Edit Pengajar"
                 : ""}
             </p>
@@ -302,7 +304,7 @@ const TabPengajar = () => {
               onClick={
                 TabsValues === "TambahPengajar"
                   ? () => actionPengajar()
-                  : TabsValues === "EditPengajar"
+                  : TabsValues === "updatePengajar"
                   ? () => actionPengajar(Pengajar.data.id)
                   : null
               }

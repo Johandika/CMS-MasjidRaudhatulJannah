@@ -1,11 +1,11 @@
 const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 
-export function getAllDivisi() {
+export function getAllKegiatan() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${BaseUrl}/kegiatan`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -13,7 +13,7 @@ export function getAllDivisi() {
       });
 
       dispatch({
-        type: "Fetch/GetAllDivisi",
+        type: "Fetch/GetAllKegiatan",
         payload: data,
       });
     } catch (error) {
@@ -22,11 +22,11 @@ export function getAllDivisi() {
   };
 }
 
-export function getOneDivisi(id) {
+export function getOneKegiatan(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/kegiatan/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -34,7 +34,7 @@ export function getOneDivisi(id) {
       });
 
       dispatch({
-        type: "Fetch/GetOneDivisi",
+        type: "Fetch/GetOneKegiatan",
         payload: data,
       });
     } catch (error) {
@@ -43,11 +43,11 @@ export function getOneDivisi(id) {
   };
 }
 
-export function createDivisi(body) {
+export function createKegiatan(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${BaseUrl}/kegiatan`,
         method: "POST",
         data: body,
         headers: {
@@ -62,11 +62,11 @@ export function createDivisi(body) {
   };
 }
 
-export function updateDivisi(id, body) {
+export function updateKegiatan(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/kegiatan/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -81,11 +81,11 @@ export function updateDivisi(id, body) {
   };
 }
 
-export function updateStatusDivisi(id, status) {
+export function updateStatusKegiatan(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/status/${id}`,
+        url: `${BaseUrl}/kegiatan/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -100,11 +100,30 @@ export function updateStatusDivisi(id, status) {
   };
 }
 
-export function deleteDivisi(id) {
+export function updateHeadlineKegiatan(id, headline) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/kegiatan/headline/${id}`,
+        method: "PATCH",
+        data: { status_aktif: headline },
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function deleteKegiatan(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kegiatan/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

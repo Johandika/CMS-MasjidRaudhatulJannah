@@ -2,6 +2,7 @@ const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 import { message } from "antd";
 
+//! KelasDewasa
 export function getAllKelasTahsinDewasa() {
   return async (dispatch) => {
     try {
@@ -22,6 +23,103 @@ export function getAllKelasTahsinDewasa() {
     }
   };
 }
+
+export function getOneKelasTahsinDewasa(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinDewasa`,
+        method: "GET",
+        headers: {
+          api_key: "masjidraudhatuljannah",
+        },
+      });
+
+      dispatch({
+        type: "Fetch/GetOneKelasTahsinDewasa",
+        payload: data,
+      });
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function createKelasTahsinDewasa(body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinDewasa`,
+        method: "POST",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function updateKelasTahsinDewasa(id, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinDewasa/${id}`,
+        method: "PATCH",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function updateStatusKelasTahsinDewasa(id, status) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinDewasa/status/${id}`,
+        method: "PATCH",
+        data: { status_aktif: status },
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function deleteKelasTahsinDewasa(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinDewasa/${id}`,
+        method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+//! KelasAnak
 
 export function getAllKelasTahsinAnak() {
   return async (dispatch) => {
@@ -86,13 +184,32 @@ export function addKelasTahsinAnak(body) {
   };
 }
 
-export function editKelasTahsinAnak(id, body) {
+export function updateKelasTahsinAnak(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
         url: `${BaseUrl}/kelasTahsinAnak/${id}`,
         method: "PATCH",
         data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function updateStatusKelasTahsinAnak(id, status) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${BaseUrl}/kelasTahsinAnak/status/${id}`,
+        method: "PATCH",
+        data: { status_aktif: status },
         headers: {
           authorization: localStorage.getItem("authorization"),
         },

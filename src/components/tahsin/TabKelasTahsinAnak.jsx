@@ -36,7 +36,7 @@ import {
   getOneKelasTahsinAnak,
   addKelasTahsinAnak,
   deleteKelasTahsinAnak,
-  editKelasTahsinAnak,
+  updateKelasTahsinAnak,
 } from "../../store/action/kelasTahsin";
 
 const Hari = [
@@ -103,7 +103,7 @@ const ColumsKelasAnak = [
         if (e.key === "detail") {
           dispatch(getOneKelasTahsinAnak(id));
         } else if (e.key === "edit") {
-          dispatch(setTabsValue("EditKelasTahsinAnak"));
+          dispatch(setTabsValue("updateKelasTahsinAnak"));
           dispatch(getOneKelasTahsinAnak(id));
         } else if (e.key === "delete") {
           Swal.fire({
@@ -187,7 +187,7 @@ const TabKelasTahsinAnak = () => {
     };
 
     dispatch(
-      id ? editKelasTahsinAnak(id, dataKelas) : addKelasTahsinAnak(dataKelas)
+      id ? updateKelasTahsinAnak(id, dataKelas) : addKelasTahsinAnak(dataKelas)
     ).then((data) => {
       message
         .loading("Loading", 1, () => {
@@ -229,7 +229,7 @@ const TabKelasTahsinAnak = () => {
   return (
     <div>
       {TabsValues == "TambahKelasAnak" ||
-      TabsValues == "EditKelasTahsinAnak" ? (
+      TabsValues == "updateKelasTahsinAnak" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-2 items-center">
@@ -242,7 +242,7 @@ const TabKelasTahsinAnak = () => {
             <p className="font-semibold text-[16px]">
               {TabsValues == "TambahKelasAnak"
                 ? "Tambah kelas Tahsin Anak"
-                : TabsValues == "EditKelasTahsinAnak"
+                : TabsValues == "updateKelasTahsinAnak"
                 ? "Edit Kelas Tahsin Anak"
                 : ""}
             </p>
@@ -341,7 +341,7 @@ const TabKelasTahsinAnak = () => {
               onClick={
                 TabsValues == "TambahKelasAnak"
                   ? () => actionKelasTahsinAnak()
-                  : TabsValues == "EditKelasTahsinAnak"
+                  : TabsValues == "updateKelasTahsinAnak"
                   ? () => actionKelasTahsinAnak(KelasTahsinAnak.data.id)
                   : null
               }

@@ -10,6 +10,11 @@ import PesertaTahsinReducer from "./reducer/pesertaTahsin";
 import UstadzReducer from "./reducer/ustadz";
 import TabsReducer from "./reducer/tabs";
 
+import DiklatReducer from "./reducer/diklat";
+import KegiatanReducer from "./reducer/kegiatan";
+import LayananReducer from "./reducer/layanan";
+import PesertaDiklatReducer from "./reducer/pesertaDiklat";
+
 let reducer = combineReducers({
   PengajarReducer,
   DivisiReducer,
@@ -19,6 +24,10 @@ let reducer = combineReducers({
   PesertaTahsinReducer,
   UstadzReducer,
   TabsReducer,
+  DiklatReducer,
+  KegiatanReducer,
+  LayananReducer,
+  PesertaDiklatReducer,
 });
 
 const store = createStore(reducer, applyMiddleware(thunk));

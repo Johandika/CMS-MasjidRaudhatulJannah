@@ -8,13 +8,18 @@ let initialState = {
 function KelasTahsinReducer(state = initialState, actions) {
   switch (actions.type) {
     case "Fetch/GetAllKelasTahsinDewasa":
-      console.log(actions.payload);
       return {
         ...state,
         KelasTahsinDewasas: actions.payload,
       };
+
+    case "Fetch/GetOneKelasTahsinDewasa":
+      return {
+        ...state,
+        KelasTahsinDewasa: actions.payload,
+      };
+
     case "Fetch/GetAllKelasTahsinAnak":
-      console.log(actions.payload);
       return {
         ...state,
         KelasTahsinAnaks: actions.payload,

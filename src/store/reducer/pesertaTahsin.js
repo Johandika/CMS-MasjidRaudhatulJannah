@@ -13,10 +13,22 @@ function PesertaTahsinReducer(state = initalState, actions) {
         PesertaTahsinAnaks: actions.payload,
       };
 
+    case "Fetch/GetOnePesertaTahsinAnak":
+      return {
+        ...state,
+        PesertaTahsinAnak: actions.payload,
+      };
+
     case "Fetch/GetAllPesertaTahsinDewasa":
       return {
         ...state,
         PesertaTahsinDewasas: actions.payload,
+      };
+
+    case "Fetch/GetOnePesertaTahsinDewasa":
+      return {
+        ...state,
+        PesertaTahsinDewasa: actions.payload,
       };
 
     default:

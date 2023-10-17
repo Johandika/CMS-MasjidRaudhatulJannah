@@ -1,11 +1,11 @@
 const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 
-export function getAllDivisi() {
+export function getAllDiklat() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${BaseUrl}/diklat`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -13,7 +13,7 @@ export function getAllDivisi() {
       });
 
       dispatch({
-        type: "Fetch/GetAllDivisi",
+        type: "Fetch/GetAllDiklat",
         payload: data,
       });
     } catch (error) {
@@ -22,11 +22,11 @@ export function getAllDivisi() {
   };
 }
 
-export function getOneDivisi(id) {
+export function getOneDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/diklat/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -34,7 +34,7 @@ export function getOneDivisi(id) {
       });
 
       dispatch({
-        type: "Fetch/GetOneDivisi",
+        type: "Fetch/GetOneDiklat",
         payload: data,
       });
     } catch (error) {
@@ -43,11 +43,11 @@ export function getOneDivisi(id) {
   };
 }
 
-export function createDivisi(body) {
+export function createDiklat(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${BaseUrl}/diklat`,
         method: "POST",
         data: body,
         headers: {
@@ -62,11 +62,11 @@ export function createDivisi(body) {
   };
 }
 
-export function updateDivisi(id, body) {
+export function updateDiklat(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/diklat/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -81,11 +81,11 @@ export function updateDivisi(id, body) {
   };
 }
 
-export function updateStatusDivisi(id, status) {
+export function updateStatusDiklat(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/status/${id}`,
+        url: `${BaseUrl}/diklat/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -100,11 +100,11 @@ export function updateStatusDivisi(id, status) {
   };
 }
 
-export function deleteDivisi(id) {
+export function deleteDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${BaseUrl}/diklat/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

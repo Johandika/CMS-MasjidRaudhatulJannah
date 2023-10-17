@@ -8,11 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ubahFormatDate from "../components/utils/date";
 
 import {
-  fetchKajianRutin,
-  fetchKajianTablighAkbar,
-  fetchKategoriKajian,
+  getAllKajianRutin,
+  getAllKajianTablighAkbar,
+  getAllKategoriKajian,
 } from "../store/action/kajian";
-import { fetchUstadz } from "../store/action/ustadz";
+import { getAllUstadz } from "../store/action/ustadz";
 
 const ColumnKategoriKajian = [
   {
@@ -207,10 +207,10 @@ const Kajian = () => {
   const { Ustadzs } = useSelector((state) => state.UstadzReducer);
 
   useEffect(() => {
-    dispatch(fetchKajianRutin());
-    dispatch(fetchUstadz());
-    dispatch(fetchKajianTablighAkbar());
-    dispatch(fetchKategoriKajian());
+    dispatch(getAllKajianRutin());
+    dispatch(getAllUstadz());
+    dispatch(getAllKajianTablighAkbar());
+    dispatch(getAllKategoriKajian());
   }, []);
   return (
     <div className="w-full h-full px-5">

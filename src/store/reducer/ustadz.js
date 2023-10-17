@@ -11,6 +11,11 @@ function UstadzReducer(state = initalState, actions) {
         Ustadzs: actions.payload,
       };
 
+    case "Fetch/GetOneUstadz":
+      return {
+        ...state,
+        Ustadz: actions.payload,
+      };
     default:
       return state;
   }

@@ -5,7 +5,7 @@ import { Space, Table, Tag, Input, Tabs, Button, Tooltip } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 const { Search } = Input;
 
-import { fetchRekening } from "../store/action/rekening";
+import { getAllRekening } from "../store/action/rekening";
 import ubahFormatDate from "../components/utils/date";
 
 const Rekening = () => {
@@ -14,7 +14,7 @@ const Rekening = () => {
   const { Rekenings } = useSelector((state) => state.RekeningReducer);
 
   useEffect(() => {
-    dispatch(fetchRekening());
+    dispatch(getAllRekening());
   }, []);
 
   const ColumsPengajar = [
