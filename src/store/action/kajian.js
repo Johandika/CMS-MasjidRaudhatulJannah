@@ -139,25 +139,6 @@ export function updateStatusKajian(id, status) {
   };
 }
 
-export function updateLinkKajian(id, link) {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios({
-        url: `${BaseUrl}/kajian/link/${id}`,
-        method: "PATCH",
-        data: { link: link },
-        headers: {
-          authorization: localStorage.getItem("authorization"),
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return error;
-    }
-  };
-}
-
 export function deleteKajian(id) {
   return async (dispatch) => {
     try {

@@ -4,10 +4,15 @@ import axios from "axios";
 export function getAllPengajar() {
   return async (dispatch) => {
     try {
+      const queryParams = {
+        limit: 50,
+      };
+
       const { data } = await axios.get(`${BaseUrl}/pengajarTahsin`, {
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
 
       dispatch({

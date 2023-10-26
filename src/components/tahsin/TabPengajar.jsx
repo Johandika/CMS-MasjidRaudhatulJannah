@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import axios from "axios";
+
 import { setTabsValue } from "../../store/action/tabs";
 
 import {
@@ -37,154 +39,6 @@ import {
   updateStatusPengajar,
   getOnePengajar,
 } from "../../store/action/pengajar";
-import axios from "axios";
-
-const ColumsPengajar = [
-  {
-    title: "Nama",
-    align: "center",
-    render: (data) => {
-      return data.nama;
-    },
-  },
-  {
-    title: "Telepon",
-    align: "center",
-    render: (data) => {
-      return data.telepon;
-    },
-  },
-  {
-    title: "Alamat",
-    align: "center",
-    render: (data) => {
-      return data.alamat;
-    },
-  },
-  {
-    title: "Pekerjaan",
-    align: "center",
-    render: (data) => {
-      return data.pekerjaan;
-    },
-  },
-  {
-    title: "Umur",
-    align: "center",
-    render: (data) => {
-      return `${data.umur} Tahun`;
-    },
-  },
-  {
-    title: "Status Aktif",
-    align: "center",
-    render: (data) => {
-      const dispatch = useDispatch();
-      const handleStatusChange = (newStatus) => {
-        dispatch(updateStatusPengajar(data.id, newStatus)).then((response) => {
-          if (response.statusCode === 200) {
-            message.success(`Status ${newStatus ? "Aktif" : "Tidak Aktif"}`);
-            dispatch(getAllPengajar());
-          } else {
-            message.error(response.message);
-          }
-        });
-      };
-
-      const menu = (
-        <Menu className="w-28">
-          <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
-            Aktif
-          </Menu.Item>
-          <Menu.Item
-            key="tidak-aktif"
-            onClick={() => handleStatusChange(false)}
-          >
-            Tidak Aktif
-          </Menu.Item>
-        </Menu>
-      );
-
-      return (
-        <Dropdown menu={menu} trigger={["click"]}>
-          <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-            <div>
-              {data.status_aktif ? (
-                <Tag color="success">Aktif</Tag>
-              ) : (
-                <Tag color="error" style={{ color: "red" }}>
-                  Tidak Aktif
-                </Tag>
-              )}
-            </div>
-          </a>
-        </Dropdown>
-      );
-    },
-  },
-  {
-    title: "Action",
-    fixed: "right",
-    align: "center",
-    width: 75,
-    render: (data) => {
-      const dispatch = useDispatch();
-      const handleMenuClick = (e, id) => {
-        if (e.key === "edit") {
-          dispatch(setTabsValue("updatePengajar"));
-          dispatch(getOnePengajar(id));
-        } else if (e.key === "delete") {
-          Swal.fire({
-            text: "Apakah Anda Mau Menghapus?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Submit",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              dispatch(deletePengajar(id)).then((data) => {
-                message.loading("Loading", 1, () => {
-                  if (data.statusCode == 200) {
-                    message.success(data.message);
-                    dispatch(getAllPengajar());
-                  } else {
-                    message.error(data.response.data.message);
-                  }
-                });
-              });
-            }
-          });
-        }
-      };
-
-      const menu = (
-        <Menu onClick={(e) => handleMenuClick(e, data.id)}>
-          <Menu.Item key="edit">
-            <EditOutlined /> Edit
-          </Menu.Item>
-          <Menu.Item key="delete" style={{ color: "red" }}>
-            <DeleteOutlined />
-            Hapus
-          </Menu.Item>
-        </Menu>
-      );
-
-      return (
-        <Dropdown menu={menu} trigger={["click"]}>
-          <a
-            className="ant-dropdown-link"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <DownCircleOutlined className="text-lg text-slate-500" />
-          </a>
-        </Dropdown>
-      );
-    },
-  },
-];
 
 const TabPengajar = () => {
   const dispatch = useDispatch();
@@ -199,26 +53,25 @@ const TabPengajar = () => {
   let [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
 
   useEffect(() => {
+    dispatch(getAllPengajar());
+  }, []);
+
+  useEffect(() => {
     setNamaPengajar(Pengajar?.data?.nama);
     setTeleponPengajar(Pengajar?.data?.telepon);
     setAlamatPengajar(Pengajar?.data?.alamat);
     setUmurPengajar(Pengajar?.data?.umur);
     setPekerjaanPengajar(Pengajar?.data?.pekerjaan);
-  }, [Pengajar]);
+  }, [Pengajar, TabsValues]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(getAllPengajar());
-
-      setNamaPengajar("");
-      setTeleponPengajar("");
-      setAlamatPengajar("");
-      setUmurPengajar("");
-      setPekerjaanPengajar("");
-    };
-
-    fetchData();
-  }, [TabsValues]);
+  const fetchData = async () => {
+    await dispatch(getAllPengajar());
+    setNamaPengajar("");
+    setTeleponPengajar("");
+    setAlamatPengajar("");
+    setUmurPengajar("");
+    setPekerjaanPengajar("");
+  };
 
   const actionPengajar = (id) => {
     let dataPengajar = {
@@ -250,6 +103,165 @@ const TabPengajar = () => {
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
+
+  const handleSearch = async (value) => {
+    // await dispatch(getAllPengajar({ search: value }));
+  };
+
+  const ColumsPengajar = [
+    {
+      title: "Nama",
+      align: "center",
+      render: (data) => {
+        return data.nama;
+      },
+    },
+    {
+      title: "Telepon",
+      align: "center",
+      render: (data) => {
+        return data.telepon;
+      },
+    },
+    {
+      title: "Alamat",
+      align: "center",
+      render: (data) => {
+        return data.alamat;
+      },
+    },
+    {
+      title: "Pekerjaan",
+      align: "center",
+      render: (data) => {
+        return data.pekerjaan;
+      },
+    },
+    {
+      title: "Umur",
+      align: "center",
+      render: (data) => {
+        return `${data.umur} Tahun`;
+      },
+    },
+    {
+      title: "Status Aktif",
+      align: "center",
+      render: (data) => {
+        const dispatch = useDispatch();
+        const handleStatusChange = (newStatus) => {
+          dispatch(updateStatusPengajar(data.id, newStatus)).then(
+            (response) => {
+              if (response.statusCode === 200) {
+                message.success(
+                  `Status ${newStatus ? "Aktif" : "Tidak Aktif"}`
+                );
+                dispatch(getAllPengajar());
+              } else {
+                message.error(response.message);
+              }
+            }
+          );
+        };
+
+        const menu = (
+          <Menu className="w-28">
+            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+              Aktif
+            </Menu.Item>
+            <Menu.Item
+              key="tidak-aktif"
+              onClick={() => handleStatusChange(false)}
+            >
+              Tidak Aktif
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <div>
+                {data.status_aktif ? (
+                  <Tag color="success">Aktif</Tag>
+                ) : (
+                  <Tag color="error" style={{ color: "red" }}>
+                    Tidak Aktif
+                  </Tag>
+                )}
+              </div>
+            </a>
+          </Dropdown>
+        );
+      },
+    },
+    {
+      title: "Action",
+      fixed: "right",
+      align: "center",
+      width: 75,
+      render: (data) => {
+        const handleMenuClick = (e, id) => {
+          if (e.key === "edit") {
+            dispatch(setTabsValue("updatePengajar"));
+            dispatch(getOnePengajar(id));
+          } else if (e.key === "delete") {
+            Swal.fire({
+              text: "Apakah Anda Mau Menghapus?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Submit",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(deletePengajar(id)).then((data) => {
+                  message.loading("Loading", 1, () => {
+                    if (data.statusCode == 200) {
+                      message.success(data.message);
+                      dispatch(getAllPengajar());
+                    } else {
+                      message.error(data.response.data.message);
+                    }
+                  });
+                });
+              }
+            });
+          }
+        };
+
+        const menu = (
+          <Menu onClick={(e) => handleMenuClick(e, data.id)}>
+            <Menu.Item key="edit">
+              <EditOutlined /> Edit
+            </Menu.Item>
+            <Menu.Item key="delete" style={{ color: "red" }}>
+              <DeleteOutlined />
+              Hapus
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <div>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <DownCircleOutlined className="text-lg text-slate-500" />
+              </a>
+            </div>
+          </Dropdown>
+        );
+      },
+    },
+  ];
   return (
     <div>
       {TabsValues === "TambahPengajar" || TabsValues === "updatePengajar" ? (
@@ -260,6 +272,7 @@ const TabPengajar = () => {
               className=" text-[16px]"
               onClick={() => {
                 handleChangeTabs("");
+                fetchData();
               }}
             />
             <p className="font-semibold text-[16px]">
@@ -283,13 +296,54 @@ const TabPengajar = () => {
                 id="namaPengajar"
                 placeholder="Masukkan Nama Pengajar"
               />
+            </div>{" "}
+            <div className="w-[45%] mb-5">
+              <label htmlFor="teleponPengajar">Telepon</label>
+              <Input
+                value={teleponPengajar}
+                onChange={(e) => setTeleponPengajar(e.target.value)}
+                className="mt-[5px]"
+                id="teleponPengajar"
+                placeholder="Masukkan Telepon Pengajar"
+              />
             </div>
-            {/* ... sisa input fields */}
+            <div className="w-[45%] mb-5">
+              <label htmlFor="pekerjaanPengajar">Pekerjaan</label>
+              <Input
+                value={pekerjaanPengajar}
+                onChange={(e) => setPekerjaanPengajar(e.target.value)}
+                className="mt-[5px]"
+                id="pekerjaanPengajar"
+                placeholder="Masukkan Pekerjaan Pengajar"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="umurPengajar">Umur</label>
+              <Input
+                value={umurPengajar}
+                onChange={(e) => setUmurPengajar(e.target.value)}
+                className="mt-[5px]"
+                id="umurPengajar"
+                placeholder="Masukkan Umur Pengajar"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="alamatPengajar">Alamat</label>
+              <Input.TextArea
+                value={alamatPengajar}
+                onChange={(e) => setAlamatPengajar(e.target.value)}
+                className="mt-[5px]"
+                rows={5}
+                id="alamatPengajar"
+                placeholder="Masukkan Alamat Pengajar"
+              />
+            </div>
           </div>
           <div className="flex gap-3 justify-end">
             <Button
               onClick={() => {
                 handleChangeTabs("");
+                fetchData();
               }}
               type="default"
               size="large"
@@ -319,7 +373,7 @@ const TabPengajar = () => {
             <Search
               placeholder="Masukkan Nama / Telepon"
               size="large"
-              // onSearch={onSearch}
+              onSearch={handleSearch}
               style={{
                 width: 400,
               }}
@@ -331,6 +385,7 @@ const TabPengajar = () => {
                 className="bg-primaryLight text-white"
                 onClick={() => {
                   handleChangeTabs("TambahPengajar");
+                  fetchData();
                 }}
               >
                 Pengajar
