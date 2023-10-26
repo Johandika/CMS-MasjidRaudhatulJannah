@@ -1,12 +1,16 @@
 const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 
-export function getAllPengajar() {
+export function getAllPengajar(search) {
   return async (dispatch) => {
     try {
       const queryParams = {
         limit: 50,
       };
+
+      if (search) {
+        queryParams.search = search;
+      }
 
       const { data } = await axios.get(`${BaseUrl}/pengajarTahsin`, {
         headers: {

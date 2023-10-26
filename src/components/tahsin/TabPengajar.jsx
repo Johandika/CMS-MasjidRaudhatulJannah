@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
-import axios from "axios";
 
 import { setTabsValue } from "../../store/action/tabs";
 
@@ -105,7 +104,7 @@ const TabPengajar = () => {
   };
 
   const handleSearch = async (value) => {
-    // await dispatch(getAllPengajar({ search: value }));
+    await dispatch(getAllPengajar(value));
   };
 
   const ColumsPengajar = [
