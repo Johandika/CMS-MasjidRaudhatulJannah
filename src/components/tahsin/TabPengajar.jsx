@@ -305,7 +305,7 @@ const TabPengajar = () => {
                 autoComplete="off"
                 value={teleponPengajar}
                 onChange={(e) => setTeleponPengajar(e.target.value)}
-                className="mt-[5px]"
+                className="mt-[5px]  w-full"
                 id="teleponPengajar"
                 placeholder="Masukkan Telepon Pengajar"
               />
@@ -321,12 +321,12 @@ const TabPengajar = () => {
                 placeholder="Masukkan Pekerjaan Pengajar"
               />
             </div>
-            <div className="w-[45%] mb-5">
+            <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="umurPengajar">Umur</label>
-              <Input
+              <InputNumber
                 value={umurPengajar}
-                onChange={(e) => setUmurPengajar(e.target.value)}
-                className="mt-[5px]"
+                onChange={(value) => setUmurPengajar(value)}
+                className="mt-[5px] w-full"
                 autoComplete="off"
                 id="umurPengajar"
                 placeholder="Masukkan Umur Pengajar"
@@ -375,7 +375,7 @@ const TabPengajar = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Nama/Telepon"
               onSearch={handleSearch}
               style={{
                 width: 400,
@@ -404,6 +404,7 @@ const TabPengajar = () => {
                 y: 480,
                 x: 1400,
               }}
+              rowKey={Pengajars.id}
             />
           </div>
         </div>

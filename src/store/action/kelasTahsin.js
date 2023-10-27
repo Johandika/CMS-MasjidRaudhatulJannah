@@ -121,18 +121,26 @@ export function deleteKelasTahsinDewasa(id) {
 
 //! KelasAnak
 
-export function getAllKelasTahsinAnak() {
+export function getAllKelasTahsinAnak(search) {
   return async (dispatch) => {
     try {
+      const queryParams = {
+        limit: 50,
+      };
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${BaseUrl}/kelasTahsinAnak`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
 
-      console.log(data);
       dispatch({
         type: "Fetch/GetAllKelasTahsinAnak",
         payload: data,

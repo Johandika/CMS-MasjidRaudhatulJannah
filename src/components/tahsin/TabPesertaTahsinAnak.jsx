@@ -262,6 +262,7 @@ const TabPesertaTahsinAnak = () => {
               scroll={{
                 y: 400,
               }}
+              rowKey={PesertaTahsinAnaks.id}
             />
           </div>
         </div>

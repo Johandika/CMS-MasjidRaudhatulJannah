@@ -36,6 +36,7 @@ import {
   getOneKelasTahsinAnak,
   addKelasTahsinAnak,
   deleteKelasTahsinAnak,
+  updateStatusKelasTahsinAnak,
   updateKelasTahsinAnak,
 } from "../../store/action/kelasTahsin";
 
@@ -45,121 +46,6 @@ const Hari = [
   { id: 3, nama: "Jumat & Ahad" },
 ];
 
-const ColumsKelasAnak = [
-  {
-    title: "Kelas",
-    align: "center",
-    render: (data) => {
-      return data?.kelas;
-    },
-  },
-  {
-    title: "Pengajar",
-    align: "center",
-    render: (data) => {
-      return data?.PengajarTahsin?.nama;
-    },
-  },
-  {
-    title: "Hari",
-    align: "center",
-    render: (data) => {
-      return data.Jadwal.hari;
-    },
-  },
-  {
-    title: "Catatan",
-    align: "center",
-    render: (data) => {
-      return data.catatan;
-    },
-  },
-  {
-    title: "Kuota",
-    align: "center",
-    render: (data) => {
-      return data.kuota;
-    },
-  },
-  {
-    title: "Status Aktif",
-    align: "center",
-    render: (data) => {
-      if (data.status_aktif == true) {
-        return <Tag color="success">Aktif</Tag>;
-      } else {
-        return <Tag color="error">Tidak Aktif</Tag>;
-      }
-    },
-  },
-  {
-    title: "Action",
-    fixed: "right",
-    align: "center",
-    width: 75,
-    render: (data) => {
-      const dispatch = useDispatch();
-      const handleMenuClick = (e, id) => {
-        if (e.key === "detail") {
-          dispatch(getOneKelasTahsinAnak(id));
-        } else if (e.key === "edit") {
-          dispatch(setTabsValue("updateKelasTahsinAnak"));
-          dispatch(getOneKelasTahsinAnak(id));
-        } else if (e.key === "delete") {
-          Swal.fire({
-            text: "Apakah Anda Mau Menghapus?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Submit",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              dispatch(deleteKelasTahsinAnak(id)).then((data) => {
-                message.loading("Loading", 1, () => {
-                  if (data.statusCode == 200) {
-                    message.success(data.message);
-                    dispatch(getAllKelasTahsinAnak());
-                  } else {
-                    message.error(data.response.data.message);
-                  }
-                });
-              });
-            }
-          });
-        }
-      };
-
-      const menu = (
-        <Menu onClick={(e) => handleMenuClick(e, data.id)}>
-          <Menu.Item key="detail">
-            <InfoCircleOutlined /> Detail
-          </Menu.Item>
-          <Menu.Item key="edit">
-            <EditOutlined /> Edit
-          </Menu.Item>
-          <Menu.Item key="delete" style={{ color: "red" }}>
-            <DeleteOutlined />
-            Hapus
-          </Menu.Item>
-        </Menu>
-      );
-
-      return (
-        <Dropdown menu={menu} trigger={["click"]}>
-          <a
-            className="ant-dropdown-link"
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <DownCircleOutlined className="text-lg text-slate-500" />
-          </a>
-        </Dropdown>
-      );
-    },
-  },
-];
 const TabKelasTahsinAnak = () => {
   const dispatch = useDispatch();
 
@@ -214,17 +100,178 @@ const TabKelasTahsinAnak = () => {
 
   useEffect(() => {
     dispatch(getAllKelasTahsinAnak());
+  }, []);
+
+  const fatchData = () => {
+    dispatch(getAllKelasTahsinAnak());
 
     setKelasAnak("");
     setHariKelasAnak("");
     setPengajarKelasAnak("");
     setKuotaKelasAnak("");
     setCatatanKelasAnak("");
-  }, [TabsValues]);
+  };
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
+  const handleSearch = (value) => {
+    dispatch(getAllKelasTahsinAnak(value));
+  };
+
+  const ColumsKelasAnak = [
+    {
+      title: "Kelas",
+      align: "center",
+      render: (data) => {
+        return data?.kelas;
+      },
+    },
+    {
+      title: "Pengajar",
+      align: "center",
+      render: (data) => {
+        return data?.PengajarTahsin?.nama;
+      },
+    },
+    {
+      title: "Hari",
+      align: "center",
+      render: (data) => {
+        return data.Jadwal.hari;
+      },
+    },
+    {
+      title: "Catatan",
+      align: "center",
+      render: (data) => {
+        return data.catatan;
+      },
+    },
+    {
+      title: "Kuota",
+      align: "center",
+      render: (data) => {
+        return data.kuota;
+      },
+    },
+    {
+      title: "Status Aktif",
+      align: "center",
+      render: (data) => {
+        const dispatch = useDispatch();
+        const handleStatusChange = (newStatus) => {
+          dispatch(updateStatusKelasTahsinAnak(data.id, newStatus)).then(
+            (response) => {
+              if (response.statusCode === 200) {
+                message.success(
+                  `Status ${newStatus ? "Aktif" : "Tidak Aktif"}`
+                );
+                dispatch(getAllKelasTahsinAnak());
+              } else {
+                message.error(response.message);
+              }
+            }
+          );
+        };
+
+        const menu = (
+          <Menu className="w-28">
+            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+              Aktif
+            </Menu.Item>
+            <Menu.Item
+              key="tidak-aktif"
+              onClick={() => handleStatusChange(false)}
+            >
+              Tidak Aktif
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <div>
+                {data.status_aktif ? (
+                  <Tag color="success">Aktif</Tag>
+                ) : (
+                  <Tag color="error" style={{ color: "red" }}>
+                    Tidak Aktif
+                  </Tag>
+                )}
+              </div>
+            </a>
+          </Dropdown>
+        );
+      },
+    },
+    {
+      title: "Action",
+      fixed: "right",
+      align: "center",
+      width: 75,
+      render: (data) => {
+        const dispatch = useDispatch();
+        const handleMenuClick = (e, id) => {
+          if (e.key === "edit") {
+            dispatch(setTabsValue("updateKelasTahsinAnak"));
+            dispatch(getOneKelasTahsinAnak(id));
+          } else if (e.key === "delete") {
+            Swal.fire({
+              text: "Apakah Anda Mau Menghapus?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Submit",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(deleteKelasTahsinAnak(id)).then((data) => {
+                  message.loading("Loading", 1, () => {
+                    if (data.statusCode == 200) {
+                      message.success(data.message);
+                      dispatch(getAllKelasTahsinAnak());
+                    } else {
+                      message.error(data.response.data.message);
+                    }
+                  });
+                });
+              }
+            });
+          }
+        };
+
+        const menu = (
+          <Menu onClick={(e) => handleMenuClick(e, data.id)}>
+            <Menu.Item key="edit">
+              <EditOutlined /> Edit
+            </Menu.Item>
+            <Menu.Item key="delete" style={{ color: "red" }}>
+              <DeleteOutlined />
+              Hapus
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <div>
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <DownCircleOutlined className="text-lg text-slate-500" />
+              </a>
+            </Dropdown>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <div>
@@ -354,7 +401,8 @@ const TabKelasTahsinAnak = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Nama Kelas"
+              onSearch={handleSearch}
               style={{
                 width: 400,
               }}
@@ -363,6 +411,7 @@ const TabKelasTahsinAnak = () => {
             <Tooltip placement="top" title={"Tambahkan Kelas Tahsin Anak"}>
               <Button
                 onClick={() => {
+                  fatchData();
                   handleChangeTabs("TambahKelasAnak");
                 }}
                 icon={<PlusOutlined />}
@@ -381,6 +430,7 @@ const TabKelasTahsinAnak = () => {
               scroll={{
                 y: 480,
               }}
+              rowKey={KelasTahsinAnaks.id}
             />
           </div>
         </div>
