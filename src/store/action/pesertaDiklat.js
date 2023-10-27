@@ -1,11 +1,11 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
+import { config } from "../../configs";
 
 export function getAllPesertaDiklat() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat`,
+        url: `${config.api_host_dev}/pesertaDiklat`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getOnePesertaDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat/${id}`,
+        url: `${config.api_host_dev}/pesertaDiklat/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -47,7 +47,7 @@ export function createPesertaDiklat(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat`,
+        url: `${config.api_host_dev}/pesertaDiklat`,
         method: "POST",
         data: body,
         headers: {
@@ -66,7 +66,7 @@ export function updatePesertaDiklat(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat/${id}`,
+        url: `${config.api_host_dev}/pesertaDiklat/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -85,7 +85,7 @@ export function updateStatusPembayaranPesertaDiklat(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat/pembayaran/${id}`,
+        url: `${config.api_host_dev}/pesertaDiklat/pembayaran/${id}`,
         method: "PATCH",
         data: { status_pembayaran: status },
         headers: {
@@ -104,7 +104,7 @@ export function updateStatusPesertaDiklat(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat/status/${id}`,
+        url: `${config.api_host_dev}/pesertaDiklat/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -123,7 +123,7 @@ export function deletePesertaDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaDiklat/${id}`,
+        url: `${config.api_host_dev}/pesertaDiklat/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

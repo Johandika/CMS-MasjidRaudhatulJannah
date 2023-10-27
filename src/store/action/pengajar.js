@@ -1,5 +1,5 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
+import { config } from "../../configs";
 
 export function getAllPengajar(search) {
   return async (dispatch) => {
@@ -12,12 +12,15 @@ export function getAllPengajar(search) {
         queryParams.search = search;
       }
 
-      const { data } = await axios.get(`${BaseUrl}/pengajarTahsin`, {
-        headers: {
-          api_key: "masjidraudhatuljannah",
-        },
-        params: queryParams,
-      });
+      const { data } = await axios.get(
+        `${config.api_host_dev}/pengajarTahsin`,
+        {
+          headers: {
+            api_key: "masjidraudhatuljannah",
+          },
+          params: queryParams,
+        }
+      );
 
       dispatch({
         type: "Fetch/GetAllPengajar",
@@ -33,7 +36,7 @@ export function getOnePengajar(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        url: `${config.api_host_dev}/pengajarTahsin/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -54,7 +57,7 @@ export function createPengajar(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pengajarTahsin`,
+        url: `${config.api_host_dev}/pengajarTahsin`,
         method: "POST",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -73,7 +76,7 @@ export function updatePengajar(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        url: `${config.api_host_dev}/pengajarTahsin/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -92,7 +95,7 @@ export function updateStatusPengajar(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pengajarTahsin/status/${id}`,
+        url: `${config.api_host_dev}/pengajarTahsin/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -111,7 +114,7 @@ export function deletePengajar(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pengajarTahsin/${id}`,
+        url: `${config.api_host_dev}/pengajarTahsin/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

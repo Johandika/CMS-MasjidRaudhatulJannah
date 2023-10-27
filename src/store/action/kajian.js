@@ -1,11 +1,11 @@
 import axios from "axios";
-const BaseUrl = "http://localhost:3000";
+import { config } from "../../configs";
 
 export function getAllKategoriKajian() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kategoriKajian`,
+        url: `${config.api_host_dev}/kategoriKajian`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getAllKajianRutin() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/rutin`,
+        url: `${config.api_host_dev}/kajian/rutin`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -46,7 +46,7 @@ export function getAllKajianTablighAkbar() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/tablighAkbar`,
+        url: `${config.api_host_dev}/kajian/tablighAkbar`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -66,7 +66,7 @@ export function getOneKajian(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/${id}`,
+        url: `${config.api_host_dev}/kajian/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -86,7 +86,7 @@ export function createKajian(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian`,
+        url: `${config.api_host_dev}/kajian`,
         method: "POST",
         data: body,
         headers: {
@@ -105,7 +105,7 @@ export function updateKajian(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/${id}`,
+        url: `${config.api_host_dev}/kajian/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -124,7 +124,7 @@ export function updateStatusKajian(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/status/${id}`,
+        url: `${config.api_host_dev}/kajian/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -143,7 +143,7 @@ export function deleteKajian(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kajian/${id}`,
+        url: `${config.api_host_dev}/kajian/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -163,7 +163,7 @@ export function getAllLinkKajian() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian`,
+        url: `${config.api_host_dev}/linkKajian`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -184,7 +184,7 @@ export function getAllLinkKajianByKajianId(KajianId) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian/${KajianId}`,
+        url: `${config.api_host_dev}/linkKajian/${KajianId}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -205,7 +205,7 @@ export function getOneLinkKajian(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian/${id}`,
+        url: `${config.api_host_dev}/linkKajian/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -226,7 +226,7 @@ export function createLinkKajian(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian`,
+        url: `${config.api_host_dev}/linkKajian`,
         method: "POST",
         data: body,
         headers: {
@@ -245,7 +245,7 @@ export function updateLinkKajian(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian/${id}`,
+        url: `${config.api_host_dev}/linkKajian/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -264,7 +264,7 @@ export function deleteLinkKajian(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/linkKajian/${id}`,
+        url: `${config.api_host_dev}/linkKajian/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

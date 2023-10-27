@@ -1,11 +1,11 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
+import { config } from "../../configs";
 
 export function getAllLayanan() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan`,
+        url: `${config.api_host_dev}/layanan`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getOneLayanan(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan/${id}`,
+        url: `${config.api_host_dev}/layanan/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -47,7 +47,7 @@ export function createLayanan(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan`,
+        url: `${config.api_host_dev}/layanan`,
         method: "POST",
         data: body,
         headers: {
@@ -66,7 +66,7 @@ export function updateLayanan(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan/${id}`,
+        url: `${config.api_host_dev}/layanan/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -85,7 +85,7 @@ export function updateStatusLayanan(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan/status/${id}`,
+        url: `${config.api_host_dev}/layanan/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -104,7 +104,7 @@ export function deleteLayanan(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/layanan/${id}`,
+        url: `${config.api_host_dev}/layanan/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

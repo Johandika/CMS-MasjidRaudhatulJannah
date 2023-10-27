@@ -1,13 +1,13 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
 import { message } from "antd";
+import { config } from "../../configs";
 
 //! KelasDewasa
 export function getAllKelasTahsinDewasa() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -28,7 +28,7 @@ export function getOneKelasTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -49,7 +49,7 @@ export function createKelasTahsinDewasa(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa`,
         method: "POST",
         data: body,
         headers: {
@@ -68,7 +68,7 @@ export function updateKelasTahsinDewasa(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -87,7 +87,7 @@ export function updateStatusKelasTahsinDewasa(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa/status/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -106,7 +106,7 @@ export function deleteKelasTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -133,7 +133,7 @@ export function getAllKelasTahsinAnak(search) {
       }
 
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak`,
+        url: `${config.api_host_dev}/kelasTahsinAnak`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -155,7 +155,7 @@ export function getOneKelasTahsinAnak(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinAnak/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -177,7 +177,7 @@ export function addKelasTahsinAnak(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak`,
+        url: `${config.api_host_dev}/kelasTahsinAnak`,
         method: "POST",
         data: body,
         headers: {
@@ -196,7 +196,7 @@ export function updateKelasTahsinAnak(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinAnak/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -215,7 +215,7 @@ export function updateStatusKelasTahsinAnak(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak/status/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinAnak/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -234,7 +234,7 @@ export function deleteKelasTahsinAnak(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/kelasTahsinAnak/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

@@ -1,11 +1,11 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
+import { config } from "../../configs";
 
 export function getAllDivisi() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${config.api_host_dev}/divisi`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getOneDivisi(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${config.api_host_dev}/divisi/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -47,7 +47,7 @@ export function createDivisi(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi`,
+        url: `${config.api_host_dev}/divisi`,
         method: "POST",
         data: body,
         headers: {
@@ -66,7 +66,7 @@ export function updateDivisi(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${config.api_host_dev}/divisi/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -85,7 +85,7 @@ export function updateStatusDivisi(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/status/${id}`,
+        url: `${config.api_host_dev}/divisi/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -104,7 +104,7 @@ export function deleteDivisi(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/divisi/${id}`,
+        url: `${config.api_host_dev}/divisi/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

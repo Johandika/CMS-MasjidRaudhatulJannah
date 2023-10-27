@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { config } from "../configs";
 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Button, Input, Space } from "antd";
@@ -18,7 +19,7 @@ const Register = () => {
 
   const handleSubmit = async () => {
     const data = await axios({
-      url: "http://localhost:3000/user/register",
+      url: `${config.api_host_dev}/user/register`,
       method: "POST",
       data: {
         username,
@@ -51,7 +52,10 @@ const Register = () => {
 
         <div className="w-full rounded-xl">
           {/* Display Name */}
-          <label htmlFor="username" className="font-semibold">
+          <label
+            htmlFor="username"
+            className="font-semibold"
+          >
             Username
           </label>
           <Input
@@ -67,7 +71,10 @@ const Register = () => {
           />
 
           {/* Email */}
-          <label htmlFor="email" className="font-semibold">
+          <label
+            htmlFor="email"
+            className="font-semibold"
+          >
             E-mail
           </label>
           <Input
@@ -83,7 +90,10 @@ const Register = () => {
           />
 
           {/* Password */}
-          <label htmlFor="password" className="font-semibold">
+          <label
+            htmlFor="password"
+            className="font-semibold"
+          >
             Password
           </label>
           <Input.Password
@@ -99,7 +109,10 @@ const Register = () => {
           />
 
           {/* Phone Number */}
-          <label htmlFor="telepon" className="font-semibold">
+          <label
+            htmlFor="telepon"
+            className="font-semibold"
+          >
             Telepon
           </label>
           <Input
