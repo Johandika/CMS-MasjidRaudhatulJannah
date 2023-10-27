@@ -34,7 +34,7 @@ export function getOneKelasTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${config.api_host_dev}/kelasTahsinDewasa/`,
+        url: `${config.api_host_dev}/kelasTahsinDewasa/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
