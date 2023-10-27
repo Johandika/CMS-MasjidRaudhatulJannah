@@ -111,6 +111,7 @@ const TabPengajar = () => {
     {
       title: "Nama",
       align: "center",
+      width: 250,
       render: (data) => {
         return data.nama;
       },
@@ -118,6 +119,7 @@ const TabPengajar = () => {
     {
       title: "Telepon",
       align: "center",
+      width: 200,
       render: (data) => {
         return data.telepon;
       },
@@ -125,6 +127,7 @@ const TabPengajar = () => {
     {
       title: "Alamat",
       align: "center",
+      width: 250,
       render: (data) => {
         return data.alamat;
       },
@@ -291,14 +294,15 @@ const TabPengajar = () => {
                 value={namaPengajar}
                 onChange={(e) => setNamaPengajar(e.target.value)}
                 className="mt-[5px]"
-                size="large"
+                autoComplete="off"
                 id="namaPengajar"
                 placeholder="Masukkan Nama Pengajar"
               />
-            </div>{" "}
+            </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="teleponPengajar">Telepon</label>
               <Input
+                autoComplete="off"
                 value={teleponPengajar}
                 onChange={(e) => setTeleponPengajar(e.target.value)}
                 className="mt-[5px]"
@@ -312,6 +316,7 @@ const TabPengajar = () => {
                 value={pekerjaanPengajar}
                 onChange={(e) => setPekerjaanPengajar(e.target.value)}
                 className="mt-[5px]"
+                autoComplete="off"
                 id="pekerjaanPengajar"
                 placeholder="Masukkan Pekerjaan Pengajar"
               />
@@ -322,6 +327,7 @@ const TabPengajar = () => {
                 value={umurPengajar}
                 onChange={(e) => setUmurPengajar(e.target.value)}
                 className="mt-[5px]"
+                autoComplete="off"
                 id="umurPengajar"
                 placeholder="Masukkan Umur Pengajar"
               />
@@ -332,6 +338,7 @@ const TabPengajar = () => {
                 value={alamatPengajar}
                 onChange={(e) => setAlamatPengajar(e.target.value)}
                 className="mt-[5px]"
+                autoComplete="off"
                 rows={5}
                 id="alamatPengajar"
                 placeholder="Masukkan Alamat Pengajar"
@@ -345,14 +352,12 @@ const TabPengajar = () => {
                 fetchData();
               }}
               type="default"
-              size="large"
               className="text-primaryDark border-primaryDark"
             >
               Batal
             </Button>
             <Button
               type="primary"
-              size="large"
               className="bg-primaryDark"
               onClick={
                 TabsValues === "TambahPengajar"
@@ -371,7 +376,6 @@ const TabPengajar = () => {
           <div className="w-full flex justify-between">
             <Search
               placeholder="Masukkan Nama / Telepon"
-              size="large"
               onSearch={handleSearch}
               style={{
                 width: 400,
@@ -380,7 +384,6 @@ const TabPengajar = () => {
             <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
               <Button
                 icon={<PlusOutlined />}
-                size="large"
                 className="bg-primaryLight text-white"
                 onClick={() => {
                   handleChangeTabs("TambahPengajar");
@@ -394,11 +397,12 @@ const TabPengajar = () => {
           <div>
             <Table
               columns={ColumsPengajar}
+              size="small"
               dataSource={Pengajars.data}
               pagination={false}
               scroll={{
                 y: 480,
-                x: 1200,
+                x: 1400,
               }}
             />
           </div>
