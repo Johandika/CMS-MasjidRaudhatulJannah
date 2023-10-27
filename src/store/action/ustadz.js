@@ -1,12 +1,11 @@
 import axios from "axios";
-
-const BaseUrl = "http://localhost:3000";
+import { config } from "../../configs";
 
 export function getAllUstadz() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/ustadz`,
+        url: `${config.api_host_dev}/ustadz`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -27,7 +26,7 @@ export function getOneUstadz(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/ustadz/${id}`,
+        url: `${config.api_host_dev}/ustadz/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -50,7 +49,7 @@ export function createUstadz(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/ustadz`,
+        url: `${config.api_host_dev}/ustadz`,
         method: "POST",
         data: body,
         headers: {
@@ -69,7 +68,7 @@ export function updateUstadz(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/ustadz/${id}`,
+        url: `${config.api_host_dev}/ustadz/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -88,7 +87,7 @@ export function deleteUstadz(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/ustadz/${id}`,
+        url: `${config.api_host_dev}/ustadz/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

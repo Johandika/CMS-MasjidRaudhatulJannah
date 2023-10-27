@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const BaseUrl = "http://localhost:3000";
+import { config } from "../../configs";
 
 //! Rekening
 
@@ -8,7 +7,7 @@ export function getAllRekening() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/rekening`,
+        url: `${config.api_host_dev}/rekening`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -29,7 +28,7 @@ export function getOneRekening(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/rekening/${id}`,
+        url: `${config.api_host_dev}/rekening/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -52,7 +51,7 @@ export function createRekening(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/rekening`,
+        url: `${config.api_host_dev}/rekening`,
         method: "POST",
         data: body,
         headers: {
@@ -71,7 +70,7 @@ export function updateRekening(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/rekening/${id}`,
+        url: `${config.api_host_dev}/rekening/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -90,7 +89,7 @@ export function deleteRekening(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/rekening/${id}`,
+        url: `${config.api_host_dev}/rekening/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -110,7 +109,7 @@ export function getAllUangMasuk() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangMasuk`,
+        url: `${config.api_host_dev}/uangMasuk`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -132,7 +131,7 @@ export function getOneUangMasuk(id) {
     w;
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangMasuk/${id}`,
+        url: `${config.api_host_dev}/uangMasuk/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -153,7 +152,7 @@ export function createUangMasuk(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangMasuk`,
+        url: `${config.api_host_dev}/uangMasuk`,
         method: "POST",
         data: body,
         headers: {
@@ -172,7 +171,7 @@ export function updateUangMasuk(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangMasuk/${id}`,
+        url: `${config.api_host_dev}/uangMasuk/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -191,7 +190,7 @@ export function deleteUangMasuk(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangMasuk/${id}`,
+        url: `${config.api_host_dev}/uangMasuk/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -211,7 +210,7 @@ export function getAllUangKeluar() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangKeluar`,
+        url: `${config.api_host_dev}/uangKeluar`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -233,7 +232,7 @@ export function getOneUangKeluar(id) {
     w;
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangKeluar/${id}`,
+        url: `${config.api_host_dev}/uangKeluar/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -254,7 +253,7 @@ export function createUangKeluar(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangKeluar`,
+        url: `${config.api_host_dev}/uangKeluar`,
         method: "POST",
         data: body,
         headers: {
@@ -273,7 +272,7 @@ export function updateUangKeluar(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangKeluar/${id}`,
+        url: `${config.api_host_dev}/uangKeluar/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -292,7 +291,7 @@ export function deleteUangKeluar(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/uangKeluar/${id}`,
+        url: `${config.api_host_dev}/uangKeluar/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { config } from "../configs";
 
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Button, Input, Space, message } from "antd";
@@ -14,7 +15,7 @@ const Login = () => {
   const handleSubmit = () => {
     axios({
       method: "POST",
-      url: "http://localhost:3000/user/login",
+      url: `${config.api_host_dev}/user/login`,
       data: {
         email: email,
         password: password,
@@ -55,7 +56,10 @@ const Login = () => {
 
           <div className="w-full rounded-xl mt-10 ">
             {/* Email */}
-            <label htmlFor="email" className="font-semibold">
+            <label
+              htmlFor="email"
+              className="font-semibold"
+            >
               E-mail
             </label>
             <Input
@@ -71,7 +75,10 @@ const Login = () => {
             />
 
             {/* Password */}
-            <label htmlFor="password" className="font-semibold">
+            <label
+              htmlFor="password"
+              className="font-semibold"
+            >
               Password
             </label>
             <Input.Password

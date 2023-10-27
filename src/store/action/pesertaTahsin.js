@@ -1,12 +1,12 @@
 import axios from "axios";
-const BaseUrl = "http://localhost:3000";
+import { config } from "../../configs";
 
 //! PesertaTahsinDewasa
 export function getAllPesertaTahsinDewasa() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getOnePesertaTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -47,7 +47,7 @@ export function createPesertaTahsinDewasa(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa`,
         method: "POST",
         data: body,
         headers: {
@@ -66,7 +66,7 @@ export function updatePesertaTahsinDewasa(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -85,7 +85,7 @@ export function updateStatusPesertaTahsinDewasa(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa/status/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -104,7 +104,7 @@ export function deletePesertaTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinDewasa/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinDewasa/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
@@ -123,7 +123,7 @@ export function getAllPesertaTahsinAnak() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -144,7 +144,7 @@ export function getOnePesertaTahsinAnak(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -165,7 +165,7 @@ export function createPesertaTahsinAnak(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak`,
         method: "POST",
         data: body,
         headers: {
@@ -184,7 +184,7 @@ export function updatePesertaTahsinAnak(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -203,7 +203,7 @@ export function updateStatusPesertaTahsinAnak(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak/status/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -222,7 +222,7 @@ export function deletePesertaTahsinAnak(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/pesertaTahsinAnak/${id}`,
+        url: `${config.api_host_dev}/pesertaTahsinAnak/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),

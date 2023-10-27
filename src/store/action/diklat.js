@@ -1,11 +1,11 @@
-const BaseUrl = "http://localhost:3000";
 import axios from "axios";
+import { config } from "../../configs";
 
 export function getAllDiklat() {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat`,
+        url: `${config.api_host_dev}/diklat`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -26,7 +26,7 @@ export function getOneDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat/${id}`,
+        url: `${config.api_host_dev}/diklat/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -47,7 +47,7 @@ export function createDiklat(body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat`,
+        url: `${config.api_host_dev}/diklat`,
         method: "POST",
         data: body,
         headers: {
@@ -66,7 +66,7 @@ export function updateDiklat(id, body) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat/${id}`,
+        url: `${config.api_host_dev}/diklat/${id}`,
         method: "PATCH",
         data: body,
         headers: {
@@ -85,7 +85,7 @@ export function updateStatusDiklat(id, status) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat/status/${id}`,
+        url: `${config.api_host_dev}/diklat/status/${id}`,
         method: "PATCH",
         data: { status_aktif: status },
         headers: {
@@ -104,7 +104,7 @@ export function deleteDiklat(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/diklat/${id}`,
+        url: `${config.api_host_dev}/diklat/${id}`,
         method: "DELETE",
         headers: {
           authorization: localStorage.getItem("authorization"),
