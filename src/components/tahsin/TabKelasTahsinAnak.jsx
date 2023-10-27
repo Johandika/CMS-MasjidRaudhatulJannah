@@ -302,7 +302,7 @@ const TabKelasTahsinAnak = () => {
               <Input
                 value={kelasAnak}
                 autoComplete="off"
-                className=""
+                className="mt-[5px]"
                 id="kelasAnak"
                 placeholder="Masukkan Nama Kelas Tahsin Anak"
                 onChange={(e) => setKelasAnak(e.target.value)}
@@ -314,7 +314,8 @@ const TabKelasTahsinAnak = () => {
                 <Select
                   id="pengajarTahsinAnak"
                   placeholder="Pilih Pengajar Tahsin"
-                  value={pengajarKelasAnak}
+                  value={pengajarKelasAnak ? pengajarKelasAnak : null}
+                  className="mt-[5px]"
                   onChange={(value) => setPengajarKelasAnak(value)}
                 >
                   {Pengajars.data.map((pengajar) => (
@@ -334,7 +335,8 @@ const TabKelasTahsinAnak = () => {
                 <Select
                   id="jadwalTahsinAnak"
                   placeholder="Pilih Jadwal Kelas Tahsin"
-                  value={hariKelasAnak}
+                  value={hariKelasAnak ? hariKelasAnak : null}
+                  className="mt-[5px]"
                   onChange={(value) => setHariKelasAnak(value)}
                 >
                   {Hari.map((hari) => (
@@ -353,7 +355,7 @@ const TabKelasTahsinAnak = () => {
               <InputNumber
                 value={kuotaKelasAnak}
                 onChange={(value) => setKuotaKelasAnak(value)}
-                className="w-full"
+                className="w-full mt-[5px]"
                 id="kuotaKelasAnak"
                 placeholder="Masukkan Kuota Kelas Tahsin"
               />
@@ -366,7 +368,7 @@ const TabKelasTahsinAnak = () => {
                 autoComplete="off"
                 value={catatanKelasAnak}
                 onChange={(e) => setCatatanKelasAnak(e.target.value)}
-                className=""
+                className="mt-[5px]"
                 id="catatanKelasAnak"
                 placeholder="Masukkan Catatan"
               />

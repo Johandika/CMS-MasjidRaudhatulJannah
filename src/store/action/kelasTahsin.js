@@ -3,17 +3,23 @@ import axios from "axios";
 import { message } from "antd";
 
 //! KelasDewasa
-export function getAllKelasTahsinDewasa() {
+export function getAllKelasTahsinDewasa(search) {
   return async (dispatch) => {
     try {
+      const queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${BaseUrl}/kelasTahsinDewasa`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
-      console.log(data);
       dispatch({
         type: "Fetch/GetAllKelasTahsinDewasa",
         payload: data,
@@ -28,7 +34,7 @@ export function getOneKelasTahsinDewasa(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${BaseUrl}/kelasTahsinDewasa`,
+        url: `${BaseUrl}/kelasTahsinDewasa/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",

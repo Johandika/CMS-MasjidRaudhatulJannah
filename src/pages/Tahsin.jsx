@@ -11,14 +11,8 @@ import TabPesertaTahsinDewasa from "../components/tahsin/TabPesertaTahsinDewasa"
 
 import { Tabs } from "antd";
 
-const Kajian = () => {
+const Tahsin = () => {
   const dispatch = useDispatch();
-
-  const { TabsValues } = useSelector((state) => state.TabsReducer);
-
-  const handleChangeTabs = (value) => {
-    dispatch(setTabsValue(value));
-  };
 
   return (
     <div className="w-full h-full px-5">
@@ -59,4 +53,4 @@ const Kajian = () => {
   );
 };
 
-export default Kajian;
+export default Tahsin;
