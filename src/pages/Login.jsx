@@ -30,7 +30,6 @@ const Login = () => {
         });
       })
       .catch((error) => {
-        console.error("Gagal:", error);
         message.error(error.response.data.message);
       });
   };

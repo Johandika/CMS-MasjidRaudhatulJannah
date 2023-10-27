@@ -34,7 +34,7 @@ const Register = () => {
         });
       })
       .catch((error) => {
-        message.error("Gagal!");
+        message.error(error.response.data.message);
       });
   };
 
