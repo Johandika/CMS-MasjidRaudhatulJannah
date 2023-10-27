@@ -3,15 +3,24 @@ import { config } from "../../configs";
 
 //! Rekening
 
-export function getAllRekening() {
+export function getAllRekening(search) {
   return async (dispatch) => {
     try {
+      const queryParams = {
+        limit: 50,
+      };
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/rekening`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
 
       dispatch({

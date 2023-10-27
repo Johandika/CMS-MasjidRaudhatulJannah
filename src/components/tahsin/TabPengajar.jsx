@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -168,7 +168,10 @@ const TabPengajar = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -181,7 +184,10 @@ const TabPengajar = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -190,7 +196,10 @@ const TabPengajar = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -240,7 +249,10 @@ const TabPengajar = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -248,7 +260,10 @@ const TabPengajar = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -264,6 +279,7 @@ const TabPengajar = () => {
       },
     },
   ];
+
   return (
     <div>
       {TabsValues === "TambahPengajar" || TabsValues === "updatePengajar" ? (
@@ -381,7 +397,10 @@ const TabPengajar = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Pengajar Tahsin"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
