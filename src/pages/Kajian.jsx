@@ -1,5 +1,6 @@
 import { Tabs } from "antd";
 import TabUstadz from "../components/kajian/TabUstadz";
+import TabKategoriKajian from "../components/kajian/TabKategoriKajian";
 
 const Tahsin = () => {
   return (
@@ -15,11 +16,11 @@ const Tahsin = () => {
             key: "1",
             children: <TabUstadz />,
           },
-          // {
-          //   label: "Kelas Anak",
-          //   key: "2",
-          //   children: <TabKategoriKajian />,
-          // },
+          {
+            label: "Kategori Kajian",
+            key: "2",
+            children: <TabKategoriKajian />,
+          },
           // {
           //   label: "Kelas Dewasa",
           //   key: "3",

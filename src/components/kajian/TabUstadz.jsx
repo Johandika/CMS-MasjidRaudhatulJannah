@@ -5,9 +5,7 @@ import {
   Table,
   Tag,
   Input,
-  Tabs,
   Button,
-  Select,
   Tooltip,
   InputNumber,
   Menu,
@@ -58,6 +56,8 @@ const TabUstadz = () => {
     setPekerjaanUstadz(Ustadz?.data?.pekerjaan);
     setUmurUstadz(Ustadz?.data?.umur);
   }, [Ustadz, TabsValues]);
+
+  console.log("nama", Ustadz);
 
   const fetchData = async () => {
     await dispatch(getAllUstadz());
@@ -137,17 +137,6 @@ const TabUstadz = () => {
         return data.umur;
       },
     },
-    // {
-    //   width: 200,
-    //   title: "Status Aktif",
-    //   render: (data) => {
-    //     if (data.status_aktif == true) {
-    //       return <Tag color="success">Aktif</Tag>;
-    //     } else {
-    //       return <Tag color="error">Tidak Aktif</Tag>;
-    //     }
-    //   },
-    // },
     {
       width: 200,
       title: "Status Aktif",

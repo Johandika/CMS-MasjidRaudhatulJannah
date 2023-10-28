@@ -1,5 +1,6 @@
 let initialState = {
   KategoriKajians: [],
+  KategoriKajian: [],
   KajianRutins: [],
   KajianTablighAkbars: [],
   Kajian: {},
@@ -14,6 +15,11 @@ function KajianReducer(state = initialState, actions) {
       return {
         ...state,
         KategoriKajians: actions.payload,
+      };
+    case "Fetch/GetOneKategoriKajian":
+      return {
+        ...state,
+        KategoriKajian: actions.payload,
       };
     case "Fetch/GetAllKajianRutin":
       return {

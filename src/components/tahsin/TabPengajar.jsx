@@ -218,7 +218,6 @@ const TabPengajar = () => {
           if (e.key === "edit") {
             dispatch(setTabsValue("updatePengajar"));
             dispatch(getOnePengajar(id));
-            console.log(id);
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",

@@ -1,11 +1,43 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllKategoriKajian() {
+// Kategori Kajian
+export function getAllKategoriKajian(search) {
+  return async (dispatch) => {
+    try {
+      const queryParams = {
+        limit: 50,
+      };
+
+      if (search) {
+        queryParams.search = search;
+      }
+
+      const { data } = await axios({
+        url: `${config.api_host_dev}/kategoriKajian`,
+        method: "GET",
+        headers: {
+          api_key: "masjidraudhatuljannah",
+        },
+        params: queryParams,
+      });
+
+      dispatch({
+        type: "Fetch/GetAllKategoriKajian",
+        payload: data,
+      });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
+export function getOneKategoriKajian(id) {
   return async (dispatch) => {
     try {
       const { data } = await axios({
-        url: `${config.api_host_dev}/kategoriKajian`,
+        url: `${config.api_host_dev}/kategoriKajian/${id}`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
@@ -13,15 +45,73 @@ export function getAllKategoriKajian() {
       });
 
       dispatch({
-        type: "Fetch/GetAllKategoriKajian",
+        type: "Fetch/GetOneKategoriKajian",
         payload: data,
       });
+      return data;
     } catch (error) {
       console.log(error);
     }
   };
 }
 
+export function createKategoriKajian(body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${config.api_host_dev}/kategoriKajian`,
+        method: "POST",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function updateKategoriKajian(id, body) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${config.api_host_dev}/kategoriKajian/${id}`,
+        method: "PATCH",
+        data: body,
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function deleteKategoriKajian(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${config.api_host_dev}/kategoriKajian/${id}`,
+        method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+// Kajian
 export function getAllKajianRutin() {
   return async (dispatch) => {
     try {
@@ -120,6 +210,24 @@ export function updateKajian(id, body) {
   };
 }
 
+export function deleteKajian(id) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${config.api_host_dev}/kajian/${id}`,
+        method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
 export function updateStatusKajian(id, status) {
   return async (dispatch) => {
     try {
@@ -139,26 +247,7 @@ export function updateStatusKajian(id, status) {
   };
 }
 
-export function deleteKajian(id) {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios({
-        url: `${config.api_host_dev}/kajian/${id}`,
-        method: "DELETE",
-        headers: {
-          authorization: localStorage.getItem("authorization"),
-        },
-      });
-
-      return data;
-    } catch (error) {
-      return error;
-    }
-  };
-}
-
-//! Link Kajian
-
+// Link Kajian
 export function getAllLinkKajian() {
   return async (dispatch) => {
     try {
