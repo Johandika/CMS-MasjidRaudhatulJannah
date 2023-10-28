@@ -118,16 +118,23 @@ export function deletePesertaTahsinDewasa(id) {
   };
 }
 
-//! PesertaTahsinDewasa
-export function getAllPesertaTahsinAnak() {
+//! PesertaTahsinAnak
+export function getAllPesertaTahsinAnak(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/pesertaTahsinAnak`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
 
       dispatch({
