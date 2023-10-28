@@ -313,6 +313,7 @@ const TabPesertaTahsinDewasa = () => {
                 id="namaPesertaDewasa"
                 placeholder="Masukkan Nama"
                 value={namaPeserta}
+                autoComplete="off"
                 onChange={(e) => setNamaPeserta(e.target.value)}
               />
             </div>
@@ -323,6 +324,7 @@ const TabPesertaTahsinDewasa = () => {
                 id="umurPesertaDewasa"
                 placeholder="Masukkan Umur"
                 value={umurPeserta}
+                autoComplete="off"
                 onChange={(e) => setUmurPeserta(e.target.value)}
               />
             </div>
@@ -333,6 +335,7 @@ const TabPesertaTahsinDewasa = () => {
                 id="pekerjaanDewasa"
                 placeholder="Masukkan Pekerjaan"
                 value={pekerjaanPeserta}
+                autoComplete="off"
                 onChange={(e) => setPekerjaanPeserta(e.target.value)}
               />
             </div>
@@ -343,6 +346,7 @@ const TabPesertaTahsinDewasa = () => {
                 id="teleponPesertaDewasa"
                 placeholder="Masukkan Telepon"
                 value={teleponPeserta}
+                autoComplete="off"
                 onChange={(e) => setTeleponPeserta(e.target.value)}
               />
             </div>
@@ -354,6 +358,7 @@ const TabPesertaTahsinDewasa = () => {
                 placeholder="Masukkan Alamat"
                 value={alamatPeserta}
                 rows={4}
+                autoComplete="off"
                 onChange={(e) => setAlamatPeserta(e.target.value)}
               />
             </div>

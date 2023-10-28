@@ -346,6 +346,7 @@ const TabPesertaTahsinAnak = () => {
               <Input
                 className="mt-[5px] "
                 id="namaAyahAnak"
+                autoComplete="off"
                 value={namaAyahPeserta}
                 onChange={(e) => setNamaAyah(e.target.value)}
                 placeholder="Masukkan Nama Ayah"
@@ -357,6 +358,7 @@ const TabPesertaTahsinAnak = () => {
                 className="mt-[5px]"
                 id="namaIbuAnak"
                 value={namaIbuPeserta}
+                autoComplete="off"
                 onChange={(e) => setNamaIbu(e.target.value)}
                 placeholder="Masukkan Nama Ibu"
               />
@@ -366,6 +368,7 @@ const TabPesertaTahsinAnak = () => {
               <Input
                 className="mt-[5px] "
                 id="namaAnak"
+                autoComplete="off"
                 value={namaAnakPeserta}
                 onChange={(e) => setNamaAnak(e.target.value)}
                 placeholder="Masukkan Nama Anak"
@@ -376,6 +379,7 @@ const TabPesertaTahsinAnak = () => {
               <Input
                 className="mt-[5px] "
                 id="umurAnak"
+                autoComplete="off"
                 value={umurAnakPeserta}
                 onChange={(e) => setUmurAnak(e.target.value)}
                 placeholder="Masukkan Umur Anak"
@@ -387,6 +391,7 @@ const TabPesertaTahsinAnak = () => {
                 className="mt-[5px] "
                 id="teleponPesertaAnak"
                 value={teleponPeserta}
+                autoComplete="off"
                 onChange={(e) => setTelepon(e.target.value)}
                 placeholder="Masukkan Telepon"
               />
@@ -416,6 +421,7 @@ const TabPesertaTahsinAnak = () => {
               <Input.TextArea
                 className="mt-[5px]"
                 id="alamatPesertaAnak"
+                autoComplete="off"
                 value={alamatPeserta}
                 onChange={(e) => setAlamat(e.target.value)}
                 placeholder="Masukkan Alamat"
