@@ -2,7 +2,7 @@
 import { Tabs } from "antd";
 import TabRekening from "../components/rekening/TabRekening";
 
-const Kajian = () => {
+const Rekening = () => {
   // const dispatch = useDispatch();
 
   // const { TabsValues } = useSelector((state) => state.TabsReducer);
@@ -30,4 +30,4 @@ const Kajian = () => {
   );
 };
 
-export default Kajian;
+export default Rekening;
