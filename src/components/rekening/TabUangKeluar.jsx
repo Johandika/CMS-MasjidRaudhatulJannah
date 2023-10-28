@@ -33,7 +33,7 @@ import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
 
-const TabRekening = () => {
+const TabUangKeluar = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
@@ -259,7 +259,7 @@ const TabRekening = () => {
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaRekening">Nama Rekening</label>
+              <label htmlFor="namaPengajar">Nama Rekening</label>
               <Input
                 value={namaRekening}
                 onChange={(e) => setNamaRekening(e.target.value)}
@@ -270,7 +270,7 @@ const TabRekening = () => {
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="nomorRekening">Nomor Rekening</label>
+              <label htmlFor="teleponPengajar">Nomor Rekening</label>
               <Input
                 autoComplete="off"
                 value={nomorRekening !== null ? nomorRekening : null}
@@ -281,30 +281,30 @@ const TabRekening = () => {
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaBank">Nama Bank</label>
+              <label htmlFor="teleponPengajar">Nama Bank</label>
               <Input
                 autoComplete="off"
                 value={namaBank}
                 onChange={(e) => setNamaBank(e.target.value)}
                 className="mt-[5px]  w-full"
-                id="namaBank"
+                id="nomorRekening"
                 placeholder="Masukkan Nama Bank"
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="CatatanRekening">Catatan</label>
+              <label htmlFor="teleponPengajar">Catatan</label>
               <Input
                 autoComplete="off"
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}
                 className="mt-[5px]  w-full"
-                id="CatatanRekening"
+                id="nomorRekening"
                 placeholder="Masukkan Catatan"
               />
             </div>
 
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="saldoRekening">Saldo</label>
+              <label htmlFor="umurPengajar">Saldo</label>
               <InputNumber
                 value={saldo}
                 onChange={(value) => setSaldo(value)}
@@ -385,4 +385,4 @@ const TabRekening = () => {
   );
 };
 
-export default TabRekening;
+export default TabUangKeluar;
