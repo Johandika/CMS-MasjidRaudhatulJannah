@@ -208,9 +208,9 @@ const TabRekening = () => {
             />
             <p className="font-semibold text-[16px]">
               {TabsValues === "TambahRekening"
-                ? "Tambah Pengajar"
-                : TabsValues === "updatePengajar"
-                ? "Edit Pengajar"
+                ? "Tambah Rekening"
+                : TabsValues === "updateRekening"
+                ? "Edit Rekening"
                 : ""}
             </p>
           </div>
