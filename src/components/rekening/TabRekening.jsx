@@ -1,17 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { message, Table, Input, Button, Tooltip, InputNumber } from "antd";
-import { PlusOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import {
+  message,
+  Table,
+  Input,
+  Button,
+  Tooltip,
+  InputNumber,
+  Menu,
+  Dropdown,
+} from "antd";
+import {
+  PlusOutlined,
+  ArrowLeftOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  DownCircleOutlined,
+} from "@ant-design/icons";
 const { Search } = Input;
 
 import {
   createRekening,
+  deleteRekening,
   getAllRekening,
+  getOneRekening,
   updateRekening,
 } from "../../store/action/rekening";
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
+import Swal from "sweetalert2";
 
 const TabRekening = () => {
   const dispatch = useDispatch();
@@ -29,6 +47,14 @@ const TabRekening = () => {
     dispatch(getAllRekening());
   }, []);
 
+  useEffect(() => {
+    setNamaRekening(Rekening?.data?.atas_nama);
+    setNomorRekening(Rekening?.data?.nomor_rekening);
+    setSaldo(Rekening?.data?.saldo);
+    setCatatan(Rekening?.data?.catatan);
+    setNamaBank(Rekening?.data?.nama_bank);
+  }, [Rekening, TabsValues]);
+
   const fetchData = async () => {
     await dispatch(getAllRekening());
     setNamaRekening("");
@@ -36,10 +62,6 @@ const TabRekening = () => {
     setSaldo(0);
     setCatatan("");
     setNamaBank("");
-  };
-
-  const handleSearch = async (value) => {
-    await dispatch(getAllRekening(value));
   };
 
   const actionRekening = (id) => {
@@ -69,13 +91,18 @@ const TabRekening = () => {
       .catch((error) => console.log(error));
   };
 
+  const handleSearch = async (value) => {
+    await dispatch(getAllRekening(value));
+  };
+
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
 
-  const ColumsPengajar = [
+  const ColumnsRekening = [
     {
-      title: "Nama",
+      width: 200,
+      title: "Nama Rekening",
       render: (data) => {
         return data.atas_nama;
       },
@@ -95,24 +122,80 @@ const TabRekening = () => {
       },
     },
     {
-      width: 250,
-      title: "Terakhir Update",
+      title: "Action",
+      fixed: "right",
+      align: "center",
+      width: 75,
       render: (data) => {
-        return ubahFormatDate(data.updatedAt);
-      },
-    },
-    {
-      width: 200,
-      title: "action",
-      render: (data) => {
-        return ubahFormatDate(data.updatedAt);
+        const handleMenuClick = (e, id) => {
+          if (e.key === "edit") {
+            dispatch(setTabsValue("updateRekening"));
+            dispatch(getOneRekening(id));
+            console.log(id);
+          } else if (e.key === "delete") {
+            Swal.fire({
+              text: "Apakah Anda Mau Menghapus?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Submit",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(deleteRekening(id)).then((data) => {
+                  message.loading("Loading", 1, () => {
+                    if (data.statusCode == 200) {
+                      message.success(data.message);
+                      dispatch(getAllRekening());
+                    } else {
+                      message.error(data.response.data.message);
+                    }
+                  });
+                });
+              }
+            });
+          }
+        };
+
+        const menu = (
+          <Menu onClick={(e) => handleMenuClick(e, data.id)}>
+            <Menu.Item key="edit">
+              <EditOutlined /> Edit
+            </Menu.Item>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
+              <DeleteOutlined />
+              Hapus
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
+            <div>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <DownCircleOutlined className="text-lg text-slate-500" />
+              </a>
+            </div>
+          </Dropdown>
+        );
       },
     },
   ];
 
   return (
     <div>
-      {TabsValues === "TambahRekening" || TabsValues === "updatePengajar" ? (
+      {TabsValues === "TambahRekening" || TabsValues === "updateRekening" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -208,7 +291,7 @@ const TabRekening = () => {
               onClick={
                 TabsValues === "TambahRekening"
                   ? () => actionRekening()
-                  : TabsValues === "updatePengajar"
+                  : TabsValues === "updateRekening"
                   ? () => actionRekening(Rekening.data.id)
                   : null
               }
@@ -247,12 +330,14 @@ const TabRekening = () => {
             </div>
             <div>
               <Table
-                columns={ColumsPengajar}
+                columns={ColumnsRekening}
+                size="small"
                 dataSource={Rekenings.data}
                 pagination={false}
                 scroll={{
                   y: 440,
                 }}
+                rowKey={Rekenings.id}
               />
             </div>
           </div>

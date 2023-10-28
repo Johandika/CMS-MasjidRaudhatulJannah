@@ -48,10 +48,8 @@ export function getOneRekening(id) {
         type: "Fetch/GetOneRekening",
         payload: data,
       });
-
-      return data;
     } catch (error) {
-      return error;
+      console.log(error);
     }
   };
 }
