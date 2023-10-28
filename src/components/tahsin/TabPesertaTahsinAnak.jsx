@@ -472,7 +472,7 @@ const TabPesertaTahsinAnak = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Nama Anak/Ayah/Ibu"
               onSearch={handleSearch}
               style={{
                 width: 400,
@@ -500,7 +500,7 @@ const TabPesertaTahsinAnak = () => {
               pagination={false}
               scroll={{
                 y: 400,
-                x: 1400,
+                x: 1600,
               }}
               rowKey={PesertaTahsinAnaks.id}
             />

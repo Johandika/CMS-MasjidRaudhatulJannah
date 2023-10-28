@@ -2,15 +2,22 @@ import axios from "axios";
 import { config } from "../../configs";
 
 //! PesertaTahsinDewasa
-export function getAllPesertaTahsinDewasa() {
+export function getAllPesertaTahsinDewasa(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      console.log(search);
+      if (search) {
+        queryParams.search = search;
+      }
       const { data } = await axios({
         url: `${config.api_host_dev}/pesertaTahsinDewasa`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
       dispatch({
         type: "Fetch/GetAllPesertaTahsinDewasa",
