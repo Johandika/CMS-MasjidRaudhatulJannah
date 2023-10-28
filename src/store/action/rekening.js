@@ -18,7 +18,7 @@ export function getAllRekening(search) {
         url: `${config.api_host_dev}/rekening`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
         params: queryParams,
       });
@@ -40,7 +40,7 @@ export function getOneRekening(id) {
         url: `${config.api_host_dev}/rekening/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -119,7 +119,7 @@ export function getAllUangMasuk() {
         url: `${config.api_host_dev}/uangMasuk`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -141,7 +141,7 @@ export function getOneUangMasuk(id) {
         url: `${config.api_host_dev}/uangMasuk/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -220,7 +220,7 @@ export function getAllUangKeluar() {
         url: `${config.api_host_dev}/uangKeluar`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -242,7 +242,7 @@ export function getOneUangKeluar(id) {
         url: `${config.api_host_dev}/uangKeluar/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 

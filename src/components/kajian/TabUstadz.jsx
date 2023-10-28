@@ -43,7 +43,7 @@ const TabUstadz = () => {
   let [nomorUstadz, setNomorUstadz] = useState("");
   let [alamatUstadz, setAlamatUstadz] = useState("");
   let [pekerjaanUstadz, setPekerjaanUstadz] = useState("");
-  let [umurUstadz, setUmurUstadz] = useState(0);
+  let [umurUstadz, setUmurUstadz] = useState(null);
 
   useEffect(() => {
     dispatch(getAllUstadz());
@@ -57,15 +57,13 @@ const TabUstadz = () => {
     setUmurUstadz(Ustadz?.data?.umur);
   }, [Ustadz, TabsValues]);
 
-  console.log("nama", Ustadz);
-
   const fetchData = async () => {
     await dispatch(getAllUstadz());
     setNamaUstadz("");
     setNomorUstadz("");
     setAlamatUstadz("");
     setPekerjaanUstadz("");
-    setUmurUstadz(0);
+    setUmurUstadz(null);
   };
 
   const actionRekening = (id) => {
@@ -105,13 +103,15 @@ const TabUstadz = () => {
     {
       width: 200,
       title: "Nama Ustadz",
+      align: "center",
       render: (data) => {
         return data.nama;
       },
     },
     {
       width: 200,
-      title: "Nomor Hp",
+      title: "Nomor Telepon",
+      align: "center",
       render: (data) => {
         return data.telepon;
       },
@@ -119,6 +119,7 @@ const TabUstadz = () => {
     {
       width: 200,
       title: "Alamat",
+      align: "center",
       render: (data) => {
         return data.alamat;
       },
@@ -126,6 +127,7 @@ const TabUstadz = () => {
     {
       width: 200,
       title: "Pekerjaan",
+      align: "center",
       render: (data) => {
         return data.pekerjaan;
       },
@@ -133,12 +135,14 @@ const TabUstadz = () => {
     {
       width: 200,
       title: "Umur",
+      align: "center",
       render: (data) => {
-        return data.umur;
+        return `${data.umur} Tahun`;
       },
     },
     {
       width: 200,
+      align: "center",
       title: "Status Aktif",
       render: (data) => {
         const handleStatusChange = (newStatus) => {
@@ -154,10 +158,7 @@ const TabUstadz = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item
-              key="aktif"
-              onClick={() => handleStatusChange(true)}
-            >
+            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -170,10 +171,7 @@ const TabUstadz = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -182,10 +180,7 @@ const TabUstadz = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag
-                    color="error"
-                    style={{ color: "red" }}
-                  >
+                  <Tag color="error" style={{ color: "red" }}>
                     Tidak Aktif
                   </Tag>
                 )}
@@ -235,10 +230,7 @@ const TabUstadz = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -246,10 +238,7 @@ const TabUstadz = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -337,7 +326,7 @@ const TabUstadz = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="umurPengajar">Umur</label>
               <InputNumber
-                value={umurUstadz}
+                value={umurUstadz !== null ? umurUstadz : null}
                 onChange={(value) => setUmurUstadz(value)}
                 className="mt-[5px] w-full"
                 autoComplete="off"
@@ -377,17 +366,14 @@ const TabUstadz = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Nama/Telepon"
               onSearch={handleSearch}
               style={{
                 width: 400,
               }}
             />
 
-            <Tooltip
-              placement="top"
-              title={"Tambahkan Ustadz Baru"}
-            >
+            <Tooltip placement="top" title={"Tambahkan Ustadz Baru"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
@@ -407,7 +393,7 @@ const TabUstadz = () => {
               dataSource={Ustadzs.data}
               pagination={false}
               scroll={{
-                y: 440,
+                y: 350,
               }}
               rowKey={Ustadzs.id}
             />

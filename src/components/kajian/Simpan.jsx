@@ -227,7 +227,7 @@ const TabUstadz = () => {
               <div className="w-full flex flex-col gap-5">
                 <div className="w-full flex justify-between">
                   <Search
-                    placeholder="Masukkan Nama / Telepon"
+                    placeholder="Masukkan Nama/Telepon"
                     // onSearch={onSearch}
                     size="large"
                     style={{
@@ -235,10 +235,7 @@ const TabUstadz = () => {
                     }}
                   />
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Pengajar Tahsin"}
-                  >
+                  <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
                     <Button
                       size="large"
                       icon={<PlusOutlined />}
@@ -268,7 +265,7 @@ const TabUstadz = () => {
               <div className="w-full flex flex-col gap-5">
                 <div className="w-full flex justify-between">
                   <Search
-                    placeholder="Masukkan Nama / Telepon"
+                    placeholder="Masukkan Nama/Telepon"
                     // onSearch={onSearch}
                     size="large"
                     style={{
@@ -276,10 +273,7 @@ const TabUstadz = () => {
                     }}
                   />
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Pengajar Tahsin"}
-                  >
+                  <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
                     <Button
                       size="large"
                       icon={<PlusOutlined />}
@@ -309,7 +303,7 @@ const TabUstadz = () => {
               <div className="w-full flex flex-col gap-5">
                 <div className="w-full flex justify-between">
                   <Search
-                    placeholder="Masukkan Nama / Telepon"
+                    placeholder="Masukkan Nama/Telepon"
                     // onSearch={onSearch}
                     size="large"
                     style={{
@@ -317,10 +311,7 @@ const TabUstadz = () => {
                     }}
                   />
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Pengajar Tahsin"}
-                  >
+                  <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
                     <Button
                       size="large"
                       icon={<PlusOutlined />}
@@ -350,7 +341,7 @@ const TabUstadz = () => {
               <div className="w-full flex flex-col gap-5">
                 <div className="w-full flex justify-between">
                   <Search
-                    placeholder="Masukkan Nama / Telepon"
+                    placeholder="Masukkan Nama/Telepon"
                     // onSearch={onSearch}
                     size="large"
                     style={{
@@ -358,10 +349,7 @@ const TabUstadz = () => {
                     }}
                   />
 
-                  <Tooltip
-                    placement="top"
-                    title={"Tambahkan Pengajar Tahsin"}
-                  >
+                  <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
                     <Button
                       size="large"
                       icon={<PlusOutlined />}

@@ -14,16 +14,8 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <Input
-        style={{ width: "200px" }}
-        value={data}
-        onChange={(e) => {
-          setData(e.target.value);
-        }}
-      />
-      <button onClick={handleChangeTabs}>Change Tab</button>
-      <p>{Tabs}</p>
+    <div className="flex justify-center items-center w-full h-screen">
+      <p>COMING SOON</p>
     </div>
   );
 };

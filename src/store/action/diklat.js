@@ -8,7 +8,7 @@ export function getAllDiklat() {
         url: `${config.api_host_dev}/diklat`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -29,7 +29,7 @@ export function getOneDiklat(id) {
         url: `${config.api_host_dev}/diklat/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 

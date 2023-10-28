@@ -53,8 +53,6 @@ const TabKategoriKajian = () => {
     setCatatan(KategoriKajian?.data?.catatan);
   }, [KategoriKajian, TabsValues]);
 
-  console.log("nama", KategoriKajian);
-
   const fetchData = async () => {
     await dispatch(getAllKategoriKajian());
     setNamaKategori("");
@@ -99,6 +97,8 @@ const TabKategoriKajian = () => {
     {
       width: 200,
       title: "Nama Kategori",
+      align: "center",
+      width: 50,
       render: (data) => {
         return data.nama;
       },
@@ -106,6 +106,7 @@ const TabKategoriKajian = () => {
     {
       width: 200,
       title: "Catatan",
+      align: "center",
       render: (data) => {
         return data.catatan;
       },
@@ -114,7 +115,7 @@ const TabKategoriKajian = () => {
       title: "Action",
       fixed: "right",
       align: "center",
-      width: 75,
+      width: 20,
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
@@ -150,10 +151,7 @@ const TabKategoriKajian = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -161,10 +159,7 @@ const TabKategoriKajian = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -260,17 +255,14 @@ const TabKategoriKajian = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Kategori Kajian"
               onSearch={handleSearch}
               style={{
                 width: 400,
               }}
             />
 
-            <Tooltip
-              placement="top"
-              title={"Tambahkan Kategori Baru"}
-            >
+            <Tooltip placement="top" title={"Tambahkan Kategori Baru"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"

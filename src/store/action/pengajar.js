@@ -16,7 +16,7 @@ export function getAllPengajar(search) {
         `${config.api_host_dev}/pengajarTahsin`,
         {
           headers: {
-            api_key: "masjidraudhatuljannah",
+            apikey: "masjidraudhatuljannah",
           },
           params: queryParams,
         }
@@ -39,7 +39,7 @@ export function getOnePengajar(id) {
         url: `${config.api_host_dev}/pengajarTahsin/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 

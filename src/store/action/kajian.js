@@ -17,7 +17,7 @@ export function getAllKategoriKajian(search) {
         url: `${config.api_host_dev}/kategoriKajian`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
         params: queryParams,
       });
@@ -40,7 +40,7 @@ export function getOneKategoriKajian(id) {
         url: `${config.api_host_dev}/kategoriKajian/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -119,7 +119,7 @@ export function getAllKajianRutin() {
         url: `${config.api_host_dev}/kajian/rutin`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -139,7 +139,7 @@ export function getAllKajianTablighAkbar() {
         url: `${config.api_host_dev}/kajian/tablighAkbar`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -159,7 +159,7 @@ export function getOneKajian(id) {
         url: `${config.api_host_dev}/kajian/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -255,7 +255,7 @@ export function getAllLinkKajian() {
         url: `${config.api_host_dev}/linkKajian`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -276,7 +276,7 @@ export function getAllLinkKajianByKajianId(KajianId) {
         url: `${config.api_host_dev}/linkKajian/${KajianId}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
@@ -297,7 +297,7 @@ export function getOneLinkKajian(id) {
         url: `${config.api_host_dev}/linkKajian/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: "masjidraudhatuljannah",
         },
       });
 
