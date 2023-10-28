@@ -39,7 +39,7 @@ const TabRekening = () => {
 
   let [namaRekening, setNamaRekening] = useState("");
   let [nomorRekening, setNomorRekening] = useState("");
-  let [saldo, setSaldo] = useState(0);
+  let [saldo, setSaldo] = useState(null);
   let [catatan, setCatatan] = useState("");
   let [namaBank, setNamaBank] = useState("");
 
@@ -59,8 +59,10 @@ const TabRekening = () => {
     await dispatch(getAllRekening());
     setNamaRekening("");
     setNomorRekening("");
-    setSaldo(0);
-    setCatatan("");
+    setSaldo(null);
+    setCatatan(
+      "Jazzakumullahu Khairan bagi saudara/i yang sudah berkontribusi memberika sebagian hartanya untuk keperluan Masjid Raudhatul Jannah"
+    );
     setNamaBank("");
   };
 
@@ -102,6 +104,7 @@ const TabRekening = () => {
   const ColumnsRekening = [
     {
       width: 200,
+      align: "center",
       title: "Nama Rekening",
       render: (data) => {
         return data.atas_nama;
@@ -109,6 +112,7 @@ const TabRekening = () => {
     },
     {
       width: 200,
+      align: "center",
       title: "Nomor Rekening",
       render: (data) => {
         return data.nomor_rekening;
@@ -116,14 +120,32 @@ const TabRekening = () => {
     },
     {
       width: 200,
+      title: "Catatan",
+      align: "center",
+      render: (data) => {
+        return data.catatan;
+      },
+    },
+    {
+      width: 200,
       title: "Saldo",
+      align: "center",
       render: (data) => {
         return `Rp.${data.saldo}`;
       },
     },
     {
+      width: 200,
+      title: "Terakhir di Update",
+      align: "center",
+      render: (data) => {
+        return ubahFormatDate(data.updatedAt);
+      },
+    },
+    {
       title: "Action",
       fixed: "right",
+      align: "center",
       align: "center",
       width: 75,
       render: (data) => {
@@ -162,10 +184,7 @@ const TabRekening = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -173,10 +192,7 @@ const TabRekening = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -232,7 +248,7 @@ const TabRekening = () => {
               <label htmlFor="teleponPengajar">Nomor Rekening</label>
               <Input
                 autoComplete="off"
-                value={nomorRekening}
+                value={nomorRekening !== null ? nomorRekening : null}
                 onChange={(e) => setNomorRekening(e.target.value)}
                 className="mt-[5px]  w-full"
                 id="nomorRekening"
@@ -312,10 +328,7 @@ const TabRekening = () => {
                 }}
               />
 
-              <Tooltip
-                placement="top"
-                title={"Tambahkan Rekening Baru"}
-              >
+              <Tooltip placement="top" title={"Tambahkan Rekening Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
