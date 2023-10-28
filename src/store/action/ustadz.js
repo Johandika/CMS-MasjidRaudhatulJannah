@@ -1,21 +1,32 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllUstadz() {
+export function getAllUstadz(search) {
   return async (dispatch) => {
     try {
+      const queryParams = {
+        limit: 50,
+      };
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/ustadz`,
         method: "GET",
         headers: {
           api_key: "masjidraudhatuljannah",
         },
+        params: queryParams,
       });
 
       dispatch({
         type: "Fetch/GetAllUstadz",
         payload: data,
       });
+
+      return data;
     } catch (error) {
       console.log(error);
     }
@@ -89,6 +100,25 @@ export function deleteUstadz(id) {
       const { data } = await axios({
         url: `${config.api_host_dev}/ustadz/${id}`,
         method: "DELETE",
+        headers: {
+          authorization: localStorage.getItem("authorization"),
+        },
+      });
+
+      return data;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+
+export function updateStatusUstadz(id, status) {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios({
+        url: `${config.api_host_dev}/ustadz/status/${id}`,
+        method: "PATCH",
+        data: { status_aktif: status },
         headers: {
           authorization: localStorage.getItem("authorization"),
         },

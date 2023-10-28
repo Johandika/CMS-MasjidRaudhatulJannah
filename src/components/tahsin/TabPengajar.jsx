@@ -150,7 +150,6 @@ const TabPengajar = () => {
       title: "Status Aktif",
       align: "center",
       render: (data) => {
-        const dispatch = useDispatch();
         const handleStatusChange = (newStatus) => {
           dispatch(updateStatusPengajar(data.id, newStatus)).then(
             (response) => {
@@ -219,6 +218,7 @@ const TabPengajar = () => {
           if (e.key === "edit") {
             dispatch(setTabsValue("updatePengajar"));
             dispatch(getOnePengajar(id));
+            console.log(id);
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",

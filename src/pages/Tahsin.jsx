@@ -12,8 +12,6 @@ import TabPesertaTahsinDewasa from "../components/tahsin/TabPesertaTahsinDewasa"
 import { Tabs } from "antd";
 
 const Tahsin = () => {
-  const dispatch = useDispatch();
-
   return (
     <div className="w-full h-full px-5">
       <Tabs

@@ -1,5 +1,3 @@
-import { Tabs } from "antd";
-
 const initialState = {
   TabsValues: "",
 };
