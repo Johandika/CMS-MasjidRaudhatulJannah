@@ -29,7 +29,7 @@ export function getOneKegiatan(id) {
         url: `${config.api_host_dev}/kegiatan/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 

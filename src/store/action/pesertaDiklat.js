@@ -29,7 +29,7 @@ export function getOnePesertaDiklat(id) {
         url: `${config.api_host_dev}/pesertaDiklat/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 
