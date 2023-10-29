@@ -16,7 +16,7 @@ export function getAllPengajar(search) {
         `${config.api_host_dev}/pengajarTahsin`,
         {
           headers: {
-            apikey: "masjidraudhatuljannah",
+            aapikey: `${config.api_key}`,
           },
           params: queryParams,
         }
