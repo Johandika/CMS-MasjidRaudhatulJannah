@@ -16,7 +16,7 @@ export function getAllUstadz(search) {
         url: `${config.api_host_dev}/ustadz`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
         params: queryParams,
       });
@@ -40,7 +40,7 @@ export function getOneUstadz(id) {
         url: `${config.api_host_dev}/ustadz/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 

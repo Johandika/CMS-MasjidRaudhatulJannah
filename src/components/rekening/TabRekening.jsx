@@ -131,7 +131,6 @@ const TabRekening = () => {
           if (e.key === "edit") {
             dispatch(setTabsValue("updateRekening"));
             dispatch(getOneRekening(id));
-            console.log(id);
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",

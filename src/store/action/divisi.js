@@ -8,7 +8,7 @@ export function getAllDivisi() {
         url: `${config.api_host_dev}/divisi`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 
@@ -29,7 +29,7 @@ export function getOneDivisi(id) {
         url: `${config.api_host_dev}/divisi/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 

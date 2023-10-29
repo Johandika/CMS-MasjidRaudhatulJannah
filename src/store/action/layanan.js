@@ -8,7 +8,7 @@ export function getAllLayanan() {
         url: `${config.api_host_dev}/layanan`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 
@@ -29,7 +29,7 @@ export function getOneLayanan(id) {
         url: `${config.api_host_dev}/layanan/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 

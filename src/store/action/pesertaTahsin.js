@@ -9,7 +9,7 @@ export function getAllPesertaTahsinDewasa() {
         url: `${config.api_host_dev}/pesertaTahsinDewasa`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
       dispatch({
@@ -29,7 +29,7 @@ export function getOnePesertaTahsinDewasa(id) {
         url: `${config.api_host_dev}/pesertaTahsinDewasa/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 
@@ -126,7 +126,7 @@ export function getAllPesertaTahsinAnak() {
         url: `${config.api_host_dev}/pesertaTahsinAnak`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 
@@ -147,7 +147,7 @@ export function getOnePesertaTahsinAnak(id) {
         url: `${config.api_host_dev}/pesertaTahsinAnak/${id}`,
         method: "GET",
         headers: {
-          api_key: "masjidraudhatuljannah",
+          apikey: `${config.api_key}`,
         },
       });
 

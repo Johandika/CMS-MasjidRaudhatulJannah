@@ -57,8 +57,6 @@ const TabUstadz = () => {
     setUmurUstadz(Ustadz?.data?.umur);
   }, [Ustadz, TabsValues]);
 
-  console.log("nama", Ustadz);
-
   const fetchData = async () => {
     await dispatch(getAllUstadz());
     setNamaUstadz("");

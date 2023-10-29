@@ -43,7 +43,7 @@ import {
 const Hari = [
   { id: 1, nama: "Senin & Rabu" },
   { id: 2, nama: "Selasa & Kamis" },
-  { id: 3, nama: "Jumat & Ahad" },
+  { id: 3, nama: "Jum'at & Ahad" },
 ];
 
 const TabKelasTahsinDewasa = () => {
@@ -191,7 +191,10 @@ const TabKelasTahsinDewasa = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -204,7 +207,10 @@ const TabKelasTahsinDewasa = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -213,7 +219,10 @@ const TabKelasTahsinDewasa = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -264,7 +273,10 @@ const TabKelasTahsinDewasa = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -273,7 +285,10 @@ const TabKelasTahsinDewasa = () => {
 
         return (
           <div>
-            <Dropdown overlay={menu} trigger={["click"]}>
+            <Dropdown
+              overlay={menu}
+              trigger={["click"]}
+            >
               <a
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
@@ -333,7 +348,10 @@ const TabKelasTahsinDewasa = () => {
                   onChange={(value) => setPengajarKelasDewasa(value)}
                 >
                   {Pengajars?.data.map((pengajar) => (
-                    <Option key={pengajar?.id} value={pengajar?.id}>
+                    <Option
+                      key={pengajar?.id}
+                      value={pengajar?.id}
+                    >
                       {pengajar?.nama}
                     </Option>
                   ))}
@@ -353,7 +371,10 @@ const TabKelasTahsinDewasa = () => {
                   onChange={(value) => setHariKelasDewasa(value)}
                 >
                   {Hari?.map((hari) => (
-                    <Option key={hari?.id} value={hari.nama}>
+                    <Option
+                      key={hari?.id}
+                      value={hari.nama}
+                    >
                       {hari?.nama}
                     </Option>
                   ))}
@@ -436,7 +457,10 @@ const TabKelasTahsinDewasa = () => {
               }}
             />
 
-            <Tooltip placement="top" title={"Tambahkan Kelas Tahsin Dewasa"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Kelas Tahsin Dewasa"}
+            >
               <Button
                 onClick={() => {
                   handleChangeTabs("TambahKelasDewasa");

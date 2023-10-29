@@ -53,8 +53,6 @@ const TabKategoriKajian = () => {
     setCatatan(KategoriKajian?.data?.catatan);
   }, [KategoriKajian, TabsValues]);
 
-  console.log("nama", KategoriKajian);
-
   const fetchData = async () => {
     await dispatch(getAllKategoriKajian());
     setNamaKategori("");
