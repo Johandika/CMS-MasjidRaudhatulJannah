@@ -1,16 +1,10 @@
 // import { useDispatch } from "react-redux";
 import { Tabs } from "antd";
 import TabRekening from "../components/rekening/TabRekening";
+import TabUangMasuk from "../components/rekening/TabUangMasuk";
+import TabUangKeluar from "../components/rekening/TabUangKeluar";
 
 const Rekening = () => {
-  // const dispatch = useDispatch();
-
-  // const { TabsValues } = useSelector((state) => state.TabsReducer);
-
-  // const handleChangeTabs = (value) => {
-  //   dispatch(setTabsValue(value));
-  // };
-
   return (
     <div className="w-full h-full px-5">
       <Tabs
@@ -23,6 +17,16 @@ const Rekening = () => {
             label: "Rekening",
             key: "1",
             children: <TabRekening />,
+          },
+          {
+            label: "Catatan Uang Masuk",
+            key: "2",
+            children: <TabUangMasuk />,
+          },
+          {
+            label: "Catatan Uang Keluar",
+            key: "3",
+            children: <TabUangKeluar />,
           },
         ]}
       />

@@ -44,7 +44,7 @@ export function getOneDivisi(id) {
 }
 
 export function createDivisi(body) {
-  return async (dispatch) => {
+  return async () => {
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/divisi`,
@@ -63,7 +63,7 @@ export function createDivisi(body) {
 }
 
 export function updateDivisi(id, body) {
-  return async (dispatch) => {
+  return async () => {
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/divisi/${id}`,
@@ -82,7 +82,7 @@ export function updateDivisi(id, body) {
 }
 
 export function updateStatusDivisi(id, status) {
-  return async (dispatch) => {
+  return async () => {
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/divisi/status/${id}`,
@@ -101,7 +101,7 @@ export function updateStatusDivisi(id, status) {
 }
 
 export function deleteDivisi(id) {
-  return async (dispatch) => {
+  return async () => {
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/divisi/${id}`,

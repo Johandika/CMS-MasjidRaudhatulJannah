@@ -29,7 +29,7 @@ export function getOneLayanan(id) {
         url: `${config.api_host_dev}/layanan/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 

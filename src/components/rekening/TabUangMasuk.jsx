@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment/moment";
 
 import {
   message,
@@ -9,6 +10,8 @@ import {
   Tooltip,
   InputNumber,
   Menu,
+  DatePicker,
+  Select,
   Dropdown,
 } from "antd";
 import {
@@ -19,31 +22,29 @@ import {
   DownCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+
 const { Search } = Input;
+const { Option } = Select;
 
 import {
-  createRekening,
+  getAllUangMasuk,
+  getOneUangMasuk,
   createUangMasuk,
-  deleteRekening,
+  updateUangMasuk,
+  deleteUangMasuk,
   getAllRekening,
-  getOneRekening,
-  updateRekening,
 } from "../../store/action/rekening";
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
 
-const TabRekening = () => {
+const TabUangMasuk = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
-  const { Rekenings, Rekening } = useSelector((state) => state.RekeningReducer);
-
-  let [namaRekening, setNamaRekening] = useState("");
-  let [nomorRekening, setNomorRekening] = useState("");
-  let [saldo, setSaldo] = useState(null);
-  let [catatan, setCatatan] = useState("");
-  let [namaBank, setNamaBank] = useState("");
+  const { Rekenings, Rekening, UangMasuks, UangMasuk } = useSelector(
+    (state) => state.RekeningReducer
+  );
 
   let [total, setTotal] = useState(null);
   let [waktu, setWaktu] = useState(null);
@@ -51,63 +52,44 @@ const TabRekening = () => {
   let [informasi, setInformasi] = useState("");
   let [rekeningDonasi, setRekeningDonasi] = useState("");
 
-  const handleUangMasukSubmit = (uangMasukData) => {
-    dispatch(createUangMasuk(uangMasukData))
-      .then((data) =>
-        message.loading("Loading", 1, () => {
-          if (data.statusCode == 201 || data.statusCode == 200) {
-            message.success(data.message, 1, () => {
-              dispatch(getAllRekening());
-              handleChangeTabs("");
-            });
-          } else {
-            message.error(data.response.data.message);
-          }
-        })
-      )
-      .catch((error) => console.log(error));
-    setUangMasukModalVisible(false);
-  };
-
   useEffect(() => {
-    dispatch(getAllRekening());
+    dispatch(getAllUangMasuk());
   }, []);
 
   useEffect(() => {
-    setNamaRekening(Rekening?.data?.atas_nama);
-    setNomorRekening(Rekening?.data?.nomor_rekening);
-    setSaldo(Rekening?.data?.saldo);
-    setCatatan(Rekening?.data?.catatan);
-    setNamaBank(Rekening?.data?.nama_bank);
-  }, [Rekening, TabsValues]);
+    setTotal(UangMasuk?.data?.total);
+    setWaktu(UangMasuk?.data?.waktu);
+    setKeterangan(UangMasuk?.data?.keterangan);
+    setInformasi(UangMasuk?.data?.informasi);
+    setRekeningDonasi(UangMasuk?.data?.RekeningDonasi?.id);
+  }, [UangMasuk, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllRekening());
-    setNamaRekening("");
-    setNomorRekening("");
-    setSaldo(null);
-    setCatatan(
-      "Jazzakumullahu Khairan bagi saudara/i yang sudah berkontribusi memberika sebagian hartanya untuk keperluan Masjid Raudhatul Jannah"
-    );
-    setNamaBank("");
+    await dispatch(getAllUangMasuk());
+    setTotal("");
+    setWaktu(null);
+    setKeterangan(null);
+    setInformasi("");
+    setRekeningDonasi("");
   };
 
-  const actionRekening = (id) => {
-    let dataRekening = {
-      atas_nama: namaRekening,
-      nomor_rekening: nomorRekening,
-      saldo: saldo,
-      catatan: catatan,
-      nama_bank: namaBank,
+  const actionUangMasuk = (id) => {
+    let dataUangMasuk = {
+      total: total,
+      waktu: waktu,
+      keterangan: keterangan,
+      informasi: informasi,
+      RekeningDonasiId: rekeningDonasi,
     };
 
     dispatch(
-      id ? updateRekening(id, dataRekening) : createRekening(dataRekening)
+      id ? updateUangMasuk(id, dataUangMasuk) : createUangMasuk(dataUangMasuk)
     )
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
+              dispatch(getAllUangMasuk());
               dispatch(getAllRekening());
               handleChangeTabs("");
             });
@@ -120,52 +102,60 @@ const TabRekening = () => {
   };
 
   const handleSearch = async (value) => {
-    await dispatch(getAllRekening(value));
+    await dispatch(getAllUangMasuk(value));
   };
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
 
-  const ColumnsRekening = [
+  const ColumnsUangMasuk = [
     {
       width: 200,
       align: "center",
       title: "Nama Rekening",
       render: (data) => {
-        return data.atas_nama;
+        return data?.RekeningDonasi?.atas_nama;
       },
     },
     {
       width: 200,
-      align: "center",
       title: "Nomor Rekening",
+      align: "center",
       render: (data) => {
-        return data.nomor_rekening;
+        return data?.RekeningDonasi?.nomor_rekening;
       },
     },
     {
       width: 200,
-      title: "Catatan",
+      title: "Total",
       align: "center",
       render: (data) => {
-        return data.catatan;
+        return data.total;
       },
     },
     {
       width: 200,
-      title: "Saldo",
+      title: "Waktu",
       align: "center",
       render: (data) => {
-        return `Rp.${data.saldo}`;
+        return ubahFormatDate(data.waktu);
       },
     },
     {
       width: 200,
-      title: "Terakhir di Update",
+      title: "Keterangan",
       align: "center",
       render: (data) => {
-        return ubahFormatDate(data.updatedAt);
+        return data.keterangan;
+      },
+    },
+    {
+      width: 200,
+      title: "Informasi",
+      align: "center",
+      render: (data) => {
+        return data.informasi;
       },
     },
     {
@@ -177,8 +167,8 @@ const TabRekening = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("updateRekening"));
-            dispatch(getOneRekening(id));
+            dispatch(setTabsValue("updateUangMasuk"));
+            dispatch(getOneUangMasuk(id));
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",
@@ -189,10 +179,11 @@ const TabRekening = () => {
               confirmButtonText: "Submit",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(deleteRekening(id)).then((data) => {
+                dispatch(deleteUangMasuk(id)).then((data) => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
+                      dispatch(getAllUangMasuk());
                       dispatch(getAllRekening());
                     } else {
                       message.error(data.response.data.message);
@@ -236,7 +227,7 @@ const TabRekening = () => {
 
   return (
     <div>
-      {TabsValues === "TambahRekening" || TabsValues === "updateRekening" ? (
+      {TabsValues === "TambahUangMasuk" || TabsValues === "updateUangMasuk" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -248,72 +239,84 @@ const TabRekening = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahRekening"
-                ? "Tambah Rekening"
-                : TabsValues === "updateRekening"
-                ? "Edit Rekening"
+              {TabsValues === "TambahUangMasuk"
+                ? "Tambah Uang Masuk"
+                : TabsValues === "updateUangMasuk"
+                ? "Edit Uang Masuk"
                 : ""}
             </p>
           </div>
 
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaRekening">Nama Rekening</label>
-              <Input
-                value={namaRekening}
-                onChange={(e) => setNamaRekening(e.target.value)}
-                className="mt-[5px]"
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="totalUangMasuk">Total Uang Masuk</label>
+              <InputNumber
+                value={total}
+                onChange={(value) => setTotal(value)}
+                className="mt-[5px] w-full"
                 autoComplete="off"
-                id="namaRekening"
-                placeholder="Masukkan Nama Rekening"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="nomorRekening">Nomor Rekening</label>
-              <Input
-                autoComplete="off"
-                value={nomorRekening !== null ? nomorRekening : null}
-                onChange={(e) => setNomorRekening(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="nomorRekening"
-                placeholder="Masukkan Nomor Rekening"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaBank">Nama Bank</label>
-              <Input
-                autoComplete="off"
-                value={namaBank}
-                onChange={(e) => setNamaBank(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="namaBank"
-                placeholder="Masukkan Nama Bank"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="CatatanRekening">Catatan</label>
-              <Input
-                autoComplete="off"
-                value={catatan}
-                onChange={(e) => setCatatan(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="CatatanRekening"
-                placeholder="Masukkan Catatan"
+                id="totalUangMasuk"
+                placeholder="Masukkan Total Uang Masuk"
               />
             </div>
 
-            <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="saldoRekening">Saldo</label>
-              <InputNumber
-                value={saldo}
-                onChange={(value) => setSaldo(value)}
+            <div className="w-[45%] mb-5">
+              <label htmlFor="waktuUangMasuk">Waktu</label>
+              <DatePicker
+                value={waktu ? moment(waktu) : null}
+                format="YYYY-MM-DD"
+                onChange={(date, dateString) => setWaktu(dateString)}
                 className="mt-[5px] w-full"
-                autoComplete="off"
-                id="saldoRekening"
-                placeholder="Masukkan Saldo Rekening"
+                id="waktuUangMasuk"
+                placeholder="Masukkan Waktu"
               />
             </div>
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="KeteranganUangMasuk">Keterangan</label>
+              <Input
+                autoComplete="off"
+                value={keterangan}
+                onChange={(e) => setKeterangan(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="KeteranganUangMasuk"
+                placeholder="Masukkan Keterangan"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="informasiUangMasuk">Informasi</label>
+              <Input
+                autoComplete="off"
+                value={informasi}
+                onChange={(e) => setInformasi(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="informasiUangMasuk"
+                placeholder="Masukkan Informasi"
+              />
+            </div>
+          </div>
+
+          <div className="w-[45%] mb-5 flex flex-col">
+            <label htmlFor="RekeningDonasiMasuk">RekeningDonasi</label>
+            {Rekenings && Rekenings?.data?.length > 0 ? (
+              <Select
+                id="RekeningDonasiMasuk"
+                className="mt-[5px]"
+                value={rekeningDonasi}
+                placeholder="Pilih Rekening"
+                onChange={(value) => setRekeningDonasi(value)}
+                disabled={TabsValues == "updateUangMasuk"}
+              >
+                {Rekenings?.data.map((rekening) => (
+                  <Option key={rekening?.id} value={rekening?.id}>
+                    {rekening?.atas_nama}
+                  </Option>
+                ))}
+              </Select>
+            ) : (
+              <div>Rekening Kosong</div>
+            )}
           </div>
           <div className="flex gap-3 justify-end">
             <Button
@@ -330,10 +333,10 @@ const TabRekening = () => {
               type="primary"
               className="bg-primaryDark"
               onClick={
-                TabsValues === "TambahRekening"
-                  ? () => actionRekening()
-                  : TabsValues === "updateRekening"
-                  ? () => actionRekening(Rekening.data.id)
+                TabsValues === "TambahUangMasuk"
+                  ? () => actionUangMasuk()
+                  : TabsValues === "updateUangMasuk"
+                  ? () => actionUangMasuk(UangMasuk.data.id)
                   : null
               }
             >
@@ -353,29 +356,29 @@ const TabRekening = () => {
                 }}
               />
 
-              <Tooltip placement="top" title={"Tambahkan Rekening Baru"}>
+              <Tooltip placement="top" title={"Tambahkan Uang Masuk Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
                   onClick={() => {
-                    handleChangeTabs("TambahRekening");
+                    handleChangeTabs("TambahUangMasuk");
                     fetchData();
                   }}
                 >
-                  Rekening
+                  Uang Masuk
                 </Button>
               </Tooltip>
             </div>
             <div>
               <Table
-                columns={ColumnsRekening}
+                columns={ColumnsUangMasuk}
                 size="small"
-                dataSource={Rekenings.data}
+                dataSource={UangMasuks.data}
                 pagination={false}
                 scroll={{
                   y: 440,
                 }}
-                rowKey={Rekenings.id}
+                rowKey={(record) => record.id}
               />
             </div>
           </div>
@@ -385,4 +388,4 @@ const TabRekening = () => {
   );
 };
 
-export default TabRekening;
+export default TabUangMasuk;

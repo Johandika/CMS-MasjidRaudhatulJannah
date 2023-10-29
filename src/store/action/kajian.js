@@ -40,7 +40,7 @@ export function getOneKategoriKajian(id) {
         url: `${config.api_host_dev}/kategoriKajian/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -127,7 +127,7 @@ export function getAllKajianRutin(search) {
         url: `${config.api_host_dev}/kajian/rutin`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
         params: queryParams,
       });
@@ -148,7 +148,7 @@ export function getAllKajianTablighAkbar() {
         url: `${config.api_host_dev}/kajian/tablighAkbar`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -168,7 +168,7 @@ export function getOneKajian(id) {
         url: `${config.api_host_dev}/kajian/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({
@@ -264,7 +264,7 @@ export function getAllLinkKajian() {
         url: `${config.api_host_dev}/linkKajian`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -285,7 +285,7 @@ export function getAllLinkKajianByKajianId(KajianId) {
         url: `${config.api_host_dev}/linkKajian/${KajianId}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -306,7 +306,7 @@ export function getOneLinkKajian(id) {
         url: `${config.api_host_dev}/linkKajian/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 

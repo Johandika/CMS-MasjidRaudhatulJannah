@@ -32,21 +32,62 @@ const { Search } = Input;
 const { Option } = Select;
 
 import {
-  getAllPesertaTahsinAnak,
   getAllPesertaTahsinDewasa,
+  getOnePesertaTahsinDewasa,
+  createPesertaTahsinDewasa,
+  updatePesertaTahsinDewasa,
+  updateStatusPesertaTahsinDewasa,
+  deletePesertaTahsinDewasa,
 } from "../../store/action/pesertaTahsin";
+import {
+  createKelasTahsinDewasa,
+  getAllKelasTahsinDewasa,
+} from "../../store/action/kelasTahsin";
 
 const TabPesertaTahsinDewasa = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
 
-  const {
-    PesertaTahsinAnaks,
-    PesertaTahsinAnak,
-    PesertaTahsinDewasa,
-    PesertaTahsinDewasas,
-  } = useSelector((state) => state.PesertaTahsinReducer);
+  const { PesertaTahsinDewasa, PesertaTahsinDewasas } = useSelector(
+    (state) => state.PesertaTahsinReducer
+  );
+
+  const { KelasTahsinDewasas } = useSelector(
+    (state) => state.KelasTahsinReducer
+  );
+
+  const [namaPeserta, setNamaPeserta] = useState("");
+  const [teleponPeserta, setTeleponPeserta] = useState("");
+  const [alamatPeserta, setAlamatPeserta] = useState("");
+  const [pekerjaanPeserta, setPekerjaanPeserta] = useState("");
+  const [umurPeserta, setUmurPeserta] = useState("");
+  const [kelasTahsinDewasa, setKelasTahsinDewasa] = useState("");
+
+  const fatchData = () => {
+    dispatch(getAllKelasTahsinDewasa());
+
+    setNamaPeserta("");
+    setTeleponPeserta("");
+    setAlamatPeserta("");
+    setPekerjaanPeserta("");
+    setUmurPeserta("");
+    setKelasTahsinDewasa("");
+  };
+
+  useEffect(() => {
+    setNamaPeserta(PesertaTahsinDewasa?.data?.nama);
+    setTeleponPeserta(PesertaTahsinDewasa?.data?.telepon);
+    setAlamatPeserta(PesertaTahsinDewasa?.data?.alamat);
+    setPekerjaanPeserta(PesertaTahsinDewasa?.data?.pekerjaan);
+    setUmurPeserta(PesertaTahsinDewasa?.data?.umur);
+    setKelasTahsinDewasa(PesertaTahsinDewasa?.data?.KelasTahsinDewasa?.id);
+  }, [PesertaTahsinDewasa]);
+
+  useEffect(() => {
+    dispatch(getAllPesertaTahsinDewasa());
+    dispatch(getAllKelasTahsinDewasa());
+  }, []);
 
   const ColumsPesertaDewasa = [
     {
@@ -95,32 +136,167 @@ const TabPesertaTahsinDewasa = () => {
       title: "Status Aktif",
       align: "center",
       render: (data) => {
-        if (data.status_aktif == true) {
-          return <Tag color="success">Aktif</Tag>;
-        } else {
-          return <Tag color="error">Tidak Aktif</Tag>;
-        }
+        const dispatch = useDispatch();
+        const handleStatusChange = (newStatus) => {
+          dispatch(updateStatusPesertaTahsinDewasa(data.id, newStatus)).then(
+            (response) => {
+              if (response.statusCode === 200) {
+                message.success(
+                  `Status ${newStatus ? "Aktif" : "Tidak Aktif"}`
+                );
+                dispatch(getAllPesertaTahsinDewasa());
+              } else {
+                message.error(response.message);
+              }
+            }
+          );
+        };
+
+        const menu = (
+          <Menu className="w-28">
+            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+              Aktif
+            </Menu.Item>
+            <Menu.Item
+              key="tidak-aktif"
+              onClick={() => handleStatusChange(false)}
+            >
+              Tidak Aktif
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <div>
+                {data.status_aktif ? (
+                  <Tag color="success">Aktif</Tag>
+                ) : (
+                  <Tag color="error" style={{ color: "red" }}>
+                    Tidak Aktif
+                  </Tag>
+                )}
+              </div>
+            </a>
+          </Dropdown>
+        );
+      },
+    },
+    {
+      title: "Action",
+      fixed: "right",
+      align: "center",
+      width: 75,
+      render: (data) => {
+        const dispatch = useDispatch();
+        const handleMenuClick = (e, id) => {
+          if (e.key === "edit") {
+            dispatch(setTabsValue("UpdatePesertaDewasa"));
+            dispatch(getOnePesertaTahsinDewasa(id));
+          } else if (e.key === "delete") {
+            Swal.fire({
+              text: "Apakah Anda Mau Menghapus?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Submit",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                dispatch(deletePesertaTahsinDewasa(id)).then((data) => {
+                  message.loading("Loading", 1, () => {
+                    if (data.statusCode == 200) {
+                      message.success(data.message);
+                      dispatch(getAllPesertaTahsinDewasa());
+                    } else {
+                      message.error(data.response.data.message);
+                    }
+                  });
+                });
+              }
+            });
+          }
+        };
+
+        const menu = (
+          <Menu onClick={(e) => handleMenuClick(e, data.id)}>
+            <Menu.Item key="edit">
+              <EditOutlined /> Edit
+            </Menu.Item>
+            <Menu.Item key="delete" style={{ color: "red" }}>
+              <DeleteOutlined />
+              Hapus
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <div>
+            <Dropdown overlay={menu} trigger={["click"]}>
+              <a
+                className="ant-dropdown-link"
+                onClick={(e) => e.preventDefault()}
+              >
+                <DownCircleOutlined className="text-lg text-slate-500" />
+              </a>
+            </Dropdown>
+          </div>
+        );
       },
     },
   ];
 
-  useEffect(() => {
-    dispatch(getAllPesertaTahsinAnak());
-    dispatch(getAllPesertaTahsinDewasa());
-  }, [TabsValues]);
+  const actionPesertaTahsin = (id) => {
+    let dataPesertaDewasa = {
+      nama: namaPeserta,
+      telepon: teleponPeserta,
+      alamat: alamatPeserta,
+      pekerjaan: pekerjaanPeserta,
+      umur: umurPeserta,
+      KelasTahsinDewasaId: kelasTahsinDewasa,
+    };
+
+    dispatch(
+      id
+        ? updatePesertaTahsinDewasa(id, dataPesertaDewasa)
+        : createPesertaTahsinDewasa(dataPesertaDewasa)
+    )
+      .then((data) =>
+        message.loading("Loading", 1, () => {
+          if (data.statusCode == 201 || data.statusCode == 200) {
+            message.success(data.message, 1, () => {
+              dispatch(getAllPesertaTahsinDewasa());
+              handleChangeTabs("");
+            });
+          } else {
+            message.error(data.response.data.message);
+          }
+        })
+      )
+      .catch((error) => console.log(error));
+  };
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
 
+  const handelSearch = (value) => {
+    dispatch(getAllPesertaTahsinDewasa(value));
+  };
+
   return (
     <div>
-      {TabsValues == "TambahPesertaDewasa" ? (
+      {TabsValues == "TambahPesertaDewasa" ||
+      TabsValues == "UpdatePesertaDewasa" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-2 items-center">
             <ArrowLeftOutlined
-              className=" text-[20px]"
+              className=" text-[16px]"
               onClick={() => {
                 handleChangeTabs("");
               }}
@@ -133,56 +309,78 @@ const TabPesertaTahsinDewasa = () => {
             <div className="w-[45%] mb-5">
               <label htmlFor="namaPesertaDewasa">Nama</label>
               <Input
-                className=""
+                className="mt-[5px]"
                 id="namaPesertaDewasa"
-                size="large"
                 placeholder="Masukkan Nama"
+                value={namaPeserta}
+                autoComplete="off"
+                onChange={(e) => setNamaPeserta(e.target.value)}
               />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="umurPesertaDewasa">Umur</label>
               <Input
-                className=""
+                className="mt-[5px]"
                 id="umurPesertaDewasa"
-                size="large"
                 placeholder="Masukkan Umur"
+                value={umurPeserta}
+                autoComplete="off"
+                onChange={(e) => setUmurPeserta(e.target.value)}
               />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="pekerjaanDewasa">Pekerjaan</label>
               <Input
-                className=""
+                className="mt-[5px]"
                 id="pekerjaanDewasa"
-                size="large"
                 placeholder="Masukkan Pekerjaan"
+                value={pekerjaanPeserta}
+                autoComplete="off"
+                onChange={(e) => setPekerjaanPeserta(e.target.value)}
               />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="teleponPesertaDewasa">Telepon</label>
               <Input
-                className=""
+                className="mt-[5px]"
                 id="teleponPesertaDewasa"
-                size="large"
                 placeholder="Masukkan Telepon"
+                value={teleponPeserta}
+                autoComplete="off"
+                onChange={(e) => setTeleponPeserta(e.target.value)}
               />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="alamatPesertaDewasa">Alamat</label>
               <Input.TextArea
-                className=""
+                className="mt-[5px]"
                 id="alamatPesertaDewasa"
-                size="large"
                 placeholder="Masukkan Alamat"
+                value={alamatPeserta}
+                rows={4}
+                autoComplete="off"
+                onChange={(e) => setAlamatPeserta(e.target.value)}
               />
             </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="kelasTahsinDewasa">Kelas Tahsin Anak</label>
-              <Input
-                className=""
-                id="kelasTahsinDewasa"
-                size="large"
-                placeholder="Masukkan Kelas Tahsin"
-              />
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="KelasTahsinDewasa">Kelas Tahsin</label>
+              {KelasTahsinDewasas && KelasTahsinDewasas?.data?.length > 0 ? (
+                <Select
+                  id="KelasTahsinDewasa"
+                  className="mt-[5px]"
+                  value={kelasTahsinDewasa ? kelasTahsinDewasa : null}
+                  placeholder="Pilih Kelas Tahsin"
+                  onChange={(value) => setKelasTahsinDewasa(value)}
+                >
+                  {KelasTahsinDewasas?.data.map((kelas) => (
+                    <Option key={kelas?.id} value={kelas?.id}>
+                      {kelas?.kelas}
+                    </Option>
+                  ))}
+                </Select>
+              ) : (
+                <div>Pengajar Tahsin Belum Ada</div>
+              )}
             </div>
           </div>
           <div className="flex gap-3 justify-end">
@@ -195,7 +393,17 @@ const TabPesertaTahsinDewasa = () => {
             >
               Batal
             </Button>
-            <Button type="primary" className="bg-primaryDark">
+            <Button
+              type="primary"
+              className="bg-primaryDark"
+              onClick={
+                TabsValues === "TambahPesertaDewasa"
+                  ? () => actionPesertaTahsin()
+                  : TabsValues === "UpdatePesertaDewasa"
+                  ? () => actionPesertaTahsin(PesertaTahsinDewasa.data.id)
+                  : null
+              }
+            >
               Simpan
             </Button>
           </div>
@@ -204,9 +412,8 @@ const TabPesertaTahsinDewasa = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
-              // onSearch={onSearch}
-              size="large"
+              placeholder="Masukkan Nama/Telepon"
+              onSearch={handelSearch}
               style={{
                 width: 400,
               }}
@@ -216,8 +423,8 @@ const TabPesertaTahsinDewasa = () => {
               <Button
                 onClick={() => {
                   handleChangeTabs("TambahPesertaDewasa");
+                  fatchData();
                 }}
-                size="large"
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
               >
@@ -227,6 +434,7 @@ const TabPesertaTahsinDewasa = () => {
           </div>
           <div>
             <Table
+              size="small"
               columns={ColumsPesertaDewasa}
               dataSource={PesertaTahsinDewasas.data}
               pagination={false}

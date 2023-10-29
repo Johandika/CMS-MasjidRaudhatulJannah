@@ -11,6 +11,8 @@ import Rekening from "../pages/Rekening";
 import Divisi from "../pages/Divisi";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Layanan from "../pages/Layanan";
+import Diklat from "../pages/Diklat";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
       {
         path: "/divisi",
         element: <Divisi />,
+      },
+      {
+        path: "/layanan",
+        element: <Layanan />,
+      },
+      {
+        path: "/diklat",
+        element: <Diklat />,
       },
     ],
   },

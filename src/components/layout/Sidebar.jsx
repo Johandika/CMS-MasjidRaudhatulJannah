@@ -23,6 +23,8 @@ import {
   AreaChartOutlined,
   ReconciliationOutlined,
   ClusterOutlined,
+  AppstoreAddOutlined,
+  ContactsOutlined,
 } from "@ant-design/icons";
 
 export const dataSidebar = [
@@ -52,6 +54,16 @@ export const dataSidebar = [
     link: "/rekening",
   },
   {
+    name: "Diklat",
+    icon: <AppstoreAddOutlined />,
+    link: "/diklat",
+  },
+  {
+    name: "Layanan",
+    icon: <ContactsOutlined />,
+    link: "/layanan",
+  },
+  {
     name: "Keluar",
     icon: <LogoutOutlined />,
     link: "/",
@@ -74,7 +86,7 @@ const Sidebar = () => {
       </div>
 
       {/* Menu */}
-      <div className="h-[75%]">
+      <div className="h-[80%]">
         {dataSidebar &&
           dataSidebar?.map((el, index) => (
             <Link
@@ -104,6 +116,7 @@ const Sidebar = () => {
                 onClick={() => {
                   message.loading("Loading...", 1, () => {
                     localStorage.clear();
+                    localStorage.setItem("activeMenu", "Dasboard");
                     message.success("Sampai Jumpa Lagi!!");
                     navigate("/login");
                   });

@@ -135,7 +135,6 @@ export function getAllUangMasuk() {
 
 export function getOneUangMasuk(id) {
   return async (dispatch) => {
-    w;
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/uangMasuk/${id}`,

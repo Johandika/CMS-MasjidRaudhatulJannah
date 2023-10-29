@@ -37,7 +37,7 @@ export function getOneKelasTahsinDewasa(id) {
         url: `${config.api_host_dev}/kelasTahsinDewasa/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
 
@@ -142,7 +142,7 @@ export function getAllKelasTahsinAnak(search) {
         url: `${config.api_host_dev}/kelasTahsinAnak`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
         params: queryParams,
       });
@@ -164,7 +164,7 @@ export function getOneKelasTahsinAnak(id) {
         url: `${config.api_host_dev}/kelasTahsinAnak/${id}`,
         method: "GET",
         headers: {
-          apikey: `${config.api_key}`,
+          api_key: "masjidraudhatuljannah",
         },
       });
       dispatch({
