@@ -95,10 +95,9 @@ const TabKategoriKajian = () => {
 
   const ColumnsKategoriKajian = [
     {
-      width: 200,
+      width: 100,
       title: "Nama Kategori",
       align: "center",
-      width: 50,
       render: (data) => {
         return data.nama;
       },
@@ -115,7 +114,7 @@ const TabKategoriKajian = () => {
       title: "Action",
       fixed: "right",
       align: "center",
-      width: 20,
+      width: 75,
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
@@ -151,7 +150,10 @@ const TabKategoriKajian = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -159,7 +161,10 @@ const TabKategoriKajian = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -262,7 +267,10 @@ const TabKategoriKajian = () => {
               }}
             />
 
-            <Tooltip placement="top" title={"Tambahkan Kategori Baru"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Kategori Baru"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"

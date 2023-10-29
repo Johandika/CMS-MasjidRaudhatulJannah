@@ -162,7 +162,6 @@ const TabUangMasuk = () => {
       title: "Action",
       fixed: "right",
       align: "center",
-      align: "center",
       width: 75,
       render: (data) => {
         const handleMenuClick = (e, id) => {
@@ -200,7 +199,10 @@ const TabUangMasuk = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -208,7 +210,10 @@ const TabUangMasuk = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -309,7 +314,10 @@ const TabUangMasuk = () => {
                 disabled={TabsValues == "updateUangMasuk"}
               >
                 {Rekenings?.data.map((rekening) => (
-                  <Option key={rekening?.id} value={rekening?.id}>
+                  <Option
+                    key={rekening?.id}
+                    value={rekening?.id}
+                  >
                     {rekening?.atas_nama}
                   </Option>
                 ))}
@@ -356,7 +364,10 @@ const TabUangMasuk = () => {
                 }}
               />
 
-              <Tooltip placement="top" title={"Tambahkan Uang Masuk Baru"}>
+              <Tooltip
+                placement="top"
+                title={"Tambahkan Uang Masuk Baru"}
+              >
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"

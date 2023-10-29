@@ -138,14 +138,14 @@ const TabKelasTahsinDewasa = () => {
       title: "Pengajar",
       align: "center",
       render: (data) => {
-        return data.PengajarTahsin.nama;
+        return data.PengajarTahsin?.nama;
       },
     },
     {
       title: "Hari",
       align: "center",
       render: (data) => {
-        return data.Jadwal.hari;
+        return data.Jadwal?.hari;
       },
     },
     {
@@ -173,7 +173,6 @@ const TabKelasTahsinDewasa = () => {
       title: "Status Aktif",
       align: "center",
       render: (data) => {
-        const dispatch = useDispatch();
         const handleStatusChange = (newStatus) => {
           dispatch(updateStatusKelasTahsinDewasa(data.id, newStatus)).then(
             (response) => {
