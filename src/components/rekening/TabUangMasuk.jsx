@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment/moment";
 
 import {
   message,
@@ -265,7 +264,8 @@ const TabUangMasuk = () => {
               <label htmlFor="waktuUangMasuk">Waktu</label>
               <DatePicker
                 value={waktu ? dayjs(waktu) : null}
-x                onChange={(date, dateString) => setWaktu(date)}
+                x
+                onChange={(date, dateString) => setWaktu(date)}
                 className="mt-[5px] w-full"
                 id="waktuUangMasuk"
                 placeholder="Masukkan Waktu"
