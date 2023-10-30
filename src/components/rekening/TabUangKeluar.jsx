@@ -9,6 +9,8 @@ import {
   Tooltip,
   InputNumber,
   Menu,
+  DatePicker,
+  Select,
   Dropdown,
 } from "antd";
 import {
@@ -19,95 +21,78 @@ import {
   DownCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+
 const { Search } = Input;
+const { Option } = Select;
 
 import {
-  createRekening,
-  createUangMasuk,
-  deleteRekening,
+  getAllUangKeluar,
+  getOneUangKeluar,
+  createUangKeluar,
+  updateUangKeluar,
+  deleteUangKeluar,
   getAllRekening,
-  getOneRekening,
-  updateRekening,
 } from "../../store/action/rekening";
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
+import numberWithCommas from "../../helper/numberWithCommas";
 
 const TabUangKeluar = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
-  const { Rekenings, Rekening } = useSelector((state) => state.RekeningReducer);
-
-  let [namaRekening, setNamaRekening] = useState("");
-  let [nomorRekening, setNomorRekening] = useState("");
-  let [saldo, setSaldo] = useState(null);
-  let [catatan, setCatatan] = useState("");
-  let [namaBank, setNamaBank] = useState("");
+  const { Rekenings, Rekening, UangKeluars, UangKeluar } = useSelector(
+    (state) => state.RekeningReducer
+  );
 
   let [total, setTotal] = useState(null);
   let [waktu, setWaktu] = useState(null);
   let [keterangan, setKeterangan] = useState("");
   let [informasi, setInformasi] = useState("");
-  let [rekeningDonasi, setRekeningDonasi] = useState("");
-
-  const handleUangMasukSubmit = (uangMasukData) => {
-    dispatch(createUangMasuk(uangMasukData))
-      .then((data) =>
-        message.loading("Loading", 1, () => {
-          if (data.statusCode == 201 || data.statusCode == 200) {
-            message.success(data.message, 1, () => {
-              dispatch(getAllRekening());
-              handleChangeTabs("");
-            });
-          } else {
-            message.error(data.response.data.message);
-          }
-        })
-      )
-      .catch((error) => console.log(error));
-    setUangMasukModalVisible(false);
-  };
+  let [rekeningDonasi, setRekeningDonasi] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllRekening());
+    dispatch(getAllUangKeluar());
   }, []);
 
   useEffect(() => {
-    setNamaRekening(Rekening?.data?.atas_nama);
-    setNomorRekening(Rekening?.data?.nomor_rekening);
-    setSaldo(Rekening?.data?.saldo);
-    setCatatan(Rekening?.data?.catatan);
-    setNamaBank(Rekening?.data?.nama_bank);
-  }, [Rekening, TabsValues]);
+    setTotal(UangKeluar?.data?.total);
+    setWaktu(UangKeluar?.data?.waktu);
+    setKeterangan(UangKeluar?.data?.keterangan);
+    setInformasi(UangKeluar?.data?.informasi);
+    setRekeningDonasi(UangKeluar?.data?.RekeningDonasi?.id);
+  }, [UangKeluar, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllRekening());
-    setNamaRekening("");
-    setNomorRekening("");
-    setSaldo(null);
-    setCatatan(
-      "Jazzakumullahu Khairan bagi saudara/i yang sudah berkontribusi memberika sebagian hartanya untuk keperluan Masjid Raudhatul Jannah"
-    );
-    setNamaBank("");
+    await dispatch(getAllUangKeluar());
+    setTotal("");
+    setWaktu(null);
+    setKeterangan(null);
+    setInformasi("");
+    setRekeningDonasi("");
   };
 
-  const actionRekening = (id) => {
-    let dataRekening = {
-      atas_nama: namaRekening,
-      nomor_rekening: nomorRekening,
-      saldo: saldo,
-      catatan: catatan,
-      nama_bank: namaBank,
+  const actionUangKeluar = (id) => {
+    let dataUangKeluar = {
+      total: total,
+      waktu: waktu,
+      keterangan: keterangan,
+      informasi: informasi,
+      RekeningDonasiId: rekeningDonasi,
     };
 
     dispatch(
-      id ? updateRekening(id, dataRekening) : createRekening(dataRekening)
+      id
+        ? updateUangKeluar(id, dataUangKeluar)
+        : createUangKeluar(dataUangKeluar)
     )
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
+              dispatch(getAllUangKeluar());
               dispatch(getAllRekening());
               handleChangeTabs("");
             });
@@ -120,52 +105,60 @@ const TabUangKeluar = () => {
   };
 
   const handleSearch = async (value) => {
-    await dispatch(getAllRekening(value));
+    await dispatch(getAllUangKeluar(value));
   };
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
   };
 
-  const ColumnsRekening = [
+  const ColumnsUangKeluar = [
     {
       width: 200,
       align: "center",
       title: "Nama Rekening",
       render: (data) => {
-        return data.atas_nama;
+        return data?.RekeningDonasi?.atas_nama;
       },
     },
     {
       width: 200,
-      align: "center",
       title: "Nomor Rekening",
+      align: "center",
       render: (data) => {
-        return data.nomor_rekening;
+        return data?.RekeningDonasi?.nomor_rekening;
       },
     },
     {
       width: 200,
-      title: "Catatan",
+      title: "Total",
       align: "center",
       render: (data) => {
-        return data.catatan;
+        return `Rp. ${numberWithCommas(data.total)}`;
       },
     },
     {
       width: 200,
-      title: "Saldo",
+      title: "Waktu",
       align: "center",
       render: (data) => {
-        return `Rp.${data.saldo}`;
+        return ubahFormatDate(data.waktu);
       },
     },
     {
       width: 200,
-      title: "Terakhir di Update",
+      title: "Keterangan",
       align: "center",
       render: (data) => {
-        return ubahFormatDate(data.updatedAt);
+        return data.keterangan;
+      },
+    },
+    {
+      width: 200,
+      title: "Informasi",
+      align: "center",
+      render: (data) => {
+        return data.informasi;
       },
     },
     {
@@ -176,8 +169,8 @@ const TabUangKeluar = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("updateRekening"));
-            dispatch(getOneRekening(id));
+            dispatch(setTabsValue("updateUangKeluar"));
+            dispatch(getOneUangKeluar(id));
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",
@@ -188,10 +181,11 @@ const TabUangKeluar = () => {
               confirmButtonText: "Submit",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(deleteRekening(id)).then((data) => {
+                dispatch(deleteUangKeluar(id)).then((data) => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
+                      dispatch(getAllUangKeluar());
                       dispatch(getAllRekening());
                     } else {
                       message.error(data.response.data.message);
@@ -208,10 +202,7 @@ const TabUangKeluar = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -219,10 +210,7 @@ const TabUangKeluar = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -239,9 +227,14 @@ const TabUangKeluar = () => {
     },
   ];
 
+  const handleFilterRekening = (value) => {
+    dispatch(getAllUangKeluar(value));
+  };
+
   return (
     <div>
-      {TabsValues === "TambahRekening" || TabsValues === "updateRekening" ? (
+      {TabsValues === "TambahUangKeluar" ||
+      TabsValues === "updateUangKeluar" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -253,72 +246,84 @@ const TabUangKeluar = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahRekening"
-                ? "Tambah Rekening"
-                : TabsValues === "updateRekening"
-                ? "Edit Rekening"
+              {TabsValues === "TambahUangKeluar"
+                ? "Tambah Uang Keluar"
+                : TabsValues === "updateUangKeluar"
+                ? "Edit Uang Keluar"
                 : ""}
             </p>
           </div>
 
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaPengajar">Nama Rekening</label>
-              <Input
-                value={namaRekening}
-                onChange={(e) => setNamaRekening(e.target.value)}
-                className="mt-[5px]"
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="totalUangKeluar">Total Uang Keluar</label>
+              <InputNumber
+                value={total}
+                onChange={(value) => setTotal(value)}
+                className="mt-[5px] w-full"
                 autoComplete="off"
-                id="namaRekening"
-                placeholder="Masukkan Nama Rekening"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="teleponPengajar">Nomor Rekening</label>
-              <Input
-                autoComplete="off"
-                value={nomorRekening !== null ? nomorRekening : null}
-                onChange={(e) => setNomorRekening(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="nomorRekening"
-                placeholder="Masukkan Nomor Rekening"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="teleponPengajar">Nama Bank</label>
-              <Input
-                autoComplete="off"
-                value={namaBank}
-                onChange={(e) => setNamaBank(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="nomorRekening"
-                placeholder="Masukkan Nama Bank"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="teleponPengajar">Catatan</label>
-              <Input
-                autoComplete="off"
-                value={catatan}
-                onChange={(e) => setCatatan(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="nomorRekening"
-                placeholder="Masukkan Catatan"
+                id="totalUangKeluar"
+                placeholder="Masukkan Total Uang Keluar"
               />
             </div>
 
-            <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="umurPengajar">Saldo</label>
-              <InputNumber
-                value={saldo}
-                onChange={(value) => setSaldo(value)}
+            <div className="w-[45%] mb-5">
+              <label htmlFor="waktuUangKeluar">Waktu</label>
+              <DatePicker
+                value={waktu ? dayjs(waktu) : null}
+                x
+                onChange={(date, dateString) => setWaktu(date)}
                 className="mt-[5px] w-full"
-                autoComplete="off"
-                id="saldoRekening"
-                placeholder="Masukkan Saldo Rekening"
+                id="waktuUangKeluar"
+                placeholder="Masukkan Waktu"
               />
             </div>
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="KeteranganUangKeluar">Keterangan</label>
+              <Input
+                autoComplete="off"
+                value={keterangan}
+                onChange={(e) => setKeterangan(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="KeteranganUangKeluar"
+                placeholder="Masukkan Keterangan"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="informasiUangKeluar">Informasi</label>
+              <Input
+                autoComplete="off"
+                value={informasi}
+                onChange={(e) => setInformasi(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="informasiUangKeluar"
+                placeholder="Masukkan Informasi"
+              />
+            </div>
+          </div>
+
+          <div className="w-[45%] mb-5 flex flex-col">
+            <label htmlFor="RekeningDonasiMasuk">RekeningDonasi</label>
+            {Rekenings && Rekenings?.data?.length > 0 ? (
+              <Select
+                id="RekeningDonasiMasuk"
+                className="mt-[5px]"
+                value={rekeningDonasi ? rekeningDonasi : null}
+                placeholder="Pilih Rekening"
+                onChange={(value) => setRekeningDonasi(value)}
+                disabled={TabsValues == "updateUangKeluar"}
+              >
+                {Rekenings?.data.map((rekening) => (
+                  <Option key={rekening?.id} value={rekening?.id}>
+                    {rekening?.atas_nama}
+                  </Option>
+                ))}
+              </Select>
+            ) : (
+              <div>Rekening Kosong</div>
+            )}
           </div>
           <div className="flex gap-3 justify-end">
             <Button
@@ -335,10 +340,10 @@ const TabUangKeluar = () => {
               type="primary"
               className="bg-primaryDark"
               onClick={
-                TabsValues === "TambahRekening"
-                  ? () => actionRekening()
-                  : TabsValues === "updateRekening"
-                  ? () => actionRekening(Rekening.data.id)
+                TabsValues === "TambahUangKeluar"
+                  ? () => actionUangKeluar()
+                  : TabsValues === "updateUangKeluar"
+                  ? () => actionUangKeluar(UangKeluar.data.id)
                   : null
               }
             >
@@ -350,40 +355,48 @@ const TabUangKeluar = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex flex-col gap-5">
             <div className="w-full flex justify-between">
-              <Search
-                placeholder="Masukkan Nama/Telepon"
-                onSearch={handleSearch}
-                style={{
-                  width: 400,
-                }}
-              />
+              <div className="w-[45%] flex flex-col">
+                {Rekenings && Rekenings?.data?.length > 0 ? (
+                  <Select
+                    className="w-60"
+                    placeholder="Pilih Rekening"
+                    onChange={(value) => handleFilterRekening(value)}
+                  >
+                    <Option value={null}>Pilih Rekening</Option>
+                    {Rekenings?.data.map((rekening) => (
+                      <Option key={rekening?.id} value={rekening?.id}>
+                        {rekening?.atas_nama}
+                      </Option>
+                    ))}
+                  </Select>
+                ) : (
+                  <div>Rekening Kosong</div>
+                )}
+              </div>
 
-              <Tooltip
-                placement="top"
-                title={"Tambahkan Rekening Baru"}
-              >
+              <Tooltip placement="top" title={"Tambahkan Uang Keluar Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
                   onClick={() => {
-                    handleChangeTabs("TambahRekening");
+                    handleChangeTabs("TambahUangKeluar");
                     fetchData();
                   }}
                 >
-                  Rekening
+                  Uang Keluar
                 </Button>
               </Tooltip>
             </div>
             <div>
               <Table
-                columns={ColumnsRekening}
+                columns={ColumnsUangKeluar}
                 size="small"
-                dataSource={Rekenings.data}
+                dataSource={UangKeluars.data}
                 pagination={false}
                 scroll={{
                   y: 440,
                 }}
-                rowKey={Rekenings.id}
+                rowKey={(record) => record.id}
               />
             </div>
           </div>
