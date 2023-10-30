@@ -37,6 +37,7 @@ import {
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
 
 const TabUangMasuk = () => {
   const dispatch = useDispatch();
@@ -199,10 +200,7 @@ const TabUangMasuk = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -210,10 +208,7 @@ const TabUangMasuk = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -269,9 +264,8 @@ const TabUangMasuk = () => {
             <div className="w-[45%] mb-5">
               <label htmlFor="waktuUangMasuk">Waktu</label>
               <DatePicker
-                value={waktu ? moment(waktu) : null}
-                format="YYYY-MM-DD"
-                onChange={(date, dateString) => setWaktu(dateString)}
+                value={waktu ? dayjs(waktu) : null}
+x                onChange={(date, dateString) => setWaktu(date)}
                 className="mt-[5px] w-full"
                 id="waktuUangMasuk"
                 placeholder="Masukkan Waktu"
@@ -314,10 +308,7 @@ const TabUangMasuk = () => {
                 disabled={TabsValues == "updateUangMasuk"}
               >
                 {Rekenings?.data.map((rekening) => (
-                  <Option
-                    key={rekening?.id}
-                    value={rekening?.id}
-                  >
+                  <Option key={rekening?.id} value={rekening?.id}>
                     {rekening?.atas_nama}
                   </Option>
                 ))}
@@ -364,10 +355,7 @@ const TabUangMasuk = () => {
                 }}
               />
 
-              <Tooltip
-                placement="top"
-                title={"Tambahkan Uang Masuk Baru"}
-              >
+              <Tooltip placement="top" title={"Tambahkan Uang Masuk Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
