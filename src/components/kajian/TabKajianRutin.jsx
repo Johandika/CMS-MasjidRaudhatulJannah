@@ -130,6 +130,7 @@ const TabKajianRutin = () => {
   const ColumnsKategoriKajian = [
     {
       width: 200,
+      align: "center",
       title: "Poster Kajian",
       render: (data) => {
         if (data.poster_kajian) {
@@ -160,12 +161,14 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Tema",
+      align: "center",
       render: (data) => {
         return data.tema;
       },
     },
     {
       width: 200,
+      align: "center",
       title: "Pemateri",
       render: (data) => {
         return data.Ustadz?.nama;
@@ -173,6 +176,7 @@ const TabKajianRutin = () => {
     },
     {
       width: 200,
+      align: "center",
       title: "Hari",
       render: (data) => {
         return data.Jadwal.hari;
@@ -181,6 +185,7 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Jam",
+      align: "center",
       render: (data) => {
         return data.waktu_kajian_rutin;
       },
@@ -188,6 +193,7 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Penerjemah",
+      align: "center",
       render: (data) => {
         return data.nama_penerjemah;
       },
@@ -195,6 +201,7 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Catatan",
+      align: "center",
       render: (data) => {
         return data.catatan;
       },
@@ -239,10 +246,7 @@ const TabKajianRutin = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -250,10 +254,7 @@ const TabKajianRutin = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -295,14 +296,14 @@ const TabKajianRutin = () => {
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaKajian">Nama Kajian</label>
+              <label htmlFor="temaKajian">Tema Kajian</label>
               <Input
                 value={tema}
                 onChange={(e) => setTema(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                id="namaKajian"
-                placeholder="Masukkan Nama Kajian"
+                id="temaKajian"
+                placeholder="Masukkan Tema Kajian"
               />
             </div>
             <div className="w-[45%] mb-5">
@@ -324,11 +325,11 @@ const TabKajianRutin = () => {
                 onChange={(e) => setTipe(e.target.value)}
                 className="mt-[5px]  w-full"
                 id="waktu"
-                placeholder="Contoh: 17.00 - 18.00"
+                placeholder=""
                 disabled
               />
             </div>
-            <div className="w-[45%] mb-5">
+            {/* <div className="w-[45%] mb-5">
               <label htmlFor="penerjemah">Nama Penerjemah</label>
               <Input
                 autoComplete="off"
@@ -338,7 +339,7 @@ const TabKajianRutin = () => {
                 id="penerjemah"
                 placeholder="Masukkan nama penerjemah"
               />
-            </div>
+            </div> */}
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="ustadz">Pilih Ustadz</label>
               {Ustadzs && Ustadzs?.data?.length > 0 ? (
@@ -350,10 +351,7 @@ const TabKajianRutin = () => {
                   onChange={(value) => setUstadzId(value)}
                 >
                   {Ustadzs?.data.map((ustadz) => (
-                    <Option
-                      key={ustadz?.id}
-                      value={ustadz?.id}
-                    >
+                    <Option key={ustadz?.id} value={ustadz?.id}>
                       {ustadz?.nama}
                     </Option>
                   ))}
@@ -368,33 +366,19 @@ const TabKajianRutin = () => {
                 <Select
                   id="kategori"
                   className="mt-[5px]"
-                  value={ustadzId ? ustadzId : null}
+                  value={kategoriId ? kategoriId : null}
                   placeholder="Pilih Kategori"
                   onChange={(value) => setKategoriId(value)}
                 >
-                  {KategoriKajians?.data.map((kajian) => (
-                    <Option
-                      key={kajian?.id}
-                      value={kajian?.id}
-                    >
-                      {kajian?.UstadzId}
+                  {KategoriKajians?.data.map((kategori) => (
+                    <Option key={kategori?.id} value={kategori?.id}>
+                      {kategori?.nama}
                     </Option>
                   ))}
                 </Select>
               ) : (
                 <div>kajian Tahsin Belum Ada</div>
               )}
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="catatan">Catatan</label>
-              <Input
-                autoComplete="off"
-                value={catatan}
-                onChange={(e) => setCatatan(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="catatan"
-                placeholder="Masukkan Catatan"
-              />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="catatan">Catatan</label>
@@ -445,10 +429,7 @@ const TabKajianRutin = () => {
               }}
             />
 
-            <Tooltip
-              placement="top"
-              title={"Tambahkan Kajian Baru"}
-            >
+            <Tooltip placement="top" title={"Tambahkan Kajian Baru"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
