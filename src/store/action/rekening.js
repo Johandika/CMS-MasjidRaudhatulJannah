@@ -112,8 +112,13 @@ export function deleteRekening(id) {
 
 //! Uang Masuk
 
-export function getAllUangMasuk() {
+export function getAllUangMasuk(RekeningId) {
   return async (dispatch) => {
+    let queryParams = {};
+
+    if (RekeningId) {
+      queryParams.RekeningId = RekeningId;
+    }
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/uangMasuk`,
@@ -121,6 +126,7 @@ export function getAllUangMasuk() {
         headers: {
           apikey: `${config.api_key}`,
         },
+        params: queryParams,
       });
 
       dispatch({
@@ -212,15 +218,23 @@ export function deleteUangMasuk(id) {
 
 //! Uang Keluar
 
-export function getAllUangKeluar() {
+export function getAllUangKeluar(RekeningId) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (RekeningId) {
+        queryParams.RekeningId = RekeningId;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/uangKeluar`,
         method: "GET",
         headers: {
           apikey: `${config.api_key}`,
         },
+
+        params: queryParams,
       });
 
       dispatch({
@@ -235,7 +249,6 @@ export function getAllUangKeluar() {
 
 export function getOneUangKeluar(id) {
   return async (dispatch) => {
-    w;
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/uangKeluar/${id}`,

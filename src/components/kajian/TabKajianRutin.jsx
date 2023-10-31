@@ -3,16 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   Table,
-  Tag,
   Input,
   Button,
   Tooltip,
-  InputNumber,
   Menu,
   Dropdown,
   message,
   Select,
-  Upload,
 } from "antd";
 
 import {
@@ -30,18 +27,14 @@ import Swal from "sweetalert2";
 
 import {
   createKajian,
-  createKategoriKajian,
   deleteKajian,
-  deleteKategoriKajian,
   getAllKajianRutin,
   getAllKategoriKajian,
   getOneKajian,
-  getOneKategoriKajian,
   updateKajian,
 } from "../../store/action/kajian";
 import { config } from "../../configs";
 import formatPathGambar from "../utils/formatGambar";
-import { getAllUstadz } from "../../store/action/ustadz";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -67,7 +60,6 @@ const TabKajianRutin = () => {
   const { Ustadzs } = useSelector((state) => state.UstadzReducer);
 
   let tipe = "RUTIN";
-  let [penerjemah, setPenerjemah] = useState("");
   let [waktu, setWaktu] = useState("");
   let [tema, setTema] = useState("");
   let [catatan, setCatatan] = useState("");
@@ -83,7 +75,6 @@ const TabKajianRutin = () => {
   }, []);
 
   useEffect(() => {
-    setPenerjemah(Kajian?.data?.nama_penerjemah);
     setWaktu(Kajian?.data?.waktu_kajian_rutin);
     setTema(Kajian?.data?.tema);
     setCatatan(Kajian?.data?.catatan);
@@ -95,7 +86,6 @@ const TabKajianRutin = () => {
 
   const fetchData = async () => {
     await dispatch(getAllKajianRutin());
-    setPenerjemah("");
     setWaktu("");
     setTema("");
     setCatatan("");
@@ -108,7 +98,6 @@ const TabKajianRutin = () => {
   const actionKajian = (id) => {
     let dataKajian = {
       tipe: tipe,
-      nama_penerjemah: penerjemah,
       waktu_kajian_rutin: waktu,
       tema: tema,
       catatan: catatan,
@@ -167,7 +156,7 @@ const TabKajianRutin = () => {
     }
   };
 
-  const handleClearFile = (e) => {
+  const handleClearFile = () => {
     setShowNamaPoster(null);
     setPosterKajian(null);
   };
@@ -175,28 +164,33 @@ const TabKajianRutin = () => {
   const ColumnsKategoriKajian = [
     {
       width: 200,
+      align: "center",
       title: "Poster Kajian",
       render: (data) => {
         if (data.poster_kajian) {
           return (
-            <img
-              alt={`foto ${data.tema}`}
-              src={`${config.api_host_dev}/${formatPathGambar(
-                data.poster_kajian
-              )}`}
-              className="w-16 h-16 rounded-lg border-2 border-gray-100 shadow-md"
-            />
+            <div className="flex justify-center items-center">
+              <img
+                alt={`foto ${data.tema}`}
+                src={`${config.api_host_dev}/${formatPathGambar(
+                  data.poster_kajian
+                )}`}
+                className=" w-16 h-16 rounded-lg object-cover border-2 border-gray-100 shadow-md"
+              />
+            </div>
           );
         } else {
           return (
-            <div
-              alt={`foto ${data.tema}`}
-              className="w-16 h-16 rounded-lg border-2 bg-slate-50 border-gray-100
+            <div className="flex justify-center items-center">
+              <div
+                alt={`foto ${data.tema}`}
+                className="w-16 h-16 rounded-lg border-2 bg-slate-50 border-gray-100
               shadow-md flex justify-center items-center"
-            >
-              <p className="text-center text-xs font-medium text-slate-400">
-                Empty
-              </p>
+              >
+                <p className="text-center text-xs font-medium text-slate-400">
+                  Empty
+                </p>
+              </div>
             </div>
           );
         }
@@ -205,12 +199,14 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Tema",
+      align: "center",
       render: (data) => {
         return data.tema;
       },
     },
     {
       width: 200,
+      align: "center",
       title: "Pemateri",
       render: (data) => {
         return data.Ustadz?.nama;
@@ -218,6 +214,7 @@ const TabKajianRutin = () => {
     },
     {
       width: 200,
+      align: "center",
       title: "Hari",
       render: (data) => {
         return data.Jadwal?.hari;
@@ -226,27 +223,24 @@ const TabKajianRutin = () => {
     {
       width: 200,
       title: "Jam",
+      align: "center",
       render: (data) => {
         return data.waktu_kajian_rutin;
       },
     },
     {
       width: 200,
+      align: "center",
       title: "Kategori",
       render: (data) => {
         return data.KategoriKajian?.nama;
       },
     },
-    {
-      width: 200,
-      title: "Penerjemah",
-      render: (data) => {
-        return data.nama_penerjemah;
-      },
-    },
+
     {
       width: 200,
       title: "Catatan",
+      align: "center",
       render: (data) => {
         return data.catatan;
       },
@@ -346,9 +340,9 @@ const TabKajianRutin = () => {
 
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
-            <div className="w-[45%] mb-5">
+            <div className="w-[45%] mb-5 flex flex-col gap-1">
               <label htmlFor="uploadPoster">Upload Poster</label>
-              <div className="flex flex-col gap-2">
+              <div className=" gap-2">
                 <Button
                   icon={<UploadOutlined />}
                   onClick={() => target.current.click()}
@@ -358,7 +352,7 @@ const TabKajianRutin = () => {
                 </Button>
                 {showNamaPoster !== null && (
                   <div className="flex flex-row ">
-                    <div className="flex-1 text-blue-600">{showNamaPoster}</div>
+                    <div className="mr-3  text-blue-700">{showNamaPoster}</div>
                     <div className="text-red-500">
                       <CloseCircleOutlined onClick={handleClearFile} />
                     </div>
@@ -376,14 +370,14 @@ const TabKajianRutin = () => {
               </div>
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaKajian">Nama Kajian</label>
+              <label htmlFor="namaKajian">Tema Kajian</label>
               <Input
                 value={tema}
                 onChange={(e) => setTema(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                id="namaKajian"
-                placeholder="Masukkan Nama Kajian"
+                id="temaKajian"
+                placeholder="Masukkan Tema Kajian"
               />
             </div>
             <div className="w-[45%] mb-5">
@@ -397,17 +391,7 @@ const TabKajianRutin = () => {
                 disabled
               />
             </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="penerjemah">Nama Penerjemah</label>
-              <Input
-                autoComplete="off"
-                value={penerjemah}
-                onChange={(e) => setPenerjemah(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="penerjemah"
-                placeholder="Masukkan nama penerjemah"
-              />
-            </div>
+
             <div className="w-[45%] mb-5">
               <label htmlFor="waktu">Waktu Kajian</label>
               <Input

@@ -32,6 +32,7 @@ import {
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
+import numberWithCommas from "../../helper/numberWithCommas";
 
 const TabRekening = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const TabRekening = () => {
   let [nomorRekening, setNomorRekening] = useState("");
   let [saldo, setSaldo] = useState(null);
   let [catatan, setCatatan] = useState("");
-  let [namaBank, setNamaBank] = useState("");
+  let [namaBank, setNamaBank] = useState(null);
 
   let [total, setTotal] = useState(null);
   let [waktu, setWaktu] = useState(null);
@@ -157,7 +158,9 @@ const TabRekening = () => {
       title: "Saldo",
       align: "center",
       render: (data) => {
-        return `Rp.${data.saldo}`;
+        return data.saldo == 0 || data.saldo == null
+          ? "Belum Ada Saldo"
+          : `Rp.${numberWithCommas(data.saldo)}`;
       },
     },
     {
@@ -208,10 +211,7 @@ const TabRekening = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -219,10 +219,7 @@ const TabRekening = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -358,10 +355,7 @@ const TabRekening = () => {
                 }}
               />
 
-              <Tooltip
-                placement="top"
-                title={"Tambahkan Rekening Baru"}
-              >
+              <Tooltip placement="top" title={"Tambahkan Rekening Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"

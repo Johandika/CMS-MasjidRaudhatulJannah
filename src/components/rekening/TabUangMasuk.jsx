@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import moment from "moment/moment";
 
 import {
   message,
@@ -37,6 +36,8 @@ import {
 import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
+import numberWithCommas from "../../helper/numberWithCommas";
 
 const TabUangMasuk = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const TabUangMasuk = () => {
   let [waktu, setWaktu] = useState(null);
   let [keterangan, setKeterangan] = useState("");
   let [informasi, setInformasi] = useState("");
-  let [rekeningDonasi, setRekeningDonasi] = useState("");
+  let [rekeningDonasi, setRekeningDonasi] = useState(null);
 
   useEffect(() => {
     dispatch(getAllUangMasuk());
@@ -131,7 +132,7 @@ const TabUangMasuk = () => {
       title: "Total",
       align: "center",
       render: (data) => {
-        return data.total;
+        return `Rp. ${numberWithCommas(data.total)}`;
       },
     },
     {
@@ -199,10 +200,7 @@ const TabUangMasuk = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -210,10 +208,7 @@ const TabUangMasuk = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -229,6 +224,10 @@ const TabUangMasuk = () => {
       },
     },
   ];
+
+  const handleFilterRekening = (value) => {
+    dispatch(getAllUangMasuk(value));
+  };
 
   return (
     <div>
@@ -269,9 +268,9 @@ const TabUangMasuk = () => {
             <div className="w-[45%] mb-5">
               <label htmlFor="waktuUangMasuk">Waktu</label>
               <DatePicker
-                value={waktu ? moment(waktu) : null}
-                format="YYYY-MM-DD"
-                onChange={(date, dateString) => setWaktu(dateString)}
+                value={waktu ? dayjs(waktu) : null}
+                x
+                onChange={(date, dateString) => setWaktu(date)}
                 className="mt-[5px] w-full"
                 id="waktuUangMasuk"
                 placeholder="Masukkan Waktu"
@@ -308,16 +307,13 @@ const TabUangMasuk = () => {
               <Select
                 id="RekeningDonasiMasuk"
                 className="mt-[5px]"
-                value={rekeningDonasi}
+                value={rekeningDonasi ? rekeningDonasi : null}
                 placeholder="Pilih Rekening"
                 onChange={(value) => setRekeningDonasi(value)}
                 disabled={TabsValues == "updateUangMasuk"}
               >
                 {Rekenings?.data.map((rekening) => (
-                  <Option
-                    key={rekening?.id}
-                    value={rekening?.id}
-                  >
+                  <Option key={rekening?.id} value={rekening?.id}>
                     {rekening?.atas_nama}
                   </Option>
                 ))}
@@ -356,18 +352,26 @@ const TabUangMasuk = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex flex-col gap-5">
             <div className="w-full flex justify-between">
-              <Search
-                placeholder="Masukkan Nama/Telepon"
-                onSearch={handleSearch}
-                style={{
-                  width: 400,
-                }}
-              />
+              <div className="w-[45%] flex flex-col">
+                {Rekenings && Rekenings?.data?.length > 0 ? (
+                  <Select
+                    className="w-60"
+                    placeholder="Pilih Rekening"
+                    onChange={(value) => handleFilterRekening(value)}
+                  >
+                    <Option value={null}>Pilih Rekening</Option>
+                    {Rekenings?.data.map((rekening) => (
+                      <Option key={rekening?.id} value={rekening?.id}>
+                        {rekening?.atas_nama}
+                      </Option>
+                    ))}
+                  </Select>
+                ) : (
+                  <div>Rekening Kosong</div>
+                )}
+              </div>
 
-              <Tooltip
-                placement="top"
-                title={"Tambahkan Uang Masuk Baru"}
-              >
+              <Tooltip placement="top" title={"Tambahkan Uang Masuk Baru"}>
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
