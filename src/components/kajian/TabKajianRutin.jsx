@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -12,6 +12,7 @@ import {
   Dropdown,
   message,
   Select,
+  Upload,
 } from "antd";
 
 import {
@@ -20,6 +21,8 @@ import {
   EditOutlined,
   DeleteOutlined,
   DownCircleOutlined,
+  UploadOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 
 import { setTabsValue } from "../../store/action/tabs";
@@ -38,12 +41,24 @@ import {
 } from "../../store/action/kajian";
 import { config } from "../../configs";
 import formatPathGambar from "../utils/formatGambar";
+import { getAllUstadz } from "../../store/action/ustadz";
 
 const { Search } = Input;
 const { Option } = Select;
 
+const Hari = [
+  { id: 1, nama: "Senin" },
+  { id: 2, nama: "Selasa" },
+  { id: 3, nama: "Rabu" },
+  { id: 4, nama: "kamis" },
+  { id: 5, nama: "Jum'at" },
+  { id: 6, nama: "Sabtu" },
+  { id: 7, nama: "Ahad" },
+];
+
 const TabKajianRutin = () => {
   const dispatch = useDispatch();
+  const target = useRef(null);
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
   const { KajianRutins, Kajian, KategoriKajians } = useSelector(
@@ -51,40 +66,40 @@ const TabKajianRutin = () => {
   );
   const { Ustadzs } = useSelector((state) => state.UstadzReducer);
 
-  let [tipe, setTipe] = useState("");
+  let tipe = "RUTIN";
   let [penerjemah, setPenerjemah] = useState("");
   let [waktu, setWaktu] = useState("");
   let [tema, setTema] = useState("");
   let [catatan, setCatatan] = useState("");
-  let [posterKajian, setPosterKajian] = useState("");
   let [kategoriId, setKategoriId] = useState("");
   let [ustadzId, setUstadzId] = useState("");
   let [hari, setHari] = useState("");
+  let [posterKajian, setPosterKajian] = useState(null);
+  let [showNamaPoster, setShowNamaPoster] = useState(null);
 
   useEffect(() => {
     dispatch(getAllKajianRutin());
+    dispatch(getAllKategoriKajian());
   }, []);
 
   useEffect(() => {
-    setTipe(Kajian?.data?.tipe);
-    setPenerjemah(Kajian?.data?.namma_penerjemah);
+    setPenerjemah(Kajian?.data?.nama_penerjemah);
     setWaktu(Kajian?.data?.waktu_kajian_rutin);
     setTema(Kajian?.data?.tema);
     setCatatan(Kajian?.data?.catatan);
-    setPosterKajian(Kajian?.data?.poster_kajian);
+    setPosterKajian(Kajian?.data?.poster_kajian || null);
     setKategoriId(Kajian?.data?.KategoriKajianId);
     setUstadzId(Kajian?.data?.UstadzId);
-    setHari(Kajian?.data?.Jadwal.hari);
+    setHari(Kajian?.data?.Jadwal?.hari);
   }, [Kajian, TabsValues]);
 
   const fetchData = async () => {
     await dispatch(getAllKajianRutin());
-    setTipe("");
     setPenerjemah("");
     setWaktu("");
     setTema("");
     setCatatan("");
-    setPosterKajian("");
+    setPosterKajian(null);
     setKategoriId("");
     setUstadzId("");
     setHari("");
@@ -102,6 +117,11 @@ const TabKajianRutin = () => {
       UstadzId: ustadzId,
       hari: hari,
     };
+
+    if (posterKajian === null) {
+      alert("Poster kajian harus jpg,jpeg,png.");
+      return;
+    }
 
     dispatch(id ? updateKajian(id, dataKajian) : createKajian(dataKajian))
       .then((data) =>
@@ -125,6 +145,31 @@ const TabKajianRutin = () => {
 
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
+  };
+
+  const handleFileChange = async (e) => {
+    const uploaded = e?.target?.files[0];
+    setShowNamaPoster(uploaded?.name);
+
+    if (
+      uploaded?.type === "image/jpg" ||
+      uploaded?.type === "image/png" ||
+      uploaded?.type === "image/jpeg"
+    ) {
+      var size = parseFloat(e.target.files[0].size / 3145728).toFixed(2);
+      if (size > 5) {
+        alert("File kebesaran, size maximal 5MB");
+      } else {
+        setPosterKajian(uploaded);
+      }
+    } else {
+      alert("Anda harus menginput file jpg/jpeg/png");
+    }
+  };
+
+  const handleClearFile = (e) => {
+    setShowNamaPoster(null);
+    setPosterKajian(null);
   };
 
   const ColumnsKategoriKajian = [
@@ -175,7 +220,7 @@ const TabKajianRutin = () => {
       width: 200,
       title: "Hari",
       render: (data) => {
-        return data.Jadwal.hari;
+        return data.Jadwal?.hari;
       },
     },
     {
@@ -183,6 +228,13 @@ const TabKajianRutin = () => {
       title: "Jam",
       render: (data) => {
         return data.waktu_kajian_rutin;
+      },
+    },
+    {
+      width: 200,
+      title: "Kategori",
+      render: (data) => {
+        return data.KategoriKajian?.nama;
       },
     },
     {
@@ -295,6 +347,35 @@ const TabKajianRutin = () => {
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
             <div className="w-[45%] mb-5">
+              <label htmlFor="uploadPoster">Upload Poster</label>
+              <div className="flex flex-col gap-2">
+                <Button
+                  icon={<UploadOutlined />}
+                  onClick={() => target.current.click()}
+                  id="uploadPoster"
+                >
+                  Upload Poster
+                </Button>
+                {showNamaPoster !== null && (
+                  <div className="flex flex-row ">
+                    <div className="flex-1 text-blue-600">{showNamaPoster}</div>
+                    <div className="text-red-500">
+                      <CloseCircleOutlined onClick={handleClearFile} />
+                    </div>
+                  </div>
+                )}
+                <input
+                  ref={target}
+                  multiple={false}
+                  type="file"
+                  name="poster_kajian"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="posterKajian"
+                />
+              </div>
+            </div>
+            <div className="w-[45%] mb-5">
               <label htmlFor="namaKajian">Nama Kajian</label>
               <Input
                 value={tema}
@@ -306,25 +387,13 @@ const TabKajianRutin = () => {
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="waktu">Waktu Kajian</label>
-              <Input
-                autoComplete="off"
-                value={waktu}
-                onChange={(e) => setWaktu(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="waktu"
-                placeholder="Contoh: 17.00 - 18.00"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="waktu">Tipe</label>
+              <label htmlFor="tipe">Tipe</label>
               <Input
                 autoComplete="off"
                 value="RUTIN"
-                onChange={(e) => setTipe(e.target.value)}
                 className="mt-[5px]  w-full"
-                id="waktu"
-                placeholder="Contoh: 17.00 - 18.00"
+                id="tipe"
+                placeholder="RUTIN"
                 disabled
               />
             </div>
@@ -339,6 +408,41 @@ const TabKajianRutin = () => {
                 placeholder="Masukkan nama penerjemah"
               />
             </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="waktu">Waktu Kajian</label>
+              <Input
+                autoComplete="off"
+                value={waktu}
+                onChange={(e) => setWaktu(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="waktu"
+                placeholder="Contoh: 17.00 - 18.00"
+              />
+            </div>
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="jadwalKelasDewasa">Hari</label>
+              {Hari && Hari?.length > 0 ? (
+                <Select
+                  id="jadwalKelasDewasa"
+                  className="mt-[5px]"
+                  value={hari ? hari : null}
+                  placeholder="Pilih Hari Kajian"
+                  onChange={(value) => setHari(value)}
+                >
+                  {Hari?.map((hari) => (
+                    <Option
+                      key={hari?.id}
+                      value={hari?.nama}
+                    >
+                      {hari?.nama}
+                    </Option>
+                  ))}
+                </Select>
+              ) : (
+                <div>Jadwal Tahsin Belum Ada</div>
+              )}
+            </div>
+
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="ustadz">Pilih Ustadz</label>
               {Ustadzs && Ustadzs?.data?.length > 0 ? (
@@ -368,16 +472,16 @@ const TabKajianRutin = () => {
                 <Select
                   id="kategori"
                   className="mt-[5px]"
-                  value={ustadzId ? ustadzId : null}
+                  value={kategoriId ? kategoriId : null}
                   placeholder="Pilih Kategori"
                   onChange={(value) => setKategoriId(value)}
                 >
-                  {KategoriKajians?.data.map((kajian) => (
+                  {KategoriKajians?.data.map((kategori) => (
                     <Option
-                      key={kajian?.id}
-                      value={kajian?.id}
+                      key={kategori?.id}
+                      value={kategori?.id}
                     >
-                      {kajian?.UstadzId}
+                      {kategori?.nama}
                     </Option>
                   ))}
                 </Select>
@@ -387,18 +491,8 @@ const TabKajianRutin = () => {
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="catatan">Catatan</label>
-              <Input
-                autoComplete="off"
-                value={catatan}
-                onChange={(e) => setCatatan(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="catatan"
-                placeholder="Masukkan Catatan"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="catatan">Catatan</label>
-              <Input
+              <Input.TextArea
+                rows={4}
                 autoComplete="off"
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}

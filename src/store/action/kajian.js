@@ -26,7 +26,6 @@ export function getAllKategoriKajian(search) {
         type: "Fetch/GetAllKategoriKajian",
         payload: data,
       });
-      return data;
     } catch (error) {
       console.log(error);
     }
@@ -171,6 +170,7 @@ export function getOneKajian(id) {
           apikey: `${config.api_key}`,
         },
       });
+
       dispatch({
         type: "Fetch/GetOneKajian",
         payload: data,
@@ -184,12 +184,19 @@ export function getOneKajian(id) {
 export function createKajian(body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/kajian`,
         method: "POST",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -203,12 +210,19 @@ export function createKajian(body) {
 export function updateKajian(id, body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/kajian/${id}`,
         method: "PATCH",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 

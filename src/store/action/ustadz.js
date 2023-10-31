@@ -25,8 +25,6 @@ export function getAllUstadz(search) {
         type: "Fetch/GetAllUstadz",
         payload: data,
       });
-
-      return data;
     } catch (error) {
       console.log(error);
     }
