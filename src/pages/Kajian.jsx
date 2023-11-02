@@ -24,7 +24,7 @@ const Tahsin = () => {
             children: <TabKategoriKajian />,
           },
           {
-            label: "Kajian",
+            label: "Kajian Rutin",
             key: "3",
             children: <TabKajianRutin />,
           },
