@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// import locale from "antd/es/date-picker/locale/id_ID";
 
 import {
   Table,
@@ -10,6 +11,8 @@ import {
   Dropdown,
   message,
   Select,
+  DatePicker,
+  Space,
 } from "antd";
 
 import {
@@ -28,71 +31,74 @@ import Swal from "sweetalert2";
 import {
   createKajian,
   deleteKajian,
-  getAllKajianRutin,
+  getAllKajianTablighAkbar,
   getAllKategoriKajian,
   getOneKajian,
   updateKajian,
 } from "../../store/action/kajian";
 import { config } from "../../configs";
 import formatPathGambar from "../utils/formatGambar";
+import ubahFormatDate from "../utils/date";
 
 const { Search } = Input;
 const { Option } = Select;
 
-const Hari = [
-  { id: 1, nama: "Senin" },
-  { id: 2, nama: "Selasa" },
-  { id: 3, nama: "Rabu" },
-  { id: 4, nama: "kamis" },
-  { id: 5, nama: "Jum'at" },
-  { id: 6, nama: "Sabtu" },
-  { id: 7, nama: "Ahad" },
-];
+// const Hari = [
+//   { id: 1, nama: "Senin" },
+//   { id: 2, nama: "Selasa" },
+//   { id: 3, nama: "Rabu" },
+//   { id: 4, nama: "kamis" },
+//   { id: 5, nama: "Jum'at" },
+//   { id: 6, nama: "Sabtu" },
+//   { id: 7, nama: "Ahad" },
+// ];
 
-const TabKajianRutin = () => {
+const TabTablighAkbar = () => {
   const dispatch = useDispatch();
   const target = useRef(null);
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
-  const { KajianRutins, Kajian, KategoriKajians } = useSelector(
+  const { KajianTablighAkbars, Kajian, KategoriKajians } = useSelector(
     (state) => state.KajianReducer
   );
-  const { Ustadzs } = useSelector((state) => state.UstadzReducer);
 
   let tipe = "RUTIN";
-  let [waktu, setWaktu] = useState("");
+  let [waktu, setWaktu] = useState(new Date());
   let [tema, setTema] = useState("");
   let [catatan, setCatatan] = useState("");
   let [kategoriId, setKategoriId] = useState("");
-  let [ustadzId, setUstadzId] = useState("");
-  let [hari, setHari] = useState("");
+  let [namaUstadz, setNamaUstadz] = useState("");
+  let [namaPenerjemah, setNamaPenerjemah] = useState("");
+  // let [hari, setHari] = useState("");
   let [posterKajian, setPosterKajian] = useState(null);
   let [showNamaPoster, setShowNamaPoster] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllKajianRutin());
+    dispatch(getAllKajianTablighAkbar());
     dispatch(getAllKategoriKajian());
   }, []);
 
   useEffect(() => {
-    setWaktu(Kajian?.data?.waktu_kajian_rutin);
+    setWaktu(Kajian?.data?.waktu);
     setTema(Kajian?.data?.tema);
     setCatatan(Kajian?.data?.catatan);
     setPosterKajian(Kajian?.data?.poster_kajian || null);
     setKategoriId(Kajian?.data?.KategoriKajianId);
-    setUstadzId(Kajian?.data?.UstadzId);
-    setHari(Kajian?.data?.Jadwal?.hari);
+    setNamaUstadz(Kajian?.data?.namaUstadz);
+    setNamaPenerjemah(Kajian?.data?.namaPenerjemah);
+    // setHari(Kajian?.data?.Jadwal?.hari);
   }, [Kajian, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllKajianRutin());
+    await dispatch(getAllKajianTablighAkbar());
     setWaktu("");
     setTema("");
     setCatatan("");
     setPosterKajian(null);
     setKategoriId("");
-    setUstadzId("");
-    setHari("");
+    setNamaUstadz("");
+    setNamaPenerjemah("");
+    // setHari("");
   };
 
   const actionKajian = (id) => {
@@ -103,8 +109,9 @@ const TabKajianRutin = () => {
       catatan: catatan,
       poster_kajian: posterKajian,
       KategoriKajianId: kategoriId,
-      UstadzId: ustadzId,
-      hari: hari,
+      nama_ustadz: namaUstadz,
+      nama_penerjemah: setNamaPenerjemah,
+      // hari: hari,
     };
 
     if (posterKajian === null) {
@@ -117,7 +124,7 @@ const TabKajianRutin = () => {
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
-              dispatch(getAllKajianRutin());
+              dispatch(getAllKajianTablighAkbar());
               handleChangeTabs("");
             });
           } else {
@@ -129,7 +136,7 @@ const TabKajianRutin = () => {
   };
 
   const handleSearch = async (value) => {
-    await dispatch(getAllKajianRutin(value));
+    await dispatch(getAllKajianTablighAkbar(value));
   };
 
   const handleChangeTabs = (value) => {
@@ -161,7 +168,15 @@ const TabKajianRutin = () => {
     setPosterKajian(null);
   };
 
-  const ColumnsKategoriKajian = [
+  const onChange = (value, dateString) => {
+    console.log("Selected Time: ", value);
+    console.log("Formatted Selected Time: ", dateString);
+  };
+  const onOk = (value) => {
+    setWaktu(value.$d);
+  };
+
+  const ColumnsKajianTablighAkbars = [
     {
       width: 200,
       align: "center",
@@ -209,23 +224,31 @@ const TabKajianRutin = () => {
       align: "center",
       title: "Pemateri",
       render: (data) => {
-        return data.Ustadz?.nama;
+        return data.nama_ustadz;
       },
     },
     {
       width: 200,
       align: "center",
-      title: "Hari",
+      title: "Penerjemah",
       render: (data) => {
-        return data.Jadwal?.hari;
+        return data.nama_penerjemah;
       },
     },
+    // {
+    //   width: 200,
+    //   align: "center",
+    //   title: "Hari",
+    //   render: (data) => {
+    //     return data.Jadwal?.hari;
+    //   },
+    // },
     {
       width: 200,
-      title: "Jam",
+      title: "Waktu",
       align: "center",
       render: (data) => {
-        return data.waktu_kajian_rutin;
+        return ubahFormatDate(data.waktu);
       },
     },
     {
@@ -269,7 +292,7 @@ const TabKajianRutin = () => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
-                      dispatch(getAllKajianRutin());
+                      dispatch(getAllKajianTablighAkbar());
                     } else {
                       message.error(data.response.data.message);
                     }
@@ -318,7 +341,8 @@ const TabKajianRutin = () => {
 
   return (
     <div>
-      {TabsValues === "TambahKajian" || TabsValues === "UpdateKajian" ? (
+      {TabsValues === "TambahKajianTablighAkbar" ||
+      TabsValues === "UpdateKajian" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -330,7 +354,7 @@ const TabKajianRutin = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahKajian"
+              {TabsValues === "TambahKajianTablighAkbar"
                 ? "Tambah Kajian"
                 : TabsValues === "UpdateKajian"
                 ? "Edit Kajian"
@@ -384,26 +408,29 @@ const TabKajianRutin = () => {
               <label htmlFor="tipe">Tipe</label>
               <Input
                 autoComplete="off"
-                value="RUTIN"
+                value="TABLIGH_AKBAR"
                 className="mt-[5px]  w-full"
                 id="tipe"
-                placeholder="RUTIN"
+                placeholder="TABLIGH_AKBAR"
                 disabled
               />
             </div>
 
-            <div className="w-[45%] mb-5">
-              <label htmlFor="waktu">Waktu Kajian</label>
-              <Input
-                autoComplete="off"
-                value={waktu}
-                onChange={(e) => setWaktu(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="waktu"
-                placeholder="Contoh: 17.00 - 18.00"
-              />
-            </div>
             <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="waktu">Waktu Kajian</label>
+
+              <Space
+                direction="vertical"
+                size={12}
+              >
+                <DatePicker
+                  showTime
+                  onChange={onChange}
+                  onOk={onOk}
+                />
+              </Space>
+            </div>
+            {/* <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="jadwalKelasDewasa">Hari</label>
               {Hari && Hari?.length > 0 ? (
                 <Select
@@ -425,31 +452,31 @@ const TabKajianRutin = () => {
               ) : (
                 <div>Jadwal Tahsin Belum Ada</div>
               )}
+            </div> */}
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="namaUstadz">Nama Ustadz</label>
+              <Input
+                value={namaUstadz}
+                onChange={(e) => setNamaUstadz(e.target.value)}
+                className="mt-[5px]"
+                autoComplete="off"
+                id="namaUstadz"
+                placeholder="Masukkan Nama Ustadz"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="namaPenerjemah">Nama Penerjemah</label>
+              <Input
+                value={namaPenerjemah}
+                onChange={(e) => setNamaPenerjemah(e.target.value)}
+                className="mt-[5px]"
+                autoComplete="off"
+                id="namaPenerjemah"
+                placeholder="Masukkan Nama Penerjemah"
+              />
             </div>
 
-            <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="ustadz">Pilih Ustadz</label>
-              {Ustadzs && Ustadzs?.data?.length > 0 ? (
-                <Select
-                  id="ustadz"
-                  className="mt-[5px]"
-                  value={ustadzId ? ustadzId : null}
-                  placeholder="Pilih Ustadz"
-                  onChange={(value) => setUstadzId(value)}
-                >
-                  {Ustadzs?.data.map((ustadz) => (
-                    <Option
-                      key={ustadz?.id}
-                      value={ustadz?.id}
-                    >
-                      {ustadz?.nama}
-                    </Option>
-                  ))}
-                </Select>
-              ) : (
-                <div>kajian Tahsin Belum Ada</div>
-              )}
-            </div>
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="kategori">Pilih kategori</label>
               {KategoriKajians && KategoriKajians?.data?.length > 0 ? (
@@ -501,7 +528,7 @@ const TabKajianRutin = () => {
               type="primary"
               className="bg-primaryDark"
               onClick={
-                TabsValues === "TambahKajian"
+                TabsValues === "TambahKajianTablighAkbar"
                   ? () => actionKajian()
                   : TabsValues === "UpdateKajian"
                   ? () => actionKajian(Kajian.data.id)
@@ -531,7 +558,7 @@ const TabKajianRutin = () => {
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
                 onClick={() => {
-                  handleChangeTabs("TambahKajian");
+                  handleChangeTabs("TambahKajianTablighAkbar");
                   fetchData();
                 }}
               >
@@ -541,14 +568,14 @@ const TabKajianRutin = () => {
           </div>
           <div>
             <Table
-              columns={ColumnsKategoriKajian}
+              columns={ColumnsKajianTablighAkbars}
               size="small"
-              dataSource={KajianRutins.data}
+              dataSource={KajianTablighAkbars.data}
               pagination={false}
               scroll={{
                 y: 440,
               }}
-              rowKey={KajianRutins.id}
+              rowKey={KajianTablighAkbars.id}
             />
           </div>
         </div>
@@ -557,4 +584,4 @@ const TabKajianRutin = () => {
   );
 };
 
-export default TabKajianRutin;
+export default TabTablighAkbar;

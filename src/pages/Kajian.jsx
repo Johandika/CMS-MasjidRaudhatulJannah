@@ -2,6 +2,7 @@ import { Tabs } from "antd";
 import TabUstadz from "../components/kajian/TabUstadz";
 import TabKategoriKajian from "../components/kajian/TabKategoriKajian";
 import TabKajianRutin from "../components/kajian/TabKajianRutin";
+import TabTablighAkbar from "../components/kajian/TabTablighAkbar";
 
 const Tahsin = () => {
   return (
@@ -27,11 +28,11 @@ const Tahsin = () => {
             key: "3",
             children: <TabKajianRutin />,
           },
-          // {
-          //   label: "Peserta Anak",
-          //   key: "4",
-          //   children: <TabTablighAkbar />,
-          // },
+          {
+            label: "Tabligh Akbar",
+            key: "4",
+            children: <TabTablighAkbar />,
+          },
         ]}
       />
     </div>
