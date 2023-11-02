@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  redirect,
-} from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import Home from "../pages/Home";
 import Kajian from "../pages/Kajian";
 import Tahsin from "../pages/Tahsin";
@@ -13,6 +9,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Layanan from "../pages/Layanan";
 import Diklat from "../pages/Diklat";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,31 +38,59 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/kajian",
-        element: <Kajian />,
+        element: (
+          <ProtectedRoute>
+            <Kajian />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/tahsin",
-        element: <Tahsin />,
+        element: (
+          <ProtectedRoute>
+            <Tahsin />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/rekening",
-        element: <Rekening />,
+        element: (
+          <ProtectedRoute>
+            <Rekening />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/divisi",
-        element: <Divisi />,
+        element: (
+          <ProtectedRoute>
+            <Divisi />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/layanan",
-        element: <Layanan />,
+        element: (
+          <ProtectedRoute>
+            <Layanan />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/diklat",
-        element: <Diklat />,
+        element: (
+          <ProtectedRoute>
+            <Diklat />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
