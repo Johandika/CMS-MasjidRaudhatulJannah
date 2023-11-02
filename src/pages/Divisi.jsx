@@ -1,16 +1,8 @@
-import React, { useEffect } from "react";
 import { Tabs } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllDivisi } from "../store/action/divisi";
+import TabDivisi from "../components/divisi/TabDivisi";
+import TabKegiatan from "../components/divisi/TabKegiatan";
 
 const Divisi = () => {
-  const dispatch = useDispatch();
-
-  const { Divisis } = useSelector((state) => state.DivisiReducer);
-
-  useEffect(() => {
-    dispatch(getAllDivisi());
-  }, []);
   return (
     <div className="w-full h-full px-5">
       <Tabs
@@ -22,20 +14,12 @@ const Divisi = () => {
           {
             label: "Divisi",
             key: "1",
-            children: (
-              <div>
-                <p>Divisi</p>
-              </div>
-            ),
+            children: <TabDivisi />,
           },
           {
             label: "Kegiatan",
             key: "2",
-            children: (
-              <div>
-                <p>Kegiatan</p>
-              </div>
-            ),
+            children: <TabKegiatan />,
           },
         ]}
       />

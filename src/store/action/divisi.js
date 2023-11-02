@@ -1,15 +1,21 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllDivisi() {
+export function getAllDivisi(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
       const { data } = await axios({
         url: `${config.api_host_dev}/divisi`,
         method: "GET",
         headers: {
           apikey: `${config.api_key}`,
         },
+        params: queryParams,
       });
 
       dispatch({
