@@ -3,6 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
 import { setTabsValue } from "../../store/action/tabs";
+import ImgCrop from "antd-img-crop";
+
+import moment from "moment";
+import dayjs from "dayjs";
 
 import {
   Table,
@@ -16,6 +20,9 @@ import {
   Menu,
   Dropdown,
   message,
+  Space,
+  Upload,
+  DatePicker,
 } from "antd";
 
 import {
@@ -31,64 +38,89 @@ const { Search } = Input;
 const { Option } = Select;
 
 import {
-  createPengajar,
-  deletePengajar,
-  updatePengajar,
-  getAllPengajar,
-  updateStatusPengajar,
-  getOnePengajar,
-} from "../../store/action/pengajar";
+  createKegiatan,
+  deleteKegiatan,
+  getAllKegiatan,
+  getOneKegiatan,
+  updateHeadlineKegiatan,
+  updateKegiatan,
+  updateStatusKegiatan,
+} from "../../store/action/kegiatan";
+import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
+import { formatWaktuArtikel } from "../utils/date";
 
 const TabKegiatan = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
-  const { Pengajars, Pengajar } = useSelector((state) => state.PengajarReducer);
+  const { Divisis, Divisi } = useSelector((state) => state.DivisiReducer);
+  const { Kegiatans, Kegiatan } = useSelector((state) => state.KegiatanReducer);
 
-  let [namaPengajar, setNamaPengajar] = useState("");
-  let [teleponPengajar, setTeleponPengajar] = useState("");
-  let [umurPengajar, setUmurPengajar] = useState("");
-  let [alamatPengajar, setAlamatPengajar] = useState("");
-  let [pekerjaanPengajar, setPekerjaanPengajar] = useState("");
+  let [temaKegiatan, setTemaKegiatan] = useState("");
+  let [penanggungJawabKegiatan, setPenagunggJawabKegiatan] = useState("");
+  let [waktuKegiatan, setWaktuKegiatan] = useState("");
+  let [lokasiKegiatan, setLokasiKegiatan] = useState("");
+  let [catatanKegiatan, setCatatanKegiatan] = useState("");
+  let [deskripsiKegiatan, setDeskripsiKegiatan] = useState("");
+  let [linkKegiatan, setLinkKegiatan] = useState("");
+  let [divisiId, setDivisiId] = useState("");
+  // let [fileList, setFileList] = useState([]);
+  let [deskripsiGambarKegiatan, setDeskripsiGambarKegiatan] = useState("");
 
   useEffect(() => {
-    dispatch(getAllPengajar());
+    dispatch(getAllKegiatan());
   }, []);
 
   useEffect(() => {
-    setNamaPengajar(Pengajar?.data?.nama);
-    setTeleponPengajar(Pengajar?.data?.telepon);
-    setAlamatPengajar(Pengajar?.data?.alamat);
-    setUmurPengajar(Pengajar?.data?.umur);
-    setPekerjaanPengajar(Pengajar?.data?.pekerjaan);
-  }, [Pengajar, TabsValues]);
+    setTemaKegiatan(Kegiatan?.data?.tema);
+    setPenagunggJawabKegiatan(Kegiatan?.data?.penanggung_jawab);
+    setWaktuKegiatan(Kegiatan?.data?.waktu);
+    setLokasiKegiatan(Kegiatan?.data?.lokasi);
+    setCatatanKegiatan(Kegiatan?.data?.catatan);
+    setDeskripsiKegiatan(Kegiatan?.data?.deskripsi);
+    setLinkKegiatan(Kegiatan?.data?.link);
+    setDivisiId(Kegiatan?.data?.DivisiId);
+    // setFileList(Kegiatan?.data?.gambar_kegiatan);
+    setDeskripsiGambarKegiatan(Kegiatan?.data?.deskripsi_gambar);
+  }, [Kegiatan, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllPengajar());
-    setNamaPengajar("");
-    setTeleponPengajar("");
-    setAlamatPengajar("");
-    setUmurPengajar("");
-    setPekerjaanPengajar("");
+    await dispatch(getAllKegiatan());
+    setTemaKegiatan("");
+    setPenagunggJawabKegiatan("");
+    setWaktuKegiatan("");
+    setLokasiKegiatan("");
+    setCatatanKegiatan("");
+    setDeskripsiKegiatan("");
+    setLinkKegiatan("");
+    setDivisiId("");
+    setDeskripsiGambarKegiatan("");
+    // setFileList("");
   };
 
-  const actionPengajar = (id) => {
-    let dataPengajar = {
-      nama: namaPengajar,
-      telepon: teleponPengajar,
-      alamat: alamatPengajar,
-      pekerjaan: pekerjaanPengajar,
-      umur: umurPengajar,
+  const action = (id) => {
+    let dataKegiatan = {
+      tema: temaKegiatan,
+      penanggung_jawab: penanggungJawabKegiatan,
+      waktu: waktuKegiatan,
+      lokasi: lokasiKegiatan,
+      catatan: catatanKegiatan,
+      deskripsi: deskripsiKegiatan,
+      link: linkKegiatan,
+      headline: false,
+      DivisiId: divisiId,
+      deskripsi_gambar: deskripsiGambarKegiatan,
+      // gambar_kegiatan: fileList,
     };
 
     dispatch(
-      id ? updatePengajar(id, dataPengajar) : createPengajar(dataPengajar)
+      id ? updateKegiatan(id, dataKegiatan) : createKegiatan(dataKegiatan)
     )
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
-              dispatch(getAllPengajar());
+              dispatch(getAllKegiatan());
               handleChangeTabs("");
             });
           } else {
@@ -104,46 +136,116 @@ const TabKegiatan = () => {
   };
 
   const handleSearch = async (value) => {
-    await dispatch(getAllPengajar(value));
+    await dispatch(getAllKegiatan(value));
   };
 
-  const ColumsPengajar = [
+  const ColumsKegiatan = [
     {
-      title: "Nama",
+      title: "Tema",
       align: "center",
       width: 250,
       render: (data) => {
-        return data.nama;
+        return data.tema;
       },
     },
     {
-      title: "Telepon",
+      title: "Penanggung Jawab",
       align: "center",
       width: 200,
       render: (data) => {
-        return data.telepon;
+        return data.penanggung_jawab;
       },
     },
     {
-      title: "Alamat",
+      title: "Waktu Kegiatan",
       align: "center",
-      width: 250,
+      width: 300,
       render: (data) => {
-        return data.alamat;
+        return formatWaktuArtikel(data.waktu);
       },
     },
     {
-      title: "Pekerjaan",
+      title: "Lokasi Kegiatan",
       align: "center",
       render: (data) => {
-        return data.pekerjaan;
+        return data.lokasi;
       },
     },
     {
-      title: "Umur",
+      title: "Catatan Kegiatan",
       align: "center",
       render: (data) => {
-        return `${data.umur} Tahun`;
+        return data.catatan;
+      },
+    },
+    {
+      title: "Deskripsi Kegiatan",
+      align: "center",
+      render: (data) => {
+        return data.deskripsi;
+      },
+    },
+
+    {
+      title: "Link Kegiatan",
+      align: "center",
+      render: (data) => {
+        return data.link;
+      },
+    },
+    {
+      title: "Deskripsi Gambar",
+      align: "center",
+      render: (data) => {
+        return data.deskripsi_gambar;
+      },
+    },
+    {
+      title: "Headline",
+      align: "center",
+      render: (data) => {
+        const handleHeadline = (headline) => {
+          dispatch(updateHeadlineKegiatan(data.id, headline)).then(
+            (response) => {
+              if (response.statusCode === 200) {
+                message.success(`Status ${headline ? "Aktif" : "Tidak Aktif"}`);
+                dispatch(getAllKegiatan());
+              } else {
+                message.error(response.message);
+              }
+            }
+          );
+        };
+
+        const menu = (
+          <Menu className="w-28">
+            <Menu.Item key="aktif" onClick={() => handleHeadline(true)}>
+              Aktif
+            </Menu.Item>
+            <Menu.Item key="tidak-aktif" onClick={() => handleHeadline(false)}>
+              Tidak Aktif
+            </Menu.Item>
+          </Menu>
+        );
+
+        return (
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <div>
+                {data.headline ? (
+                  <Tag color="success">Aktif</Tag>
+                ) : (
+                  <Tag color="error" style={{ color: "red" }}>
+                    Tidak Aktif
+                  </Tag>
+                )}
+              </div>
+            </a>
+          </Dropdown>
+        );
       },
     },
     {
@@ -151,13 +253,13 @@ const TabKegiatan = () => {
       align: "center",
       render: (data) => {
         const handleStatusChange = (newStatus) => {
-          dispatch(updateStatusPengajar(data.id, newStatus)).then(
+          dispatch(updateStatusKegiatan(data.id, newStatus)).then(
             (response) => {
               if (response.statusCode === 200) {
                 message.success(
                   `Status ${newStatus ? "Aktif" : "Tidak Aktif"}`
                 );
-                dispatch(getAllPengajar());
+                dispatch(getAllKegiatan());
               } else {
                 message.error(response.message);
               }
@@ -207,8 +309,8 @@ const TabKegiatan = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("updatePengajar"));
-            dispatch(getOnePengajar(id));
+            dispatch(setTabsValue("updateKegiatan"));
+            dispatch(getOneKegiatan(id));
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",
@@ -219,11 +321,11 @@ const TabKegiatan = () => {
               confirmButtonText: "Submit",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(deletePengajar(id)).then((data) => {
+                dispatch(deleteKegiatan(id)).then((data) => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
-                      dispatch(getAllPengajar());
+                      dispatch(getAllKegiatan());
                     } else {
                       message.error(data.response.data.message);
                     }
@@ -264,9 +366,33 @@ const TabKegiatan = () => {
     },
   ];
 
+  const onChange = (value, dateString) => {
+    setWaktuKegiatan(value);
+  };
+  const onOk = (value) => {
+    setWaktuKegiatan(value);
+  };
+
+  const onChangeGambar = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj);
+        reader.onload = () => resolve(reader.result);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
   return (
     <div>
-      {TabsValues === "TambahPengajar" || TabsValues === "updatePengajar" ? (
+      {TabsValues === "TambahKegiatan" || TabsValues === "updateKegiatan" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -278,97 +404,174 @@ const TabKegiatan = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahPengajar"
-                ? "Tambah Pengajar"
-                : TabsValues === "updatePengajar"
-                ? "Edit Pengajar"
+              {TabsValues === "TambahKegiatan"
+                ? "Tambah Kegiatan"
+                : TabsValues === "updateKegiatan"
+                ? "Edit Kegiatan"
                 : ""}
             </p>
           </div>
 
           {/* Inputan */}
-          <div className="w-full flex flex-wrap justify-between">
+          <div className="w-full flex flex-wrap justify-between overflow-auto max-h-[480px]">
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaPengajar">Nama</label>
+              <label htmlFor="temaKegiatan">Tema</label>
               <Input
-                value={namaPengajar}
-                onChange={(e) => setNamaPengajar(e.target.value)}
+                value={temaKegiatan}
+                onChange={(e) => setTemaKegiatan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                id="namaPengajar"
-                placeholder="Masukkan Nama Pengajar"
+                id="temaKegiatan"
+                placeholder="Masukkan Tema Kegiatan"
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="teleponPengajar">Telepon</label>
+              <label htmlFor="tjawabkegiatan">Penanggung Jawab</label>
               <Input
                 autoComplete="off"
-                value={teleponPengajar}
-                onChange={(e) => setTeleponPengajar(e.target.value)}
+                value={penanggungJawabKegiatan}
+                onChange={(e) => setPenagunggJawabKegiatan(e.target.value)}
                 className="mt-[5px]  w-full"
-                id="teleponPengajar"
-                placeholder="Masukkan Telepon Pengajar"
+                id="tjawabkegiatan"
+                placeholder="Masukkan Penanggung Jawab Kegiatan"
               />
             </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="pekerjaanPengajar">Pekerjaan</label>
+
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="lokasiKegiatan">Lokasi</label>
               <Input
-                value={pekerjaanPengajar}
-                onChange={(e) => setPekerjaanPengajar(e.target.value)}
-                className="mt-[5px]"
+                value={lokasiKegiatan}
+                onChange={(e) => setLokasiKegiatan(e.target.value)}
+                className="mt-[5px] w-full"
                 autoComplete="off"
-                id="pekerjaanPengajar"
-                placeholder="Masukkan Pekerjaan Pengajar"
+                id="lokasiKegiatan"
+                placeholder="Masukkan Lokasi Kegiatan"
               />
             </div>
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="umurPengajar">Umur</label>
-              <InputNumber
-                value={umurPengajar}
-                onChange={(value) => setUmurPengajar(value)}
-                className="mt-[5px] w-full"
+              <label htmlFor="divisiKegiatan">Divisi Kegiatan</label>
+              {Divisis && Divisis?.data?.length > 0 ? (
+                <Select
+                  id="divisiKegiatan"
+                  className="mt-[5px]"
+                  value={divisiId ? divisiId : null}
+                  placeholder="Pilih Divisi"
+                  onChange={(value) => setDivisiId(value)}
+                >
+                  {Divisis?.data.map((div) => (
+                    <Option key={div?.id} value={div?.id}>
+                      {div?.nama}
+                    </Option>
+                  ))}
+                </Select>
+              ) : (
+                <div>Pengajar Tahsin Belum Ada</div>
+              )}
+            </div>
+
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="waktuKegiatan">Waktu</label>
+
+              <Space direction="vertical" size={10}>
+                <DatePicker
+                  className="w-full mt-2"
+                  value={waktuKegiatan ? dayjs(waktuKegiatan) : null}
+                  showTime
+                  id="waktuKegiatan"
+                  onChange={onChange}
+                  placeholder="Pilih Waktu"
+                  onOk={onOk}
+                />
+              </Space>
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="linkKegiatan">Link Kegiatan</label>
+              <Input
+                value={linkKegiatan}
+                onChange={(e) => setLinkKegiatan(e.target.value)}
+                className="mt-[5px]"
                 autoComplete="off"
-                id="umurPengajar"
-                placeholder="Masukkan Umur Pengajar"
+                id="linkKegiatan"
+                placeholder="Masukkan Link Kegiatan"
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="alamatPengajar">Alamat</label>
+              <label htmlFor="catatanKegiatan">Catatan</label>
               <Input.TextArea
-                value={alamatPengajar}
-                onChange={(e) => setAlamatPengajar(e.target.value)}
+                value={catatanKegiatan}
+                onChange={(e) => setCatatanKegiatan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
                 rows={5}
-                id="alamatPengajar"
-                placeholder="Masukkan Alamat Pengajar"
+                id="catatanKegiatan"
+                placeholder="Masukkan Catatan Kegiatan"
               />
             </div>
-          </div>
-          <div className="flex gap-3 justify-end">
-            <Button
-              onClick={() => {
-                handleChangeTabs("");
-                fetchData();
-              }}
-              type="default"
-              className="text-primaryDark border-primaryDark"
-            >
-              Batal
-            </Button>
-            <Button
-              type="primary"
-              className="bg-primaryDark"
-              onClick={
-                TabsValues === "TambahPengajar"
-                  ? () => actionPengajar()
-                  : TabsValues === "updatePengajar"
-                  ? () => actionPengajar(Pengajar.data.id)
-                  : null
-              }
-            >
-              Simpan
-            </Button>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="deskripsiKegiatan">Deskripsi</label>
+              <Input.TextArea
+                value={deskripsiKegiatan}
+                onChange={(e) => setDeskripsiKegiatan(e.target.value)}
+                className="mt-[5px]"
+                autoComplete="off"
+                rows={5}
+                id="deskripsiKegiatan"
+                placeholder="Masukkan Deskripsi Kegiatan"
+              />
+            </div>
+            {/* <div className="w-[45%] mb-5">
+              <label htmlFor="gambarKegiatan">Gambar Kegiatan</label>
+              <ImgCrop rotationSlider>
+                <Upload
+                  id="gambarKegiatan"
+                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChangeGambar}
+                  onPreview={onPreview}
+                >
+                  {fileList.length === 0 && "+ Upload"}
+                </Upload>
+              </ImgCrop>
+            </div> */}
+            <div className="w-[45%] mb-5">
+              <label htmlFor="deskripsiGambar">Deskripsi Gambar</label>
+              <Input.TextArea
+                value={deskripsiGambarKegiatan}
+                onChange={(e) => setDeskripsiGambarKegiatan(e.target.value)}
+                className="mt-[5px]"
+                autoComplete="off"
+                rows={5}
+                id="deskripsiGambar"
+                placeholder="Masukkan Deskripsi Gambar Kegiatan"
+              />
+            </div>
+
+            <div className="flex gap-3 justify-end w-full mt-4">
+              <Button
+                onClick={() => {
+                  handleChangeTabs("");
+                  fetchData();
+                }}
+                type="default"
+                className="text-primaryDark border-primaryDark"
+              >
+                Batal
+              </Button>
+              <Button
+                type="primary"
+                className="bg-primaryDark"
+                onClick={
+                  TabsValues === "TambahKegiatan"
+                    ? () => action()
+                    : TabsValues === "updateKegiatan"
+                    ? () => action(Kegiatan.data.id)
+                    : null
+                }
+              >
+                Simpan
+              </Button>
+            </div>
           </div>
         </div>
       ) : (
@@ -381,30 +584,30 @@ const TabKegiatan = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Pengajar Tahsin"}>
+            <Tooltip placement="top" title={"Tambahkan Kegaitan"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
                 onClick={() => {
-                  handleChangeTabs("TambahPengajar");
+                  handleChangeTabs("TambahKegiatan");
                   fetchData();
                 }}
               >
-                Pengajar
+                Kegiatan
               </Button>
             </Tooltip>
           </div>
           <div>
             <Table
-              columns={ColumsPengajar}
+              columns={ColumsKegiatan}
               size="small"
-              dataSource={Pengajars.data}
+              dataSource={Kegiatans.data}
               pagination={false}
               scroll={{
                 y: 480,
-                x: 1400,
+                x: 2000,
               }}
-              rowKey={Pengajars.id}
+              rowKey={Kegiatans.id}
             />
           </div>
         </div>

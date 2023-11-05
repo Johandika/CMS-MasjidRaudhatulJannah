@@ -1,9 +1,14 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllKegiatan() {
+export function getAllKegiatan(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
       const { data } = await axios({
         url: `${config.api_host_dev}/kegiatan`,
         method: "GET",
@@ -106,7 +111,7 @@ export function updateHeadlineKegiatan(id, headline) {
       const { data } = await axios({
         url: `${config.api_host_dev}/kegiatan/headline/${id}`,
         method: "PATCH",
-        data: { status_aktif: headline },
+        data: { headline: headline },
         headers: {
           authorization: localStorage.getItem("authorization"),
         },

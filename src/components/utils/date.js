@@ -56,7 +56,12 @@ const formatWaktuArtikel = (tanggalWaktuAwal) => {
   const jam = tanggalWaktu.getHours();
   const menit = tanggalWaktu.getMinutes();
   const detik = tanggalWaktu.getSeconds();
-  const waktu = `${jam}:${menit}:${detik} WIB`;
+
+  const jamFormatted = jam.toString().padStart(2, "0");
+  const menitFormatted = menit.toString().padStart(2, "0");
+  const detikFormatted = detik.toString().padStart(2, "0");
+
+  const waktu = `${jamFormatted}:${menitFormatted}:${detikFormatted} WIB`;
 
   const hasilAkhir = `${hariOfWeek}, ${tanggalBulanTahun} (${waktu})`;
 

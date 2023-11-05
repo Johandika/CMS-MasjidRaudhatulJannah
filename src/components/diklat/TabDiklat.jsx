@@ -47,9 +47,9 @@ import moment from "moment";
 import dayjs from "dayjs";
 
 const TemaDiklat = [
-  { id: 1, nama: "DIKLATJENAZAH" },
-  { id: 2, nama: "DIKLATPRANIKAH" },
-  { id: 3, nama: "DIKLATSHOLAT" },
+  { id: 1, nama: "DIKLATJENAZAH", value: "Diklat Penyelenggaraan Jenazah" },
+  { id: 2, nama: "DIKLATPRANIKAH", value: "Diklat Pra Nikah" },
+  { id: 3, nama: "DIKLATSHOLAT", value: "Diklat Shalat" },
 ];
 
 const TabDiklat = () => {
@@ -82,7 +82,6 @@ const TabDiklat = () => {
     setLokasi(Diklat?.data?.lokasi);
     setFasilitas(Diklat?.data?.fasilitas);
     setPosterDiklat(Diklat?.data?.poster_diklat || null);
-    // console.log("waktuu", moment(Diklat?.data?.waktu));
     setWaktu(moment(Diklat?.data?.waktu));
     setTema(Diklat?.data?.tema);
   }, [Diklat, TabsValues]);
@@ -316,10 +315,7 @@ const TabDiklat = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -327,10 +323,7 @@ const TabDiklat = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -370,7 +363,7 @@ const TabDiklat = () => {
           </div>
 
           {/* Inputan */}
-          <div className="w-full flex flex-wrap justify-between">
+          <div className="w-full flex flex-wrap justify-between  overflow-auto max-h-[480px]">
             <div className="w-[45%] mb-5 flex flex-col gap-1">
               <label htmlFor="uploadPosterDiklat">Upload Poster</label>
               <div className=" gap-2">
@@ -411,11 +404,8 @@ const TabDiklat = () => {
                   onChange={(value) => setTema(value)}
                 >
                   {TemaDiklat?.map((tema) => (
-                    <Option
-                      key={tema?.id}
-                      value={tema?.nama}
-                    >
-                      {tema?.nama}
+                    <Option key={tema?.id} value={tema?.nama}>
+                      {tema?.value}
                     </Option>
                   ))}
                 </Select>
@@ -437,10 +427,7 @@ const TabDiklat = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="waktu">Waktu</label>
 
-              <Space
-                direction="vertical"
-                size={12}
-              >
+              <Space direction="vertical" size={12}>
                 <DatePicker
                   value={waktu ? dayjs(waktu) : null}
                   showTime
@@ -452,7 +439,7 @@ const TabDiklat = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="biayaDiklat">Biaya</label>
               <InputNumber
-                value={biaya}
+                value={(biaya = !null ? biaya : "")}
                 onChange={(value) => setBiaya(value)}
                 className="mt-[5px] w-full"
                 autoComplete="off"
@@ -463,7 +450,7 @@ const TabDiklat = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="kuoatDiklat">Kuota</label>
               <InputNumber
-                value={kuota}
+                value={kuota != null ? kuota : ""}
                 onChange={(value) => setKuota(value)}
                 className="mt-[5px] w-full"
                 autoComplete="off"
@@ -508,31 +495,31 @@ const TabDiklat = () => {
                 placeholder="Masukkan Catatan"
               />
             </div>
-          </div>
-          <div className="flex gap-3 justify-end">
-            <Button
-              onClick={() => {
-                handleChangeTabs("");
-                fetchData();
-              }}
-              type="default"
-              className="text-primaryDark border-primaryDark"
-            >
-              Batal
-            </Button>
-            <Button
-              type="primary"
-              className="bg-primaryDark"
-              onClick={
-                TabsValues === "TambahDiklat"
-                  ? () => actionDiklat()
-                  : TabsValues === "UpdateDiklat"
-                  ? () => actionDiklat(Diklat.data.id)
-                  : null
-              }
-            >
-              Simpan
-            </Button>
+            <div className="flex gap-3 justify-end w-full">
+              <Button
+                onClick={() => {
+                  handleChangeTabs("");
+                  fetchData();
+                }}
+                type="default"
+                className="text-primaryDark border-primaryDark"
+              >
+                Batal
+              </Button>
+              <Button
+                type="primary"
+                className="bg-primaryDark"
+                onClick={
+                  TabsValues === "TambahDiklat"
+                    ? () => actionDiklat()
+                    : TabsValues === "UpdateDiklat"
+                    ? () => actionDiklat(Diklat.data.id)
+                    : null
+                }
+              >
+                Simpan
+              </Button>
+            </div>
           </div>
         </div>
       ) : (
@@ -545,10 +532,7 @@ const TabDiklat = () => {
                 width: 400,
               }}
             />
-            <Tooltip
-              placement="top"
-              title={"Tambahkan Diklat"}
-            >
+            <Tooltip placement="top" title={"Tambahkan Diklat"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
