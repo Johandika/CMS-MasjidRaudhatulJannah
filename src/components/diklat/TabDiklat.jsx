@@ -44,6 +44,7 @@ import { formatWaktuArtikel } from "../utils/date";
 import { config } from "../../configs";
 import formatPathGambar from "../utils/formatGambar";
 import moment from "moment";
+import dayjs from "dayjs";
 
 const TemaDiklat = [
   { id: 1, nama: "DIKLATJENAZAH" },
@@ -66,7 +67,7 @@ const TabDiklat = () => {
   let [lokasi, setLokasi] = useState("");
   let [fasilitas, setFasilitas] = useState("");
   let [posterDiklat, setPosterDiklat] = useState(null);
-  let [waktu, setWaktu] = useState(new Date());
+  let [waktu, setWaktu] = useState(null);
   let [showNamaPoster, setShowNamaPoster] = useState(null);
 
   useEffect(() => {
@@ -95,11 +96,11 @@ const TabDiklat = () => {
     setLokasi("");
     setFasilitas("");
     setPosterDiklat(null);
-    setWaktu(new Date());
+    setWaktu(null);
     setTema("");
   };
 
-  const actionDivisi = (id) => {
+  const actionDiklat = (id) => {
     console.log("posterDiklat", posterDiklat);
 
     let dataDiklat = {
@@ -169,11 +170,10 @@ const TabDiklat = () => {
   };
 
   const onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    setWaktu(value);
   };
   const onOk = (value) => {
-    setWaktu(value.$d);
+    setWaktu(value);
   };
 
   const ColumsDiklat = [
@@ -230,7 +230,7 @@ const TabDiklat = () => {
     {
       title: "Waktu",
       align: "center",
-      width: 250,
+      width: 300,
       render: (data) => {
         return formatWaktuArtikel(data.waktu);
       },
@@ -442,7 +442,7 @@ const TabDiklat = () => {
                 size={12}
               >
                 <DatePicker
-                  value={waktu ? moment(waktu) : null}
+                  value={waktu ? dayjs(waktu) : null}
                   showTime
                   onChange={onChange}
                   onOk={onOk}
@@ -525,9 +525,9 @@ const TabDiklat = () => {
               className="bg-primaryDark"
               onClick={
                 TabsValues === "TambahDiklat"
-                  ? () => actionDivisi()
+                  ? () => actionDiklat()
                   : TabsValues === "UpdateDiklat"
-                  ? () => actionDivisi(Diklat.data.id)
+                  ? () => actionDiklat(Diklat.data.id)
                   : null
               }
             >

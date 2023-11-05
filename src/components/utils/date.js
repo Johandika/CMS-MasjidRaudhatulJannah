@@ -1,7 +1,7 @@
 const ubahFormatDate = (tanggalWaktuAwal) => {
   const tanggalWaktu = new Date(tanggalWaktuAwal);
 
-  const hari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const hari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
 
   const bulan = [
     "Januari",
@@ -28,37 +28,39 @@ const ubahFormatDate = (tanggalWaktuAwal) => {
   return hasilAkhir;
 };
 
-function formatWaktuArtikel(rawDate) {
-  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
+const formatWaktuArtikel = (tanggalWaktuAwal) => {
+  const tanggalWaktu = new Date(tanggalWaktuAwal);
+
+  const hari = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+
+  const bulan = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
     "Mei",
-    "Jun",
-    "Jul",
-    "Agu",
-    "Sep",
-    "Okt",
-    "Nov",
-    "Des",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
   ];
 
-  const date = new Date(rawDate);
-  const day = days[date.getUTCDay()];
-  const dayOfMonth = date.getUTCDate();
-  const month = months[date.getUTCMonth()];
-  const year = date.getUTCFullYear();
-  let hours = date.getUTCHours();
-  let minutes = date.getUTCMinutes();
+  const hariOfWeek = hari[tanggalWaktu.getDay()];
+  const tanggalBulanTahun = `${tanggalWaktu.getDate()} ${
+    bulan[tanggalWaktu.getMonth()]
+  } ${tanggalWaktu.getFullYear()}`;
 
-  // Tambahkan nol di depan jam dan menit jika kurang dari 10
-  hours = hours < 10 ? "0" + hours : hours;
-  minutes = minutes < 10 ? "0" + minutes : minutes;
+  const jam = tanggalWaktu.getHours();
+  const menit = tanggalWaktu.getMinutes();
+  const detik = tanggalWaktu.getSeconds();
+  const waktu = `${jam}:${menit}:${detik} WIB`;
 
-  const formattedDate = `${day}, ${dayOfMonth} ${month} ${year} ${hours}:${minutes} WIB`;
-  return formattedDate;
-}
+  const hasilAkhir = `${hariOfWeek}, ${tanggalBulanTahun} (${waktu})`;
+
+  return hasilAkhir;
+};
 
 export { ubahFormatDate as default, formatWaktuArtikel };

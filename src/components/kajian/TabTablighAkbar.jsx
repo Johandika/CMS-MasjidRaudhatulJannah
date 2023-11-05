@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import locale from "antd/es/date-picker/locale/id_ID";
 
 import {
   Table,
@@ -40,20 +39,11 @@ import { config } from "../../configs";
 import formatPathGambar from "../utils/formatGambar";
 import { formatWaktuArtikel } from "../utils/date";
 import moment from "moment";
+import dayjs from "dayjs";
 // import moment from "moment";
 
 const { Search } = Input;
 const { Option } = Select;
-
-// const Hari = [
-//   { id: 1, nama: "Senin" },
-//   { id: 2, nama: "Selasa" },
-//   { id: 3, nama: "Rabu" },
-//   { id: 4, nama: "kamis" },
-//   { id: 5, nama: "Jum'at" },
-//   { id: 6, nama: "Sabtu" },
-//   { id: 7, nama: "Ahad" },
-// ];
 
 const TabTablighAkbar = () => {
   const dispatch = useDispatch();
@@ -64,7 +54,7 @@ const TabTablighAkbar = () => {
     (state) => state.KajianReducer
   );
   let tipe = "TABLIGH_AKBAR";
-  let [waktu, setWaktu] = useState(new Date());
+  let [waktu, setWaktu] = useState(null);
   let [tema, setTema] = useState("");
   let [catatan, setCatatan] = useState("");
   let [kategoriId, setKategoriId] = useState("");
@@ -80,31 +70,30 @@ const TabTablighAkbar = () => {
   }, []);
 
   useEffect(() => {
-    // setWaktu(moment(Kajian?.data?.waktu));
+    setWaktu(moment(Kajian?.data?.waktu));
     setTema(Kajian?.data?.tema);
     setCatatan(Kajian?.data?.catatan);
     setPosterKajian(Kajian?.data?.poster_kajian || null);
     setKategoriId(Kajian?.data?.KategoriKajianId);
-    setNamaUstadz(Kajian?.data?.namaUstadz);
-    setNamaPenerjemah(Kajian?.data?.namaPenerjemah);
+    setNamaUstadz(Kajian?.data?.nama_ustadz);
+    setNamaPenerjemah(Kajian?.data?.nama_penerjemah);
   }, [Kajian, TabsValues]);
 
   const fetchData = async () => {
     await dispatch(getAllKajianTablighAkbar());
-    setWaktu("");
+    setWaktu(null);
     setTema("");
     setCatatan("");
     setPosterKajian(null);
     setKategoriId("");
     setNamaUstadz("");
     setNamaPenerjemah("");
-    // setHari("");
   };
 
-  const actionKajian = (id) => {
+  const actionTablighAkbar = (id) => {
     let dataKajian = {
       tipe: tipe,
-      waktu_kajian_rutin: waktu,
+      waktu: waktu,
       tema: tema,
       catatan: catatan,
       poster_kajian: posterKajian,
@@ -168,13 +157,14 @@ const TabTablighAkbar = () => {
   };
 
   const onChange = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
+    setWaktu(value);
   };
   const onOk = (value) => {
-    setWaktu(value.$d);
+    console.log("ONOK", value);
+    setWaktu(value);
   };
 
+  console.log("waktu", waktu);
   const ColumnsKajianTablighAkbars = [
     {
       width: 200,
@@ -231,12 +221,11 @@ const TabTablighAkbar = () => {
       align: "center",
       title: "Penerjemah",
       render: (data) => {
-        console.log("data", data);
         return data.nama_penerjemah;
       },
     },
     {
-      width: 250,
+      width: 300,
       title: "Waktu",
       align: "center",
       render: (data) => {
@@ -268,7 +257,7 @@ const TabTablighAkbar = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("UpdateKajian"));
+            dispatch(setTabsValue("UpdateTablighAkbar"));
             dispatch(getOneKajian(id));
           } else if (e.key === "delete") {
             Swal.fire({
@@ -334,7 +323,7 @@ const TabTablighAkbar = () => {
   return (
     <div>
       {TabsValues === "TambahKajianTablighAkbar" ||
-      TabsValues === "UpdateKajian" ? (
+      TabsValues === "UpdateTablighAkbar" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -348,7 +337,7 @@ const TabTablighAkbar = () => {
             <p className="font-semibold text-[16px]">
               {TabsValues === "TambahKajianTablighAkbar"
                 ? "Tambah Kajian"
-                : TabsValues === "UpdateKajian"
+                : TabsValues === "UpdateTablighAkbar"
                 ? "Edit Kajian"
                 : ""}
             </p>
@@ -416,7 +405,7 @@ const TabTablighAkbar = () => {
                 size={12}
               >
                 <DatePicker
-                  value={waktu ? moment(waktu) : null}
+                  value={waktu ? dayjs(waktu) : null}
                   showTime
                   onChange={onChange}
                   onOk={onOk}
@@ -448,7 +437,7 @@ const TabTablighAkbar = () => {
             </div> */}
 
             <div className="w-[45%] mb-5">
-              <label htmlFor="namaUstadz">Nama Ustadz</label>
+              <label htmlFor="namaUstadz">Pemateri</label>
               <Input
                 value={namaUstadz}
                 onChange={(e) => setNamaUstadz(e.target.value)}
@@ -522,9 +511,9 @@ const TabTablighAkbar = () => {
               className="bg-primaryDark"
               onClick={
                 TabsValues === "TambahKajianTablighAkbar"
-                  ? () => actionKajian()
-                  : TabsValues === "UpdateKajian"
-                  ? () => actionKajian(Kajian.data.id)
+                  ? () => actionTablighAkbar()
+                  : TabsValues === "UpdateTablighAkbar"
+                  ? () => actionTablighAkbar(Kajian.data.id)
                   : null
               }
             >
