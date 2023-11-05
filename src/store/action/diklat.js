@@ -1,15 +1,22 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllDiklat() {
+export function getAllDiklat(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/diklat`,
         method: "GET",
         headers: {
           apikey: `${config.api_key}`,
         },
+        params: queryParams,
       });
 
       dispatch({
@@ -46,11 +53,18 @@ export function getOneDiklat(id) {
 export function createDiklat(body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/diklat`,
         method: "POST",
-        data: body,
+        data: formData,
         headers: {
+          "Content-Type": "multipart/form-data",
           authorization: localStorage.getItem("authorization"),
         },
       });
@@ -65,12 +79,19 @@ export function createDiklat(body) {
 export function updateDiklat(id, body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/diklat/${id}`,
         method: "PATCH",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 

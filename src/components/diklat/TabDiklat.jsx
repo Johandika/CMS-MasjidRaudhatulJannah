@@ -1,129 +1,130 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import locale from "antd/es/date-picker/locale/id_ID";
+import Swal from "sweetalert2";
+
+import { setTabsValue } from "../../store/action/tabs";
 
 import {
   Table,
+  Tag,
   Input,
+  Tabs,
   Button,
+  Select,
   Tooltip,
+  InputNumber,
   Menu,
   Dropdown,
   message,
-  Select,
-  DatePicker,
   Space,
+  DatePicker,
 } from "antd";
 
 import {
   PlusOutlined,
+  UploadOutlined,
   ArrowLeftOutlined,
   EditOutlined,
   DeleteOutlined,
   DownCircleOutlined,
-  UploadOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-
-import { setTabsValue } from "../../store/action/tabs";
-import Swal from "sweetalert2";
-
-import {
-  createKajian,
-  deleteKajian,
-  getAllKajianTablighAkbar,
-  getAllKategoriKajian,
-  getOneKajian,
-  updateKajian,
-} from "../../store/action/kajian";
-import { config } from "../../configs";
-import formatPathGambar from "../utils/formatGambar";
-import { formatWaktuArtikel } from "../utils/date";
-import moment from "moment";
-// import moment from "moment";
 
 const { Search } = Input;
 const { Option } = Select;
 
-// const Hari = [
-//   { id: 1, nama: "Senin" },
-//   { id: 2, nama: "Selasa" },
-//   { id: 3, nama: "Rabu" },
-//   { id: 4, nama: "kamis" },
-//   { id: 5, nama: "Jum'at" },
-//   { id: 6, nama: "Sabtu" },
-//   { id: 7, nama: "Ahad" },
-// ];
+import {
+  createDiklat,
+  deleteDiklat,
+  getAllDiklat,
+  getOneDiklat,
+  updateDiklat,
+} from "../../store/action/diklat";
+import { formatWaktuArtikel } from "../utils/date";
+import { config } from "../../configs";
+import formatPathGambar from "../utils/formatGambar";
+import moment from "moment";
 
-const TabTablighAkbar = () => {
+const TemaDiklat = [
+  { id: 1, nama: "DIKLATJENAZAH" },
+  { id: 2, nama: "DIKLATPRANIKAH" },
+  { id: 3, nama: "DIKLATSHOLAT" },
+];
+
+const TabDiklat = () => {
   const dispatch = useDispatch();
   const target = useRef(null);
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
-  const { KajianTablighAkbars, Kajian, KategoriKajians } = useSelector(
-    (state) => state.KajianReducer
-  );
-  let tipe = "TABLIGH_AKBAR";
-  let [waktu, setWaktu] = useState(new Date());
+  const { Diklats, Diklat } = useSelector((state) => state.DiklatReducer);
+
   let [tema, setTema] = useState("");
+  let [pemateri, setPemateri] = useState("");
+  let [biaya, setBiaya] = useState(0);
   let [catatan, setCatatan] = useState("");
-  let [kategoriId, setKategoriId] = useState("");
-  let [namaUstadz, setNamaUstadz] = useState("");
-  let [namaPenerjemah, setNamaPenerjemah] = useState("");
-  // let [hari, setHari] = useState("");
-  let [posterKajian, setPosterKajian] = useState(null);
+  let [kuota, setKuota] = useState(0);
+  let [lokasi, setLokasi] = useState("");
+  let [fasilitas, setFasilitas] = useState("");
+  let [posterDiklat, setPosterDiklat] = useState(null);
+  let [waktu, setWaktu] = useState(new Date());
   let [showNamaPoster, setShowNamaPoster] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllKajianTablighAkbar());
-    dispatch(getAllKategoriKajian());
+    dispatch(getAllDiklat());
   }, []);
 
   useEffect(() => {
-    // setWaktu(moment(Kajian?.data?.waktu));
-    setTema(Kajian?.data?.tema);
-    setCatatan(Kajian?.data?.catatan);
-    setPosterKajian(Kajian?.data?.poster_kajian || null);
-    setKategoriId(Kajian?.data?.KategoriKajianId);
-    setNamaUstadz(Kajian?.data?.namaUstadz);
-    setNamaPenerjemah(Kajian?.data?.namaPenerjemah);
-  }, [Kajian, TabsValues]);
+    setPemateri(Diklat?.data?.pemateri);
+    setBiaya(Diklat?.data?.biaya);
+    setCatatan(Diklat?.data?.catatan);
+    setKuota(Diklat?.data?.kuota);
+    setLokasi(Diklat?.data?.lokasi);
+    setFasilitas(Diklat?.data?.fasilitas);
+    setPosterDiklat(Diklat?.data?.poster_diklat || null);
+    // console.log("waktuu", moment(Diklat?.data?.waktu));
+    setWaktu(moment(Diklat?.data?.waktu));
+    setTema(Diklat?.data?.tema);
+  }, [Diklat, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllKajianTablighAkbar());
-    setWaktu("");
-    setTema("");
+    await dispatch(getAllDiklat());
+    setPemateri("");
+    setBiaya(0);
     setCatatan("");
-    setPosterKajian(null);
-    setKategoriId("");
-    setNamaUstadz("");
-    setNamaPenerjemah("");
-    // setHari("");
+    setKuota(0);
+    setLokasi("");
+    setFasilitas("");
+    setPosterDiklat(null);
+    setWaktu(new Date());
+    setTema("");
   };
 
-  const actionKajian = (id) => {
-    let dataKajian = {
-      tipe: tipe,
-      waktu_kajian_rutin: waktu,
+  const actionDivisi = (id) => {
+    console.log("posterDiklat", posterDiklat);
+
+    let dataDiklat = {
       tema: tema,
+      waktu: waktu,
+      pemateri: pemateri,
+      biaya: biaya,
       catatan: catatan,
-      poster_kajian: posterKajian,
-      KategoriKajianId: kategoriId,
-      nama_ustadz: namaUstadz,
-      nama_penerjemah: namaPenerjemah,
+      kuota: kuota,
+      poster_diklat: posterDiklat,
+      lokasi: lokasi,
+      fasilitas: fasilitas,
     };
 
-    if (posterKajian === null) {
+    if (posterDiklat === null) {
       alert("Poster kajian harus jpg,jpeg,png.");
       return;
     }
 
-    dispatch(id ? updateKajian(id, dataKajian) : createKajian(dataKajian))
+    dispatch(id ? updateDiklat(id, dataDiklat) : createDiklat(dataDiklat))
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
-              dispatch(getAllKajianTablighAkbar());
+              dispatch(getAllDiklat());
               handleChangeTabs("");
             });
           } else {
@@ -134,12 +135,12 @@ const TabTablighAkbar = () => {
       .catch((error) => console.log(error));
   };
 
-  const handleSearch = async (value) => {
-    await dispatch(getAllKajianTablighAkbar(value));
-  };
-
   const handleChangeTabs = (value) => {
     dispatch(setTabsValue(value));
+  };
+
+  const handleSearch = async (value) => {
+    await dispatch(getAllDiklat(value));
   };
 
   const handleFileChange = async (e) => {
@@ -155,7 +156,7 @@ const TabTablighAkbar = () => {
       if (size > 5) {
         alert("File kebesaran, size maximal 5MB");
       } else {
-        setPosterKajian(uploaded);
+        setPosterDiklat(uploaded);
       }
     } else {
       alert("Anda harus menginput file jpg/jpeg/png");
@@ -164,7 +165,7 @@ const TabTablighAkbar = () => {
 
   const handleClearFile = () => {
     setShowNamaPoster(null);
-    setPosterKajian(null);
+    setPosterDiklat(null);
   };
 
   const onChange = (value, dateString) => {
@@ -175,19 +176,19 @@ const TabTablighAkbar = () => {
     setWaktu(value.$d);
   };
 
-  const ColumnsKajianTablighAkbars = [
+  const ColumsDiklat = [
     {
       width: 200,
       align: "center",
       title: "Poster Kajian",
       render: (data) => {
-        if (data.poster_kajian) {
+        if (data.poster_diklat) {
           return (
             <div className="flex justify-center items-center">
               <img
                 alt={`foto ${data.tema}`}
                 src={`${config.api_host_dev}/${formatPathGambar(
-                  data.poster_kajian
+                  data.poster_diklat
                 )}`}
                 className=" w-16 h-16 rounded-lg object-cover border-2 border-gray-100 shadow-md "
               />
@@ -211,51 +212,66 @@ const TabTablighAkbar = () => {
       },
     },
     {
-      width: 200,
       title: "Tema",
       align: "center",
+      width: 200,
       render: (data) => {
         return data.tema;
       },
     },
     {
-      width: 200,
-      align: "center",
       title: "Pemateri",
-      render: (data) => {
-        return data.nama_ustadz;
-      },
-    },
-    {
-      width: 200,
       align: "center",
-      title: "Penerjemah",
+      width: 200,
       render: (data) => {
-        console.log("data", data);
-        return data.nama_penerjemah;
+        return data.pemateri;
       },
     },
     {
-      width: 250,
       title: "Waktu",
       align: "center",
+      width: 250,
       render: (data) => {
         return formatWaktuArtikel(data.waktu);
       },
     },
     {
-      width: 200,
+      title: "Biaya",
       align: "center",
-      title: "Kategori",
+      width: 200,
       render: (data) => {
-        return data.KategoriKajian?.nama;
+        return data.biaya.toLocaleString("id-ID");
       },
     },
-
     {
-      width: 200,
+      title: "Kuota",
+      align: "center",
+      width: 150,
+      render: (data) => {
+        return data.kuota;
+      },
+    },
+    {
+      title: "Lokasi",
+      align: "center",
+      width: 300,
+      render: (data) => {
+        return data.lokasi;
+      },
+    },
+    {
+      title: "Fasilitas",
+      align: "center",
+      width: 250,
+      render: (data) => {
+        return data.fasilitas;
+      },
+    },
+    {
       title: "Catatan",
       align: "center",
+      width: 250,
+
       render: (data) => {
         return data.catatan;
       },
@@ -268,8 +284,8 @@ const TabTablighAkbar = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("UpdateKajian"));
-            dispatch(getOneKajian(id));
+            dispatch(setTabsValue("UpdateDiklat"));
+            dispatch(getOneDiklat(id));
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",
@@ -280,11 +296,11 @@ const TabTablighAkbar = () => {
               confirmButtonText: "Submit",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(deleteKajian(id)).then((data) => {
+                dispatch(deleteDiklat(id)).then((data) => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
-                      dispatch(getAllKajianTablighAkbar());
+                      dispatch(getAllDiklat());
                     } else {
                       message.error(data.response.data.message);
                     }
@@ -333,8 +349,7 @@ const TabTablighAkbar = () => {
 
   return (
     <div>
-      {TabsValues === "TambahKajianTablighAkbar" ||
-      TabsValues === "UpdateKajian" ? (
+      {TabsValues === "TambahDiklat" || TabsValues === "UpdateDiklat" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -346,10 +361,10 @@ const TabTablighAkbar = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahKajianTablighAkbar"
-                ? "Tambah Kajian"
-                : TabsValues === "UpdateKajian"
-                ? "Edit Kajian"
+              {TabsValues === "TambahDiklat"
+                ? "Tambah Diklat"
+                : TabsValues === "UpdateDiklat"
+                ? "Edit Diklat"
                 : ""}
             </p>
           </div>
@@ -357,12 +372,12 @@ const TabTablighAkbar = () => {
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between">
             <div className="w-[45%] mb-5 flex flex-col gap-1">
-              <label htmlFor="uploadPoster">Upload Poster</label>
+              <label htmlFor="uploadPosterDiklat">Upload Poster</label>
               <div className=" gap-2">
                 <Button
                   icon={<UploadOutlined />}
                   onClick={() => target.current.click()}
-                  id="uploadPoster"
+                  id="uploadPosterDiklat"
                 >
                   Upload Poster
                 </Button>
@@ -381,35 +396,46 @@ const TabTablighAkbar = () => {
                   name="poster_kajian"
                   onChange={handleFileChange}
                   className="hidden"
-                  id="posterKajian"
+                  id="posterDiklat"
                 />
               </div>
             </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaKajian">Tema Kajian</label>
-              <Input
-                value={tema}
-                onChange={(e) => setTema(e.target.value)}
-                className="mt-[5px]"
-                autoComplete="off"
-                id="temaKajian"
-                placeholder="Masukkan Tema Kajian"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="tipe">Tipe</label>
-              <Input
-                autoComplete="off"
-                value="TABLIGH_AKBAR"
-                className="mt-[5px]  w-full"
-                id="tipe"
-                placeholder="TABLIGH_AKBAR"
-                disabled
-              />
-            </div>
-
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="waktu">Waktu Kajian</label>
+              <label htmlFor="jadwalKelasDewasa">Tema</label>
+              {TemaDiklat && TemaDiklat?.length > 0 ? (
+                <Select
+                  id="jadwalKelasDewasa"
+                  className="mt-[5px]"
+                  value={tema ? tema : null}
+                  placeholder="Pilih Hari Kajian"
+                  onChange={(value) => setTema(value)}
+                >
+                  {TemaDiklat?.map((tema) => (
+                    <Option
+                      key={tema?.id}
+                      value={tema?.nama}
+                    >
+                      {tema?.nama}
+                    </Option>
+                  ))}
+                </Select>
+              ) : (
+                <div>Diklat belum ada ...</div>
+              )}
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="pemateri">Pemateri</label>
+              <Input
+                autoComplete="off"
+                value={pemateri}
+                onChange={(e) => setPemateri(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="pemateri"
+                placeholder="Masukkan Nama Pemateri"
+              />
+            </div>
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="waktu">Waktu</label>
 
               <Space
                 direction="vertical"
@@ -423,84 +449,61 @@ const TabTablighAkbar = () => {
                 />
               </Space>
             </div>
-            {/* <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="jadwalKelasDewasa">Hari</label>
-              {Hari && Hari?.length > 0 ? (
-                <Select
-                  id="jadwalKelasDewasa"
-                  className="mt-[5px]"
-                  value={hari ? hari : null}
-                  placeholder="Pilih Hari Kajian"
-                  onChange={(value) => setHari(value)}
-                >
-                  {Hari?.map((hari) => (
-                    <Option
-                      key={hari?.id}
-                      value={hari?.nama}
-                    >
-                      {hari?.nama}
-                    </Option>
-                  ))}
-                </Select>
-              ) : (
-                <div>Jadwal Tahsin Belum Ada</div>
-              )}
-            </div> */}
-
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaUstadz">Nama Ustadz</label>
-              <Input
-                value={namaUstadz}
-                onChange={(e) => setNamaUstadz(e.target.value)}
-                className="mt-[5px]"
-                autoComplete="off"
-                id="namaUstadz"
-                placeholder="Masukkan Nama Ustadz"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="namaPenerjemah">Nama Penerjemah</label>
-              <Input
-                value={namaPenerjemah}
-                onChange={(e) => setNamaPenerjemah(e.target.value)}
-                className="mt-[5px]"
-                autoComplete="off"
-                id="namaPenerjemah"
-                placeholder="Masukkan Nama Penerjemah"
-              />
-            </div>
-
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="kategori">Pilih kategori</label>
-              {KategoriKajians && KategoriKajians?.data?.length > 0 ? (
-                <Select
-                  id="kategori"
-                  className="mt-[5px]"
-                  value={kategoriId ? kategoriId : null}
-                  placeholder="Pilih Kategori"
-                  onChange={(value) => setKategoriId(value)}
-                >
-                  {KategoriKajians?.data.map((kategori) => (
-                    <Option
-                      key={kategori?.id}
-                      value={kategori?.id}
-                    >
-                      {kategori?.nama}
-                    </Option>
-                  ))}
-                </Select>
-              ) : (
-                <div>kajian Tahsin Belum Ada</div>
-              )}
+              <label htmlFor="biayaDiklat">Biaya</label>
+              <InputNumber
+                value={biaya}
+                onChange={(value) => setBiaya(value)}
+                className="mt-[5px] w-full"
+                autoComplete="off"
+                id="biayaDiklat"
+                placeholder="Masukkan Biaya Diklat"
+              />
+            </div>
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="kuoatDiklat">Kuota</label>
+              <InputNumber
+                value={kuota}
+                onChange={(value) => setKuota(value)}
+                className="mt-[5px] w-full"
+                autoComplete="off"
+                id="kuoatDiklat"
+                placeholder="Set Kuota Diklat"
+              />
+            </div>
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="fasilitas">Lokasi</label>
+              <Input.TextArea
+                autoComplete="off"
+                value={lokasi}
+                onChange={(e) => setLokasi(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="fasilitas"
+                rows={2}
+                placeholder="Masukkan Informasi Lokasi"
+              />
+            </div>
+            <div className="w-[45%] mb-5">
+              <label htmlFor="fasilitas">Fasilitas</label>
+              <Input.TextArea
+                autoComplete="off"
+                value={fasilitas}
+                onChange={(e) => setFasilitas(e.target.value)}
+                className="mt-[5px]  w-full"
+                id="fasilitas"
+                rows={2}
+                placeholder="Masukkan Informasi Fasilitas"
+              />
             </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="catatan">Catatan</label>
               <Input.TextArea
-                rows={4}
-                autoComplete="off"
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}
-                className="mt-[5px]  w-full"
+                className="mt-[5px]"
+                autoComplete="off"
+                rows={5}
                 id="catatan"
                 placeholder="Masukkan Catatan"
               />
@@ -521,10 +524,10 @@ const TabTablighAkbar = () => {
               type="primary"
               className="bg-primaryDark"
               onClick={
-                TabsValues === "TambahKajianTablighAkbar"
-                  ? () => actionKajian()
-                  : TabsValues === "UpdateKajian"
-                  ? () => actionKajian(Kajian.data.id)
+                TabsValues === "TambahDiklat"
+                  ? () => actionDivisi()
+                  : TabsValues === "UpdateDiklat"
+                  ? () => actionDivisi(Diklat.data.id)
                   : null
               }
             >
@@ -536,39 +539,39 @@ const TabTablighAkbar = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama / Telepon"
+              placeholder="Masukkan Nama Diklat/Penanggung Jawab"
               onSearch={handleSearch}
               style={{
                 width: 400,
               }}
             />
-
             <Tooltip
               placement="top"
-              title={"Tambahkan Kajian Baru"}
+              title={"Tambahkan Diklat"}
             >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
                 onClick={() => {
-                  handleChangeTabs("TambahKajianTablighAkbar");
+                  handleChangeTabs("TambahDiklat");
                   fetchData();
                 }}
               >
-                Kategori
+                Diklat
               </Button>
             </Tooltip>
           </div>
           <div>
             <Table
-              columns={ColumnsKajianTablighAkbars}
+              columns={ColumsDiklat}
               size="small"
-              dataSource={KajianTablighAkbars.data}
+              dataSource={Diklats.data}
               pagination={false}
               scroll={{
-                y: 440,
+                y: 480,
+                x: 1400,
               }}
-              rowKey={KajianTablighAkbars.id}
+              rowKey={Diklats.id}
             />
           </div>
         </div>
@@ -577,4 +580,4 @@ const TabTablighAkbar = () => {
   );
 };
 
-export default TabTablighAkbar;
+export default TabDiklat;
