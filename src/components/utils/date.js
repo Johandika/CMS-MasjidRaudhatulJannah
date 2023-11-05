@@ -52,21 +52,12 @@ function formatWaktuArtikel(rawDate) {
   const year = date.getUTCFullYear();
   let hours = date.getUTCHours();
   let minutes = date.getUTCMinutes();
-  let ampm = "WIB";
-
-  // Konversi jam ke format 12 jam
-  if (hours > 12) {
-    hours -= 12;
-    ampm = "WITA";
-  } else if (hours === 12) {
-    ampm = "WITA";
-  }
 
   // Tambahkan nol di depan jam dan menit jika kurang dari 10
   hours = hours < 10 ? "0" + hours : hours;
   minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  const formattedDate = `${day}, ${dayOfMonth} ${month} ${year} ${hours}:${minutes} ${ampm}`;
+  const formattedDate = `${day}, ${dayOfMonth} ${month} ${year} ${hours}:${minutes} WIB`;
   return formattedDate;
 }
 
