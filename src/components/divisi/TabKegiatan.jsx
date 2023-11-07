@@ -49,6 +49,7 @@ import {
 } from "../../store/action/kegiatan";
 import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
 import { formatWaktuArtikel } from "../utils/date";
+import ModalsColumn from "../modals/ModalsColumn";
 
 const TabKegiatan = () => {
   const dispatch = useDispatch();
@@ -139,47 +140,14 @@ const TabKegiatan = () => {
   const handleSearch = async (value) => {
     await dispatch(getAllKegiatan(value));
   };
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const createColumnWithModal = (title, dataField) => {
-    return {
-      title: title,
-      align: "center",
-      render: (data) => {
-        const content = data[dataField];
-
-        if (content.length > 30) {
-          const truncatedContent = content.substring(0, 35) + "…";
-          return (
-            <span>
-              <span
-                onClick={() => showModal(content, title)}
-                style={{ cursor: "pointer" }}
-              >
-                {truncatedContent},
-              </span>
-            </span>
-          );
-        } else {
-          return content;
-        }
-      },
-    };
-  };
+  const [modalContent, setModalContent] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
 
   const showModal = (content, title) => {
-    Modal.info({
-      title: title,
-      content: (
-        <div style={{ maxHeight: "200px", overflowY: "auto" }}>{content}</div>
-      ),
-      onOk() {},
-    });
+    setModalContent(content);
+    setModalTitle(title);
+    setIsModalVisible(true);
   };
 
   const ColumsKegiatan = [
@@ -214,14 +182,10 @@ const TabKegiatan = () => {
         return data.lokasi;
       },
     },
-    createColumnWithModal(
-      "Deskripsi Kegiatan",
-      "deskripsi",
-      "Deskripsi Kegiatan"
-    ),
-    createColumnWithModal("Catatan Kegiatan", "catatan"),
-    createColumnWithModal("Link Kegiatan", "link"),
-    createColumnWithModal("Deskripsi Gambar", "deskripsi_gambar"),
+    ModalsColumn("Deskripsi Kegiatan", "deskripsi", showModal),
+    ModalsColumn("Catatan Kegiatan", "catatan", showModal),
+    ModalsColumn("Link Kegiatan", "link", showModal),
+    ModalsColumn("Deskripsi Gambar", "deskripsi_gambar", showModal),
     {
       title: "Headline",
       align: "center",
@@ -631,6 +595,18 @@ const TabKegiatan = () => {
               }}
               rowKey={Kegiatans.id}
             />
+          </div>
+          <div>
+            <Modal
+              title={modalTitle}
+              visible={isModalVisible}
+              onCancel={() => setIsModalVisible(false)}
+              footer={null}
+            >
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {modalContent}
+              </div>
+            </Modal>
           </div>
         </div>
       )}
