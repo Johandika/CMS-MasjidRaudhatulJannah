@@ -46,12 +46,19 @@ export function getOnePesertaDiklat(id) {
 export function createPesertaDiklat(body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/pesertaDiklat`,
         method: "POST",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -65,12 +72,19 @@ export function createPesertaDiklat(body) {
 export function updatePesertaDiklat(id, body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/pesertaDiklat/${id}`,
         method: "PATCH",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 

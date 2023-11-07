@@ -6,9 +6,7 @@ import { setTabsValue } from "../../store/action/tabs";
 
 import {
   Table,
-  Tag,
   Input,
-  Tabs,
   Button,
   Select,
   Tooltip,
@@ -315,7 +313,10 @@ const TabDiklat = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -323,7 +324,10 @@ const TabDiklat = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -404,7 +408,10 @@ const TabDiklat = () => {
                   onChange={(value) => setTema(value)}
                 >
                   {TemaDiklat?.map((tema) => (
-                    <Option key={tema?.id} value={tema?.nama}>
+                    <Option
+                      key={tema?.id}
+                      value={tema?.nama}
+                    >
                       {tema?.value}
                     </Option>
                   ))}
@@ -427,7 +434,10 @@ const TabDiklat = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="waktu">Waktu</label>
 
-              <Space direction="vertical" size={12}>
+              <Space
+                direction="vertical"
+                size={12}
+              >
                 <DatePicker
                   value={waktu ? dayjs(waktu) : null}
                   showTime
@@ -532,7 +542,10 @@ const TabDiklat = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Diklat"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Diklat"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
