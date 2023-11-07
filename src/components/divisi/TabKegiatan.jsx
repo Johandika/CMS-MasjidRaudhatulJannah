@@ -23,6 +23,7 @@ import {
   Space,
   Upload,
   DatePicker,
+  Modal,
 } from "antd";
 
 import {
@@ -139,6 +140,48 @@ const TabKegiatan = () => {
     await dispatch(getAllKegiatan(value));
   };
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const createColumnWithModal = (title, dataField) => {
+    return {
+      title: title,
+      align: "center",
+      render: (data) => {
+        const content = data[dataField];
+
+        if (content.length > 30) {
+          const truncatedContent = content.substring(0, 35) + "…";
+          return (
+            <span>
+              <span
+                onClick={() => showModal(content, title)}
+                style={{ cursor: "pointer" }}
+              >
+                {truncatedContent},
+              </span>
+            </span>
+          );
+        } else {
+          return content;
+        }
+      },
+    };
+  };
+
+  const showModal = (content, title) => {
+    Modal.info({
+      title: title,
+      content: (
+        <div style={{ maxHeight: "200px", overflowY: "auto" }}>{content}</div>
+      ),
+      onOk() {},
+    });
+  };
+
   const ColumsKegiatan = [
     {
       title: "Tema",
@@ -171,35 +214,14 @@ const TabKegiatan = () => {
         return data.lokasi;
       },
     },
-    {
-      title: "Catatan Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.catatan;
-      },
-    },
-    {
-      title: "Deskripsi Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.deskripsi;
-      },
-    },
-
-    {
-      title: "Link Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.link;
-      },
-    },
-    {
-      title: "Deskripsi Gambar",
-      align: "center",
-      render: (data) => {
-        return data.deskripsi_gambar;
-      },
-    },
+    createColumnWithModal(
+      "Deskripsi Kegiatan",
+      "deskripsi",
+      "Deskripsi Kegiatan"
+    ),
+    createColumnWithModal("Catatan Kegiatan", "catatan"),
+    createColumnWithModal("Link Kegiatan", "link"),
+    createColumnWithModal("Deskripsi Gambar", "deskripsi_gambar"),
     {
       title: "Headline",
       align: "center",
