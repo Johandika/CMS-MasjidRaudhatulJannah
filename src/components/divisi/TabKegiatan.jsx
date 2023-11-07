@@ -23,6 +23,7 @@ import {
   Space,
   Upload,
   DatePicker,
+  Modal,
 } from "antd";
 
 import {
@@ -48,6 +49,7 @@ import {
 } from "../../store/action/kegiatan";
 import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
 import { formatWaktuArtikel } from "../utils/date";
+import ModalsColumn from "../modals/ModalsColumn";
 
 const TabKegiatan = () => {
   const dispatch = useDispatch();
@@ -138,6 +140,15 @@ const TabKegiatan = () => {
   const handleSearch = async (value) => {
     await dispatch(getAllKegiatan(value));
   };
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+
+  const showModal = (content, title) => {
+    setModalContent(content);
+    setModalTitle(title);
+    setIsModalVisible(true);
+  };
 
   const ColumsKegiatan = [
     {
@@ -171,35 +182,10 @@ const TabKegiatan = () => {
         return data.lokasi;
       },
     },
-    {
-      title: "Catatan Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.catatan;
-      },
-    },
-    {
-      title: "Deskripsi Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.deskripsi;
-      },
-    },
-
-    {
-      title: "Link Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.link;
-      },
-    },
-    {
-      title: "Deskripsi Gambar",
-      align: "center",
-      render: (data) => {
-        return data.deskripsi_gambar;
-      },
-    },
+    ModalsColumn("Deskripsi Kegiatan", "deskripsi", showModal),
+    ModalsColumn("Catatan Kegiatan", "catatan", showModal),
+    ModalsColumn("Link Kegiatan", "link", showModal),
+    ModalsColumn("Deskripsi Gambar", "deskripsi_gambar", showModal),
     {
       title: "Headline",
       align: "center",
@@ -609,6 +595,18 @@ const TabKegiatan = () => {
               }}
               rowKey={Kegiatans.id}
             />
+          </div>
+          <div>
+            <Modal
+              title={modalTitle}
+              visible={isModalVisible}
+              onCancel={() => setIsModalVisible(false)}
+              footer={null}
+            >
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {modalContent}
+              </div>
+            </Modal>
           </div>
         </div>
       )}
