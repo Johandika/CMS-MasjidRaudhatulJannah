@@ -352,7 +352,9 @@ const TabKajianRutin = () => {
                 </Button>
                 {showNamaPoster !== null && (
                   <div className="flex flex-row ">
-                    <div className="mr-3  text-blue-700">{showNamaPoster}</div>
+                    <div className="mr-3  text-primaryLight">
+                      {showNamaPoster}
+                    </div>
                     <div className="text-red-500">
                       <CloseCircleOutlined onClick={handleClearFile} />
                     </div>

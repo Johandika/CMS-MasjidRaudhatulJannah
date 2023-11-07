@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import Layanan from "../pages/Layanan";
 import Diklat from "../pages/Diklat";
 import ProtectedRoute from "./ProtectedRoute";
+import NotFound from "../pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
+      {
+        path: "*",
+        element: <NotFound />,
+      },
       {
         path: "/",
         element: (

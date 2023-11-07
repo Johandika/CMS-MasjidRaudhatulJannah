@@ -1,15 +1,22 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllPesertaDiklat() {
+export function getAllPesertaDiklat(search) {
   return async (dispatch) => {
     try {
+      let queryParams = {};
+
+      if (search) {
+        queryParams.search = search;
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/pesertaDiklat`,
         method: "GET",
         headers: {
           apikey: `${config.api_key}`,
         },
+        params: queryParams,
       });
 
       dispatch({
@@ -57,8 +64,8 @@ export function createPesertaDiklat(body) {
         method: "POST",
         data: formData,
         headers: {
-          authorization: localStorage.getItem("authorization"),
           "Content-Type": "multipart/form-data",
+          authorization: localStorage.getItem("authorization"),
         },
       });
 

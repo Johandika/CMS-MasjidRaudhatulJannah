@@ -59,12 +59,18 @@ const TabPesertaDiklat = () => {
   );
   const { Diklats, Diklat } = useSelector((state) => state.DiklatReducer);
 
+  const statusPembayaranDatas = [
+    { id: 1, value: "BELUM_DIBAYAR", nama: "Belum di bayar" },
+    { id: 2, value: "BELUM_VERIFIKASI", nama: "Belum di verifikasi" },
+    { id: 3, value: "SUDAH_VERIFIKASI", nama: "Sudah di verifikasi" },
+  ];
+
   let [nama, setNama] = useState("");
   let [telepon, setTelepon] = useState("");
   let [alamat, setAlamat] = useState("");
   let [pekerjaan, setPekerjaan] = useState("");
   let [umur, setUmur] = useState(0);
-  let [statusPembayaran, setStatusPembayaran] = useState("BELUM_DIBAYAR");
+  let [statusPembayaran, setStatusPembayaran] = useState("");
   let [buktiBayarFile, setBuktiBayarFile] = useState(null);
   let [status, setStatus] = useState(true);
   let [showNamaPoster, setShowNamaPoster] = useState(null);
@@ -83,6 +89,7 @@ const TabPesertaDiklat = () => {
     setStatusPembayaran(PesertaDiklat?.data?.status_pembayaran);
     setBuktiBayarFile(PesertaDiklat?.data?.file_bukti_pembayaran);
     setStatus(PesertaDiklat?.data?.status_aktif);
+    setDiklatId(PesertaDiklat?.data?.DiklatId);
   }, [PesertaDiklat, TabsValues]);
 
   const fetchData = async () => {
@@ -95,6 +102,7 @@ const TabPesertaDiklat = () => {
     setStatusPembayaran("");
     setBuktiBayarFile(null);
     setStatus(null);
+    setDiklatId("");
   };
 
   const actionDiklat = (id) => {
@@ -107,12 +115,8 @@ const TabPesertaDiklat = () => {
       status_pembayaran: statusPembayaran,
       file_bukti_pembayaran: buktiBayarFile,
       status_aktif: status,
+      DiklatId: diklatId,
     };
-
-    if (buktiBayarFile === null) {
-      alert("Poster kajian harus jpg,jpeg,png.");
-      return;
-    }
 
     console.log("dataPesertaDiklat", dataPesertaDiklat);
     dispatch(
@@ -278,19 +282,15 @@ const TabPesertaDiklat = () => {
         };
 
         const menu = (
-          <Menu className="w-28">
-            <Menu.Item
-              key="aktif"
-              onClick={() => handleStatusChange(true)}
-            >
-              BELUM_VERIFIKASI
-            </Menu.Item>
-            <Menu.Item
-              key="tidak-aktif"
-              onClick={() => handleStatusChange(false)}
-            >
-              BELUM_DIBAYAR
-            </Menu.Item>
+          <Menu className="w-36">
+            {statusPembayaranDatas.map((data) => (
+              <Menu.Item
+                key="aktif"
+                onClick={() => handleStatusChange(data.value)}
+              >
+                {data.nama}
+              </Menu.Item>
+            ))}
           </Menu>
         );
 
@@ -304,15 +304,17 @@ const TabPesertaDiklat = () => {
               onClick={(e) => e.preventDefault()}
             >
               <div>
-                {data.status_pembayaran ? (
-                  <Tag color="success">Belum Verifikasi</Tag>
-                ) : (
+                {data.status_pembayaran === "BELUM_DIBAYAR" ? (
                   <Tag
                     color="error"
                     style={{ color: "red" }}
                   >
-                    Belum Dibayar
+                    Belum di bayar
                   </Tag>
+                ) : data.status_pembayaran === "BELUM_VERIFIKASI" ? (
+                  <Tag color="success">Belum verifikasi</Tag>
+                ) : (
+                  <Tag color="success">Sudah verifikasi</Tag>
                 )}
               </div>
             </a>
@@ -491,7 +493,9 @@ const TabPesertaDiklat = () => {
                 </Button>
                 {showNamaPoster !== null && (
                   <div className="flex flex-row ">
-                    <div className="mr-3  text-blue-700">{showNamaPoster}</div>
+                    <div className="mr-3  text-primaryLight">
+                      {showNamaPoster}
+                    </div>
                     <div className="text-red-500">
                       <CloseCircleOutlined onClick={handleClearFile} />
                     </div>

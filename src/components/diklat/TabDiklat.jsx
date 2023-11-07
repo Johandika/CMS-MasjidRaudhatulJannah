@@ -45,9 +45,9 @@ import moment from "moment";
 import dayjs from "dayjs";
 
 const TemaDiklat = [
-  { id: 1, nama: "DIKLATJENAZAH", value: "Diklat Penyelenggaraan Jenazah" },
-  { id: 2, nama: "DIKLATPRANIKAH", value: "Diklat Pra Nikah" },
-  { id: 3, nama: "DIKLATSHOLAT", value: "Diklat Shalat" },
+  { id: 1, value: "DIKLAT_JENAZAH", nama: "Diklat Penyelenggaraan Jenazah" },
+  { id: 2, value: "DIKLAT_PRANIKAH", nama: "Diklat Pra Nikah" },
+  { id: 3, value: "DIKLAT_SHOLAT", nama: "Diklat Shalat" },
 ];
 
 const TabDiklat = () => {
@@ -380,7 +380,9 @@ const TabDiklat = () => {
                 </Button>
                 {showNamaPoster !== null && (
                   <div className="flex flex-row ">
-                    <div className="mr-3  text-blue-700">{showNamaPoster}</div>
+                    <div className="mr-3  text-primaryLight">
+                      {showNamaPoster}
+                    </div>
                     <div className="text-red-500">
                       <CloseCircleOutlined onClick={handleClearFile} />
                     </div>
@@ -410,9 +412,9 @@ const TabDiklat = () => {
                   {TemaDiklat?.map((tema) => (
                     <Option
                       key={tema?.id}
-                      value={tema?.nama}
+                      value={tema?.value}
                     >
-                      {tema?.value}
+                      {tema?.nama}
                     </Option>
                   ))}
                 </Select>
