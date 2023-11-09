@@ -40,7 +40,6 @@ import formatPathGambar from "../utils/formatGambar";
 import { formatWaktuArtikel } from "../utils/date";
 import moment from "moment";
 import dayjs from "dayjs";
-// import moment from "moment";
 
 const { Search } = Input;
 const { Option } = Select;
@@ -164,7 +163,6 @@ const TabTablighAkbar = () => {
     setWaktu(value);
   };
 
-  console.log("waktu", waktu);
   const ColumnsKajianTablighAkbars = [
     {
       width: 200,
@@ -289,10 +287,7 @@ const TabTablighAkbar = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item
-              key="delete"
-              style={{ color: "red" }}
-            >
+            <Menu.Item key="delete" style={{ color: "red" }}>
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -300,10 +295,7 @@ const TabTablighAkbar = () => {
         );
 
         return (
-          <Dropdown
-            overlay={menu}
-            trigger={["click"]}
-          >
+          <Dropdown overlay={menu} trigger={["click"]}>
             <div>
               <a
                 className="ant-dropdown-link"
@@ -402,10 +394,7 @@ const TabTablighAkbar = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="waktu">Waktu Kajian</label>
 
-              <Space
-                direction="vertical"
-                size={12}
-              >
+              <Space direction="vertical" size={12}>
                 <DatePicker
                   value={waktu ? dayjs(waktu) : null}
                   showTime
@@ -472,10 +461,7 @@ const TabTablighAkbar = () => {
                   onChange={(value) => setKategoriId(value)}
                 >
                   {KategoriKajians?.data.map((kategori) => (
-                    <Option
-                      key={kategori?.id}
-                      value={kategori?.id}
-                    >
+                    <Option key={kategori?.id} value={kategori?.id}>
                       {kategori?.nama}
                     </Option>
                   ))}
@@ -534,10 +520,7 @@ const TabTablighAkbar = () => {
               }}
             />
 
-            <Tooltip
-              placement="top"
-              title={"Tambahkan Kajian Baru"}
-            >
+            <Tooltip placement="top" title={"Tambahkan Kajian Baru"}>
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
