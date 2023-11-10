@@ -39,91 +39,84 @@ const { Search } = Input;
 const { Option } = Select;
 
 import {
-  createKegiatan,
-  deleteKegiatan,
-  getAllKegiatan,
-  getOneKegiatan,
-  updateHeadlineKegiatan,
-  updateKegiatan,
-  updateStatusKegiatan,
-} from "../../store/action/kegiatan";
+  createLayanan,
+  deleteLayanan,
+  getAllLayanan,
+  getOneLayanan,
+  updateLayanan,
+  updateStatusLayanan,
+} from "../../store/action/layanan";
+
 import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
+
 import { formatWaktuArtikel } from "../utils/date";
+
 import ModalsColumn from "../modals/ModalsColumn";
 
-const TabKegiatan = () => {
+const TabLayanan = () => {
   const dispatch = useDispatch();
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
   const { Divisis, Divisi } = useSelector((state) => state.DivisiReducer);
-  const { Kegiatans, Kegiatan } = useSelector((state) => state.KegiatanReducer);
+  const { Layanans, Layanan } = useSelector((state) => state.LayananReducer);
 
-  let [temaKegiatan, setTemaKegiatan] = useState("");
-  let [penanggungJawabKegiatan, setPenagunggJawabKegiatan] = useState("");
-  let [waktuKegiatan, setWaktuKegiatan] = useState("");
-  let [lokasiKegiatan, setLokasiKegiatan] = useState("");
-  let [catatanKegiatan, setCatatanKegiatan] = useState("");
-  let [deskripsiKegiatan, setDeskripsiKegiatan] = useState("");
-  let [linkKegiatan, setLinkKegiatan] = useState("");
+  let [titleLayanan, setTitleLayanan] = useState("");
+  let [subTitleLayanan, setSubTitleLayanan] = useState("");
+  let [waktuLayanan, setWaktuLayanan] = useState("");
+  let [lokasiLayanan, setLokasiLayanan] = useState("");
+  let [informasiLayanan, setInformasiLayanan] = useState("");
+  let [deskripsiLayanan, setDeskripsiLayanan] = useState("");
   let [divisiId, setDivisiId] = useState("");
   // let [fileList, setFileList] = useState([]);
-  let [deskripsiGambarKegiatan, setDeskripsiGambarKegiatan] = useState("");
+  let [deskripsiGambarLayanan, setDeskripsiGambarLayanan] = useState("");
 
   useEffect(() => {
-    dispatch(getAllKegiatan());
+    dispatch(getAllLayanan());
     dispatch(getAllDivisi());
   }, []);
 
   useEffect(() => {
-    setTemaKegiatan(Kegiatan?.data?.tema);
-    setPenagunggJawabKegiatan(Kegiatan?.data?.penanggung_jawab);
-    setWaktuKegiatan(Kegiatan?.data?.waktu);
-    setLokasiKegiatan(Kegiatan?.data?.lokasi);
-    setCatatanKegiatan(Kegiatan?.data?.catatan);
-    setDeskripsiKegiatan(Kegiatan?.data?.deskripsi);
-    setLinkKegiatan(Kegiatan?.data?.link);
-    setDivisiId(Kegiatan?.data?.DivisiId);
-    // setFileList(Kegiatan?.data?.gambar_kegiatan);
-    setDeskripsiGambarKegiatan(Kegiatan?.data?.deskripsi_gambar);
-  }, [Kegiatan, TabsValues]);
+    setTitleLayanan(Layanan?.data?.title);
+    setSubTitleLayanan(Layanan?.data?.sub_title);
+    setWaktuLayanan(Layanan?.data?.waktu);
+    setLokasiLayanan(Layanan?.data?.lokasi);
+    setInformasiLayanan(Layanan?.data?.informasi);
+    setDeskripsiLayanan(Layanan?.data?.deskripsi);
+    setDivisiId(Layanan?.data?.DivisiId);
+    // setFileList(Layanan?.data?.gambar_Layanan);
+    setDeskripsiGambarLayanan(Layanan?.data?.deskripsi_gambar);
+  }, [Layanan, TabsValues]);
 
   const fetchData = async () => {
-    await dispatch(getAllKegiatan());
-    setTemaKegiatan("");
-    setPenagunggJawabKegiatan("");
-    setWaktuKegiatan("");
-    setLokasiKegiatan("");
-    setCatatanKegiatan("");
-    setDeskripsiKegiatan("");
-    setLinkKegiatan("");
+    await dispatch(getAllLayanan());
+    setTitleLayanan("");
+    setSubTitleLayanan("");
+    setWaktuLayanan("");
+    setLokasiLayanan("");
+    setInformasiLayanan("");
+    setDeskripsiLayanan("");
     setDivisiId("");
-    setDeskripsiGambarKegiatan("");
-    // setFileList("");
+    setDeskripsiGambarLayanan("");
   };
 
   const action = (id) => {
-    let dataKegiatan = {
-      tema: temaKegiatan,
-      penanggung_jawab: penanggungJawabKegiatan,
-      waktu: waktuKegiatan,
-      lokasi: lokasiKegiatan,
-      catatan: catatanKegiatan,
-      deskripsi: deskripsiKegiatan,
-      link: linkKegiatan,
-      headline: false,
+    let dataLayanan = {
+      title: titleLayanan,
+      sub_title: subTitleLayanan,
+      waktu: waktuLayanan,
+      lokasi: lokasiLayanan,
+      informasi: informasiLayanan,
+      deskripsi: deskripsiLayanan,
       DivisiId: divisiId,
-      deskripsi_gambar: deskripsiGambarKegiatan,
-      // gambar_kegiatan: fileList,
+      deskripsi_gambar: deskripsiGambarLayanan,
     };
 
-    dispatch(
-      id ? updateKegiatan(id, dataKegiatan) : createKegiatan(dataKegiatan)
-    )
+    dispatch(id ? updateLayanan(id, dataLayanan) : createLayanan(dataLayanan))
       .then((data) =>
         message.loading("Loading", 1, () => {
           if (data.statusCode == 201 || data.statusCode == 200) {
             message.success(data.message, 1, () => {
-              dispatch(getAllKegiatan());
+              dispatch(getAllLayanan());
               handleChangeTabs("");
             });
           } else {
@@ -139,7 +132,7 @@ const TabKegiatan = () => {
   };
 
   const handleSearch = async (value) => {
-    await dispatch(getAllKegiatan(value));
+    await dispatch(getAllLayanan(value));
   };
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -151,107 +144,60 @@ const TabKegiatan = () => {
     setIsModalVisible(true);
   };
 
-  const ColumsKegiatan = [
+  const ColumsLayanan = [
     {
-      title: "Tema",
+      title: "Title",
       align: "center",
       width: 250,
       render: (data) => {
-        return data.tema;
+        return data.title;
       },
     },
     {
-      title: "Penanggung Jawab",
+      title: "Sub Title",
       align: "center",
-      width: 200,
+      width: 250,
       render: (data) => {
-        return data.penanggung_jawab;
+        return data.sub_title;
       },
     },
     {
-      title: "Waktu Kegiatan",
+      title: "Divisi",
+      align: "center",
+      width: 250,
+      render: (data) => {
+        return data.Divisi ? data.Divisi.nama : "Tidak Ada Divisi Khusus";
+      },
+    },
+    {
+      title: "Waktu Layanan",
       align: "center",
       width: 300,
       render: (data) => {
-        return formatWaktuArtikel(data.waktu);
+        return data.waktu
+          ? formatWaktuArtikel(data.waktu)
+          : "Tidak Ada Waktu Tertentu";
       },
     },
-    {
-      title: "Lokasi Kegiatan",
-      align: "center",
-      render: (data) => {
-        return data.lokasi;
-      },
-    },
-    ModalsColumn("Deskripsi Kegiatan", "deskripsi", showModal),
-    ModalsColumn("Catatan Kegiatan", "catatan", showModal),
-    ModalsColumn("Link Kegiatan", "link", showModal),
+
+    ModalsColumn("Lokasi Layanan", "lokasi", showModal),
+    ModalsColumn("Informasi Layanan", "informasi", showModal),
+    ModalsColumn("Deskripsi Layanan", "deskripsi", showModal),
     ModalsColumn("Deskripsi Gambar", "deskripsi_gambar", showModal),
     {
-      title: "Headline",
-      align: "center",
-      render: (data) => {
-        const handleHeadline = (headline) => {
-          dispatch(updateHeadlineKegiatan(data.id, headline)).then(
-            (response) => {
-              if (response.statusCode === 200) {
-                message.success(`Status ${headline ? "Aktif" : "Tidak Aktif"}`);
-                dispatch(getAllKegiatan());
-              } else {
-                message.error(response.message);
-              }
-            }
-          );
-        };
-
-        const menu = (
-          <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleHeadline(true)}>
-              Aktif
-            </Menu.Item>
-            <Menu.Item key="tidak-aktif" onClick={() => handleHeadline(false)}>
-              Tidak Aktif
-            </Menu.Item>
-          </Menu>
-        );
-
-        return (
-          <Dropdown overlay={menu} trigger={["click"]}>
-            <a
-              className="ant-dropdown-link"
-              onClick={(e) => e.preventDefault()}
-            >
-              <div>
-                {data.headline ? (
-                  <Tag color="success">Aktif</Tag>
-                ) : (
-                  <Tag color="error" style={{ color: "red" }}>
-                    Tidak Aktif
-                  </Tag>
-                )}
-              </div>
-            </a>
-          </Dropdown>
-        );
-      },
-    },
-    {
+      width: 150,
       title: "Status Aktif",
       align: "center",
       render: (data) => {
         const handleStatusChange = (newStatus) => {
-          dispatch(updateStatusKegiatan(data.id, newStatus)).then(
-            (response) => {
-              if (response.statusCode === 200) {
-                message.success(
-                  `Status ${newStatus ? "Aktif" : "Tidak Aktif"}`
-                );
-                dispatch(getAllKegiatan());
-              } else {
-                message.error(response.message);
-              }
+          dispatch(updateStatusLayanan(data.id, newStatus)).then((response) => {
+            if (response.statusCode === 200) {
+              message.success(`Status ${newStatus ? "Aktif" : "Tidak Aktif"}`);
+              dispatch(getAllLayanan());
+            } else {
+              message.error(response.message);
             }
-          );
+          });
         };
 
         const menu = (
@@ -296,8 +242,8 @@ const TabKegiatan = () => {
       render: (data) => {
         const handleMenuClick = (e, id) => {
           if (e.key === "edit") {
-            dispatch(setTabsValue("updateKegiatan"));
-            dispatch(getOneKegiatan(id));
+            dispatch(setTabsValue("updateLayanan"));
+            dispatch(getOneLayanan(id));
           } else if (e.key === "delete") {
             Swal.fire({
               text: "Apakah Anda Mau Menghapus?",
@@ -308,11 +254,11 @@ const TabKegiatan = () => {
               confirmButtonText: "Submit",
             }).then((result) => {
               if (result.isConfirmed) {
-                dispatch(deleteKegiatan(id)).then((data) => {
+                dispatch(deleteLayanan(id)).then((data) => {
                   message.loading("Loading", 1, () => {
                     if (data.statusCode == 200) {
                       message.success(data.message);
-                      dispatch(getAllKegiatan());
+                      dispatch(getAllLayanan());
                     } else {
                       message.error(data.response.data.message);
                     }
@@ -354,32 +300,15 @@ const TabKegiatan = () => {
   ];
 
   const onChange = (value, dateString) => {
-    setWaktuKegiatan(value);
+    setWaktuLayanan(value);
   };
   const onOk = (value) => {
-    setWaktuKegiatan(value);
+    setWaktuLayanan(value);
   };
 
-  const onChangeGambar = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-  };
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
   return (
     <div>
-      {TabsValues === "TambahKegiatan" || TabsValues === "updateKegiatan" ? (
+      {TabsValues === "TambahLayanan" || TabsValues === "updateLayanan" ? (
         <div className="w-full flex flex-col gap-5 p-5 bg-white rounded-lg">
           {/* Header */}
           <div className="flex gap-3 items-center">
@@ -391,10 +320,10 @@ const TabKegiatan = () => {
               }}
             />
             <p className="font-semibold text-[16px]">
-              {TabsValues === "TambahKegiatan"
-                ? "Tambah Kegiatan"
-                : TabsValues === "updateKegiatan"
-                ? "Edit Kegiatan"
+              {TabsValues === "TambahLayanan"
+                ? "Tambah Layanan"
+                : TabsValues === "updateLayanan"
+                ? "Edit Layanan"
                 : ""}
             </p>
           </div>
@@ -402,44 +331,32 @@ const TabKegiatan = () => {
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between overflow-auto max-h-[480px]">
             <div className="w-[45%] mb-5">
-              <label htmlFor="temaKegiatan">Tema</label>
+              <label htmlFor="titleLayanan">Title</label>
               <Input
-                value={temaKegiatan}
-                onChange={(e) => setTemaKegiatan(e.target.value)}
+                value={titleLayanan}
+                onChange={(e) => setTitleLayanan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                id="temaKegiatan"
-                placeholder="Masukkan Tema Kegiatan"
+                id="titleLayanan"
+                placeholder="Masukkan Title Layanan"
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="tjawabkegiatan">Penanggung Jawab</label>
+              <label htmlFor="subtitleLayanan">Sub Title</label>
               <Input
+                value={subTitleLayanan}
+                onChange={(e) => setSubTitleLayanan(e.target.value)}
+                className="mt-[5px]"
                 autoComplete="off"
-                value={penanggungJawabKegiatan}
-                onChange={(e) => setPenagunggJawabKegiatan(e.target.value)}
-                className="mt-[5px]  w-full"
-                id="tjawabkegiatan"
-                placeholder="Masukkan Penanggung Jawab Kegiatan"
-              />
-            </div>
-
-            <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="lokasiKegiatan">Lokasi</label>
-              <Input
-                value={lokasiKegiatan}
-                onChange={(e) => setLokasiKegiatan(e.target.value)}
-                className="mt-[5px] w-full"
-                autoComplete="off"
-                id="lokasiKegiatan"
-                placeholder="Masukkan Lokasi Kegiatan"
+                id="subtitleLayanan"
+                placeholder="Masukkan Sub Title Layanan"
               />
             </div>
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="divisiKegiatan">Divisi Kegiatan</label>
+              <label htmlFor="divisiLayanan">Divisi Layanan</label>
               {Divisis && Divisis?.data?.length > 0 ? (
                 <Select
-                  id="divisiKegiatan"
+                  id="divisiLayanan"
                   className="mt-[5px]"
                   value={divisiId ? divisiId : null}
                   placeholder="Pilih Divisi"
@@ -457,80 +374,69 @@ const TabKegiatan = () => {
             </div>
 
             <div className="w-[45%] mb-5 flex flex-col">
-              <label htmlFor="waktuKegiatan">Waktu</label>
+              <label htmlFor="waktuLayanan">Waktu</label>
 
               <Space direction="vertical" size={10}>
                 <DatePicker
                   className="w-full mt-2"
-                  value={waktuKegiatan ? dayjs(waktuKegiatan) : null}
+                  value={waktuLayanan ? dayjs(waktuLayanan) : null}
                   showTime
-                  id="waktuKegiatan"
+                  id="waktuLayanan"
                   onChange={onChange}
                   placeholder="Pilih Waktu"
                   onOk={onOk}
                 />
               </Space>
             </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="linkKegiatan">Link Kegiatan</label>
-              <Input
-                value={linkKegiatan}
-                onChange={(e) => setLinkKegiatan(e.target.value)}
-                className="mt-[5px]"
-                autoComplete="off"
-                id="linkKegiatan"
-                placeholder="Masukkan Link Kegiatan"
-              />
-            </div>
-            <div className="w-[45%] mb-5">
-              <label htmlFor="catatanKegiatan">Catatan</label>
+
+            <div className="w-[45%] mb-5 flex flex-col">
+              <label htmlFor="lokasiLayanan">Lokasi</label>
               <Input.TextArea
-                value={catatanKegiatan}
-                onChange={(e) => setCatatanKegiatan(e.target.value)}
+                value={lokasiLayanan}
+                onChange={(e) => setLokasiLayanan(e.target.value)}
+                className="mt-[5px] w-full"
+                autoComplete="off"
+                id="lokasiLayanan"
+                rows={3}
+                placeholder="Masukkan Lokasi Layanan"
+              />
+            </div>
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="informasiLayanan">Informasi</label>
+              <Input.TextArea
+                value={informasiLayanan}
+                onChange={(e) => setInformasiLayanan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                rows={5}
-                id="catatanKegiatan"
-                placeholder="Masukkan Catatan Kegiatan"
+                rows={3}
+                id="informasiLayanan"
+                placeholder="Masukkan Informasi Layanan"
               />
             </div>
             <div className="w-[45%] mb-5">
-              <label htmlFor="deskripsiKegiatan">Deskripsi</label>
+              <label htmlFor="deskripsiLayanan">Deskripsi</label>
               <Input.TextArea
-                value={deskripsiKegiatan}
-                onChange={(e) => setDeskripsiKegiatan(e.target.value)}
+                value={deskripsiLayanan}
+                onChange={(e) => setDeskripsiLayanan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                rows={5}
-                id="deskripsiKegiatan"
-                placeholder="Masukkan Deskripsi Kegiatan"
+                rows={3}
+                id="deskripsiLayanan"
+                placeholder="Masukkan Deskripsi Layanan"
               />
             </div>
-            {/* <div className="w-[45%] mb-5">
-              <label htmlFor="gambarKegiatan">Gambar Kegiatan</label>
-              <ImgCrop rotationSlider>
-                <Upload
-                  id="gambarKegiatan"
-                  action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={onChangeGambar}
-                  onPreview={onPreview}
-                >
-                  {fileList.length === 0 && "+ Upload"}
-                </Upload>
-              </ImgCrop>
-            </div> */}
+
             <div className="w-[45%] mb-5">
               <label htmlFor="deskripsiGambar">Deskripsi Gambar</label>
               <Input.TextArea
-                value={deskripsiGambarKegiatan}
-                onChange={(e) => setDeskripsiGambarKegiatan(e.target.value)}
+                value={deskripsiGambarLayanan}
+                onChange={(e) => setDeskripsiGambarLayanan(e.target.value)}
                 className="mt-[5px]"
                 autoComplete="off"
-                rows={5}
+                rows={3}
                 id="deskripsiGambar"
-                placeholder="Masukkan Deskripsi Gambar Kegiatan"
+                placeholder="Masukkan Deskripsi Gambar Layanan"
               />
             </div>
 
@@ -549,10 +455,10 @@ const TabKegiatan = () => {
                 type="primary"
                 className="bg-primaryDark"
                 onClick={
-                  TabsValues === "TambahKegiatan"
+                  TabsValues === "TambahLayanan"
                     ? () => action()
-                    : TabsValues === "updateKegiatan"
-                    ? () => action(Kegiatan.data.id)
+                    : TabsValues === "updateLayanan"
+                    ? () => action(Layanan.data.id)
                     : null
                 }
               >
@@ -565,7 +471,7 @@ const TabKegiatan = () => {
         <div className="w-full flex flex-col gap-5">
           <div className="w-full flex justify-between">
             <Search
-              placeholder="Masukkan Nama/Telepon"
+              placeholder="Masukkan Title Layanan"
               onSearch={handleSearch}
               style={{
                 width: 400,
@@ -576,25 +482,25 @@ const TabKegiatan = () => {
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
                 onClick={() => {
-                  handleChangeTabs("TambahKegiatan");
+                  handleChangeTabs("TambahLayanan");
                   fetchData();
                 }}
               >
-                Kegiatan
+                Layanan
               </Button>
             </Tooltip>
           </div>
           <div>
             <Table
-              columns={ColumsKegiatan}
+              columns={ColumsLayanan}
               size="small"
-              dataSource={Kegiatans.data}
+              dataSource={Layanans.data}
               pagination={false}
               scroll={{
                 y: 480,
-                x: 2000,
+                x: 3000,
               }}
-              rowKey={Kegiatans.id}
+              rowKey={Layanans.id}
             />
           </div>
           <div>
@@ -615,4 +521,4 @@ const TabKegiatan = () => {
   );
 };
 
-export default TabKegiatan;
+export default TabLayanan;

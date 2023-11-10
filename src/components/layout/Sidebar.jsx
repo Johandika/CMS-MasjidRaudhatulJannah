@@ -112,7 +112,7 @@ const Sidebar = () => {
             return (
               <div
                 key={index}
-                className="text-white text-md  font-poppins px-3 py-2 cursor-pointer hover:bg-[#041059] hover:rounded-lg  flex items-center gap-3 "
+                className="text-white text-md  font-poppins px-3 py-2 cursor-pointer hover:bg-primaryDark hover:rounded-lg  flex items-center gap-3 "
                 onClick={() => {
                   message.loading("Loading...", 1, () => {
                     localStorage.clear();

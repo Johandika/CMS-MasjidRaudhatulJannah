@@ -4,6 +4,7 @@ const ModalColumn = (title, dataField, showModal) => {
   return {
     title: title,
     align: "center",
+    width: 250,
     render: (data) => {
       const content = data[dataField];
 

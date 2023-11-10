@@ -1,8 +1,14 @@
 import axios from "axios";
 import { config } from "../../configs";
 
-export function getAllLayanan() {
+export function getAllLayanan(search) {
   return async (dispatch) => {
+    let queryParams = {};
+
+    if (search) {
+      queryParams.search = search;
+    }
+
     try {
       const { data } = await axios({
         url: `${config.api_host_dev}/layanan`,
@@ -10,6 +16,7 @@ export function getAllLayanan() {
         headers: {
           apikey: `${config.api_key}`,
         },
+        params: queryParams,
       });
 
       dispatch({
