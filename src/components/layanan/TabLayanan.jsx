@@ -52,6 +52,7 @@ import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
 import { formatWaktuArtikel } from "../utils/date";
 
 import ModalsColumn from "../modals/ModalsColumn";
+import UploadFile from "../modals/upload";
 
 const TabLayanan = () => {
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const TabLayanan = () => {
   let [informasiLayanan, setInformasiLayanan] = useState("");
   let [deskripsiLayanan, setDeskripsiLayanan] = useState("");
   let [divisiId, setDivisiId] = useState("");
-  // let [fileList, setFileList] = useState([]);
+  let [gambarLayanan, setGambarLayanan] = useState([]);
   let [deskripsiGambarLayanan, setDeskripsiGambarLayanan] = useState("");
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const TabLayanan = () => {
     setInformasiLayanan(Layanan?.data?.informasi);
     setDeskripsiLayanan(Layanan?.data?.deskripsi);
     setDivisiId(Layanan?.data?.DivisiId);
-    // setFileList(Layanan?.data?.gambar_Layanan);
+    setGambarLayanan(Layanan?.data?.gambar_layanan);
     setDeskripsiGambarLayanan(Layanan?.data?.deskripsi_gambar);
   }, [Layanan, TabsValues]);
 
@@ -95,6 +96,7 @@ const TabLayanan = () => {
     setLokasiLayanan("");
     setInformasiLayanan("");
     setDeskripsiLayanan("");
+    setGambarLayanan([]);
     setDivisiId("");
     setDeskripsiGambarLayanan("");
   };
@@ -109,6 +111,7 @@ const TabLayanan = () => {
       deskripsi: deskripsiLayanan,
       DivisiId: divisiId,
       deskripsi_gambar: deskripsiGambarLayanan,
+      gambar_layanan: gambarLayanan[0].originFileObj,
     };
 
     dispatch(id ? updateLayanan(id, dataLayanan) : createLayanan(dataLayanan))
@@ -329,7 +332,7 @@ const TabLayanan = () => {
           </div>
 
           {/* Inputan */}
-          <div className="w-full flex flex-wrap justify-between overflow-auto max-h-[480px]">
+          <div className="w-full flex flex-wrap justify-between overflow-auto max-h-[470px] pb-5">
             <div className="w-[45%] mb-5">
               <label htmlFor="titleLayanan">Title</label>
               <Input
@@ -387,6 +390,17 @@ const TabLayanan = () => {
                   onOk={onOk}
                 />
               </Space>
+            </div>
+
+            <div className="w-[45%] mb-5">
+              <label htmlFor="deskripsiGambar">Gambar</label>
+              <UploadFile
+                setValue={setGambarLayanan}
+                title={"Gambar"}
+                value={gambarLayanan}
+                single={true}
+                key={"wd"}
+              />
             </div>
 
             <div className="w-[45%] mb-5 flex flex-col">
