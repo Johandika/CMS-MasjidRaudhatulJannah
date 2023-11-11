@@ -63,8 +63,8 @@ const Login = () => {
 
         <div className="flex flex-col justify-center flex-1 gap-5">
           <div>
-            <p className="text-2xl font-bold mt-5 text-Green">Masuk</p>
-            <p className="font-light text-gray-500">
+            <h1 className="text-2xl font-bold text-Green">Masuk</h1>
+            <p className="text-sm text-gray-500">
               Silahkan masukkan e-mail dan password anda.
             </p>
           </div>
@@ -75,7 +75,7 @@ const Login = () => {
                 {/* Email */}
                 <label
                   htmlFor="email"
-                  className=" text-slate-500"
+                  className=" text-slate-500 text-sm"
                 >
                   E-mail
                 </label>
@@ -95,7 +95,7 @@ const Login = () => {
                 {/* Password */}
                 <label
                   htmlFor="password"
-                  className=" text-slate-500"
+                  className=" text-slate-500 text-sm"
                 >
                   Password
                 </label>
@@ -129,7 +129,7 @@ const Login = () => {
               <p className="font-light text-sm ">
                 Belum Punya Akun?{" "}
                 <span
-                  className="text-sky-900  cursor-pointer font-semibold"
+                  className="text-Green hover:text-blue-500 transition  cursor-pointer font-semibold"
                   onClick={() => {
                     navigate("/register");
                   }}
