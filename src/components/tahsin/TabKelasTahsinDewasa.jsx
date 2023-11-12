@@ -162,13 +162,14 @@ const TabKelasTahsinDewasa = () => {
         return data.kuota;
       },
     },
-    {
-      title: "Tipe Kelas",
-      align: "center",
-      render: (data) => {
-        return data.tipe_kelas;
-      },
-    },
+    // Hidden dulu pertimbangan untuk buat tab akhwat baru
+    // {
+    //   title: "Tipe Kelas",
+    //   align: "center",
+    //   render: (data) => {
+    //     return data.tipe_kelas;
+    //   },
+    // },
     {
       title: "Status Aktif",
       align: "center",
@@ -408,7 +409,8 @@ const TabKelasTahsinDewasa = () => {
               />
             </div>
 
-            <div className="w-[45%] mb-5">
+            {/* Sementara di matikan dlu karena kyaknya lebih bagus Akhwat di jadikan tab sendiri */}
+            {/* <div className="w-[45%] mb-5">
               <label htmlFor="tipeKelasDewasa">Tipe Kelas Tahsin</label>
               <Input
                 className="mt-[5px]"
@@ -418,7 +420,7 @@ const TabKelasTahsinDewasa = () => {
                 placeholder="Masukkan Tipe Kelas Tahsin"
                 onChange={(e) => setTipeKelasDewasa(e.target.value)}
               />
-            </div>
+            </div> */}
           </div>
           <div className="flex gap-3 justify-end">
             <Button

@@ -43,7 +43,7 @@ const Hari = [
   { id: 1, nama: "Senin" },
   { id: 2, nama: "Selasa" },
   { id: 3, nama: "Rabu" },
-  { id: 4, nama: "kamis" },
+  { id: 4, nama: "Kamis" },
   { id: 5, nama: "Jum'at" },
   { id: 6, nama: "Sabtu" },
   { id: 7, nama: "Ahad" },

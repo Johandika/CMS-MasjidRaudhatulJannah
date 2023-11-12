@@ -154,7 +154,10 @@ const TabPesertaTahsinDewasa = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -167,7 +170,10 @@ const TabPesertaTahsinDewasa = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -176,7 +182,10 @@ const TabPesertaTahsinDewasa = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -227,7 +236,10 @@ const TabPesertaTahsinDewasa = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -236,7 +248,10 @@ const TabPesertaTahsinDewasa = () => {
 
         return (
           <div>
-            <Dropdown overlay={menu} trigger={["click"]}>
+            <Dropdown
+              overlay={menu}
+              trigger={["click"]}
+            >
               <a
                 className="ant-dropdown-link"
                 onClick={(e) => e.preventDefault()}
@@ -373,8 +388,11 @@ const TabPesertaTahsinDewasa = () => {
                   onChange={(value) => setKelasTahsinDewasa(value)}
                 >
                   {KelasTahsinDewasas?.data.map((kelas) => (
-                    <Option key={kelas?.id} value={kelas?.id}>
-                      {kelas?.kelas}
+                    <Option
+                      key={kelas?.id}
+                      value={kelas?.id}
+                    >
+                      {kelas?.kelas} - {kelas.Jadwal.hari}
                     </Option>
                   ))}
                 </Select>
@@ -419,7 +437,10 @@ const TabPesertaTahsinDewasa = () => {
               }}
             />
 
-            <Tooltip placement="top" title={"Tambahkan Peserta Tahsin Dewasa"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Peserta Tahsin Dewasa"}
+            >
               <Button
                 onClick={() => {
                   handleChangeTabs("TambahPesertaDewasa");
