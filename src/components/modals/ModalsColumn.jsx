@@ -8,8 +8,8 @@ const ModalColumn = (title, dataField, showModal) => {
     render: (data) => {
       const content = data[dataField];
 
-      if (content.length > 30) {
-        const truncatedContent = content.substring(0, 35) + "…";
+      if (content?.length > 30) {
+        const truncatedContent = content.substring(0, 90) + "…";
         return (
           <span>
             <span

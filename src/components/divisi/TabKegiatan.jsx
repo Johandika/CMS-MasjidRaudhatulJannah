@@ -179,6 +179,7 @@ const TabKegiatan = () => {
     {
       title: "Lokasi Kegiatan",
       align: "center",
+      width: 300,
       render: (data) => {
         return data.lokasi;
       },
@@ -189,6 +190,8 @@ const TabKegiatan = () => {
     ModalsColumn("Deskripsi Gambar", "deskripsi_gambar", showModal),
     {
       title: "Headline",
+      width: 200,
+
       align: "center",
       render: (data) => {
         const handleHeadline = (headline) => {
@@ -206,17 +209,26 @@ const TabKegiatan = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleHeadline(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleHeadline(true)}
+            >
               Aktif
             </Menu.Item>
-            <Menu.Item key="tidak-aktif" onClick={() => handleHeadline(false)}>
+            <Menu.Item
+              key="tidak-aktif"
+              onClick={() => handleHeadline(false)}
+            >
               Tidak Aktif
             </Menu.Item>
           </Menu>
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -225,7 +237,10 @@ const TabKegiatan = () => {
                 {data.headline ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -237,6 +252,8 @@ const TabKegiatan = () => {
     },
     {
       title: "Status Aktif",
+      width: 200,
+
       align: "center",
       render: (data) => {
         const handleStatusChange = (newStatus) => {
@@ -256,7 +273,10 @@ const TabKegiatan = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -269,7 +289,10 @@ const TabKegiatan = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -278,7 +301,10 @@ const TabKegiatan = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -328,7 +354,10 @@ const TabKegiatan = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -336,7 +365,10 @@ const TabKegiatan = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -446,7 +478,10 @@ const TabKegiatan = () => {
                   onChange={(value) => setDivisiId(value)}
                 >
                   {Divisis?.data.map((div) => (
-                    <Option key={div?.id} value={div?.id}>
+                    <Option
+                      key={div?.id}
+                      value={div?.id}
+                    >
                       {div?.nama}
                     </Option>
                   ))}
@@ -459,7 +494,10 @@ const TabKegiatan = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="waktuKegiatan">Waktu</label>
 
-              <Space direction="vertical" size={10}>
+              <Space
+                direction="vertical"
+                size={10}
+              >
                 <DatePicker
                   className="w-full mt-2"
                   value={waktuKegiatan ? dayjs(waktuKegiatan) : null}
@@ -571,7 +609,10 @@ const TabKegiatan = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Kegaitan"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Kegaitan"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"

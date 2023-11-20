@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import ModalsColumn from "../modals/ModalsColumn";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -10,6 +10,7 @@ import {
   InputNumber,
   Menu,
   Dropdown,
+  Modal,
 } from "antd";
 import {
   PlusOutlined,
@@ -17,7 +18,6 @@ import {
   EditOutlined,
   DeleteOutlined,
   DownCircleOutlined,
-  PlusCircleOutlined,
 } from "@ant-design/icons";
 const { Search } = Input;
 
@@ -33,6 +33,7 @@ import ubahFormatDate from "../../components/utils/date";
 import { setTabsValue } from "../../store/action/tabs";
 import Swal from "sweetalert2";
 import numberWithCommas from "../../helper/numberWithCommas";
+import { useState, useEffect } from "react";
 
 const TabRekening = () => {
   const dispatch = useDispatch();
@@ -45,12 +46,20 @@ const TabRekening = () => {
   let [saldo, setSaldo] = useState(null);
   let [catatan, setCatatan] = useState("");
   let [namaBank, setNamaBank] = useState(null);
-
   let [total, setTotal] = useState(null);
   let [waktu, setWaktu] = useState(null);
   let [keterangan, setKeterangan] = useState("");
   let [informasi, setInformasi] = useState("");
   let [rekeningDonasi, setRekeningDonasi] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+
+  const showModal = (content, title) => {
+    setModalContent(content);
+    setModalTitle(title);
+    setIsModalVisible(true);
+  };
 
   const handleUangMasukSubmit = (uangMasukData) => {
     dispatch(createUangMasuk(uangMasukData))
@@ -145,14 +154,7 @@ const TabRekening = () => {
         return data.nomor_rekening;
       },
     },
-    {
-      width: 200,
-      title: "Catatan",
-      align: "center",
-      render: (data) => {
-        return data.catatan;
-      },
-    },
+    ModalsColumn("Catatan", "catatan", showModal),
     {
       width: 200,
       title: "Saldo",
@@ -211,7 +213,10 @@ const TabRekening = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -219,7 +224,10 @@ const TabRekening = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -355,7 +363,10 @@ const TabRekening = () => {
                 }}
               />
 
-              <Tooltip placement="top" title={"Tambahkan Rekening Baru"}>
+              <Tooltip
+                placement="top"
+                title={"Tambahkan Rekening Baru"}
+              >
                 <Button
                   icon={<PlusOutlined />}
                   className="bg-primaryLight text-white"
@@ -379,6 +390,18 @@ const TabRekening = () => {
                 }}
                 rowKey={Rekenings.id}
               />
+            </div>
+            <div>
+              <Modal
+                title={modalTitle}
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+              >
+                <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                  {modalContent}
+                </div>
+              </Modal>
             </div>
           </div>
         </div>
