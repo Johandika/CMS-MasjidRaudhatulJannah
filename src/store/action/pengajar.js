@@ -26,6 +26,8 @@ export function getAllPengajar(search) {
         type: "Fetch/GetAllPengajar",
         payload: data,
       });
+
+
     } catch (error) {
       console.error(error);
     }
@@ -104,6 +106,8 @@ export function updateStatusPengajar(id, status) {
       });
 
       return data;
+
+      getAllPengajar()
     } catch (error) {
       return error;
     }
