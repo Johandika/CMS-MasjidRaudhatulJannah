@@ -51,11 +51,18 @@ export function getOneKegiatan(id) {
 export function createKegiatan(body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/kegiatan`,
         method: "POST",
-        data: body,
+        data: formData,
         headers: {
+          "Content-Type": "multipart/form-data",
           authorization: localStorage.getItem("authorization"),
         },
       });
@@ -70,12 +77,19 @@ export function createKegiatan(body) {
 export function updateKegiatan(id, body) {
   return async (dispatch) => {
     try {
+      const formData = new FormData();
+
+      for (const key in body) {
+        formData.append(key, body[key]);
+      }
+
       const { data } = await axios({
         url: `${config.api_host_dev}/kegiatan/${id}`,
         method: "PATCH",
-        data: body,
+        data: formData,
         headers: {
           authorization: localStorage.getItem("authorization"),
+          "Content-Type": "multipart/form-data",
         },
       });
 

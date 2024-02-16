@@ -98,8 +98,6 @@ const TabDiklat = () => {
   };
 
   const actionDiklat = (id) => {
-    console.log("posterDiklat", posterDiklat);
-
     let dataDiklat = {
       tema: tema,
       waktu: waktu,

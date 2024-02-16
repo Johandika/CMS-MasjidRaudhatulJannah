@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
@@ -28,11 +28,12 @@ import {
 
 import {
   PlusOutlined,
-  InfoCircleOutlined,
+  UploadOutlined,
   ArrowLeftOutlined,
   EditOutlined,
   DeleteOutlined,
   DownCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 
 const { Search } = Input;
@@ -50,9 +51,12 @@ import {
 import { getAllDivisi, getOneDivisi } from "../../store/action/divisi";
 import { formatWaktuArtikel } from "../utils/date";
 import ModalsColumn from "../modals/ModalsColumn";
+import { config } from "../../configs";
+import formatPathGambar from "../utils/formatGambar";
 
 const TabKegiatan = () => {
   const dispatch = useDispatch();
+  const target = useRef(null);
 
   const { TabsValues } = useSelector((state) => state.TabsReducer);
   const { Divisis, Divisi } = useSelector((state) => state.DivisiReducer);
@@ -68,6 +72,8 @@ const TabKegiatan = () => {
   let [divisiId, setDivisiId] = useState("");
   // let [fileList, setFileList] = useState([]);
   let [deskripsiGambarKegiatan, setDeskripsiGambarKegiatan] = useState("");
+  let [showNamaPoster, setShowNamaPoster] = useState(null);
+  let [posterKegiatan, setPosterKegiatan] = useState(null);
 
   useEffect(() => {
     dispatch(getAllKegiatan());
@@ -84,6 +90,7 @@ const TabKegiatan = () => {
     setLinkKegiatan(Kegiatan?.data?.link);
     setDivisiId(Kegiatan?.data?.DivisiId);
     // setFileList(Kegiatan?.data?.gambar_kegiatan);
+    setPosterKegiatan(Kegiatan?.data?.gambar_kegiatan || null);
     setDeskripsiGambarKegiatan(Kegiatan?.data?.deskripsi_gambar);
   }, [Kegiatan, TabsValues]);
 
@@ -112,6 +119,7 @@ const TabKegiatan = () => {
       link: linkKegiatan,
       headline: false,
       DivisiId: divisiId,
+      gambar_kegiatan: posterKegiatan,
       deskripsi_gambar: deskripsiGambarKegiatan,
       // gambar_kegiatan: fileList,
     };
@@ -141,6 +149,32 @@ const TabKegiatan = () => {
   const handleSearch = async (value) => {
     await dispatch(getAllKegiatan(value));
   };
+
+  const handleFileChange = async (e) => {
+    const uploaded = e?.target?.files[0];
+    setShowNamaPoster(uploaded?.name);
+
+    if (
+      uploaded?.type === "image/jpg" ||
+      uploaded?.type === "image/png" ||
+      uploaded?.type === "image/jpeg"
+    ) {
+      var size = parseFloat(e.target.files[0].size / 3145728).toFixed(2);
+      if (size > 5) {
+        alert("File kebesaran, size maximal 5MB");
+      } else {
+        setPosterKegiatan(uploaded);
+      }
+    } else {
+      alert("Anda harus menginput file jpg/jpeg/png");
+    }
+  };
+
+  const handleClearFile = () => {
+    setShowNamaPoster(null);
+    setPosterKegiatan(null);
+  };
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [modalTitle, setModalTitle] = useState("");
@@ -152,6 +186,40 @@ const TabKegiatan = () => {
   };
 
   const ColumsKegiatan = [
+    {
+      width: 200,
+      align: "center",
+      title: "Poster Kegiatan",
+      render: (data) => {
+        if (data.gambar_kegiatan) {
+          return (
+            <div className="flex justify-center items-center">
+              <img
+                alt={`foto ${data.tema}`}
+                src={`${config.api_host_dev}/${formatPathGambar(
+                  data.gambar_kegiatan
+                )}`}
+                className=" w-16 h-16 rounded-lg object-cover border-2 border-gray-100 shadow-md "
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div className="flex justify-center items-center">
+              <div
+                alt={`foto ${data.tema}`}
+                className="w-16 h-16 rounded-lg border-2 bg-slate-50 border-gray-100
+              shadow-md flex justify-center items-center"
+              >
+                <p className="text-center text-xs font-medium text-slate-400">
+                  Empty
+                </p>
+              </div>
+            </div>
+          );
+        }
+      },
+    },
     {
       title: "Tema",
       align: "center",
@@ -179,6 +247,7 @@ const TabKegiatan = () => {
     {
       title: "Lokasi Kegiatan",
       align: "center",
+      width: 300,
       render: (data) => {
         return data.lokasi;
       },
@@ -189,6 +258,7 @@ const TabKegiatan = () => {
     ModalsColumn("Deskripsi Gambar", "deskripsi_gambar", showModal),
     {
       title: "Headline",
+      width: 200,
       align: "center",
       render: (data) => {
         const handleHeadline = (headline) => {
@@ -206,17 +276,26 @@ const TabKegiatan = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleHeadline(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleHeadline(true)}
+            >
               Aktif
             </Menu.Item>
-            <Menu.Item key="tidak-aktif" onClick={() => handleHeadline(false)}>
+            <Menu.Item
+              key="tidak-aktif"
+              onClick={() => handleHeadline(false)}
+            >
               Tidak Aktif
             </Menu.Item>
           </Menu>
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -225,7 +304,10 @@ const TabKegiatan = () => {
                 {data.headline ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -237,6 +319,7 @@ const TabKegiatan = () => {
     },
     {
       title: "Status Aktif",
+      width: 200,
       align: "center",
       render: (data) => {
         const handleStatusChange = (newStatus) => {
@@ -256,7 +339,10 @@ const TabKegiatan = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -269,7 +355,10 @@ const TabKegiatan = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -278,7 +367,10 @@ const TabKegiatan = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -328,7 +420,10 @@ const TabKegiatan = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -336,7 +431,10 @@ const TabKegiatan = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -363,6 +461,7 @@ const TabKegiatan = () => {
   const onChangeGambar = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
   const onPreview = async (file) => {
     let src = file.url;
     if (!src) {
@@ -377,6 +476,7 @@ const TabKegiatan = () => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
+
   return (
     <div>
       {TabsValues === "TambahKegiatan" || TabsValues === "updateKegiatan" ? (
@@ -401,6 +501,37 @@ const TabKegiatan = () => {
 
           {/* Inputan */}
           <div className="w-full flex flex-wrap justify-between overflow-auto max-h-[480px]">
+            <div className="w-[45%] mb-5 flex flex-col gap-1">
+              <label htmlFor="uploadPosterKegiatan">Upload Poster</label>
+              <div className=" gap-2">
+                <Button
+                  icon={<UploadOutlined />}
+                  onClick={() => target.current.click()}
+                  id="uploadPosterKegiatan"
+                >
+                  Upload Poster
+                </Button>
+                {showNamaPoster !== null && (
+                  <div className="flex flex-row ">
+                    <div className="mr-3  text-primaryLight">
+                      {showNamaPoster}
+                    </div>
+                    <div className="text-red-500">
+                      <CloseCircleOutlined onClick={handleClearFile} />
+                    </div>
+                  </div>
+                )}
+                <input
+                  ref={target}
+                  multiple={false}
+                  type="file"
+                  name="poster_kegiatan"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  id="posterKegiatan"
+                />
+              </div>
+            </div>
             <div className="w-[45%] mb-5">
               <label htmlFor="temaKegiatan">Tema</label>
               <Input
@@ -446,7 +577,10 @@ const TabKegiatan = () => {
                   onChange={(value) => setDivisiId(value)}
                 >
                   {Divisis?.data.map((div) => (
-                    <Option key={div?.id} value={div?.id}>
+                    <Option
+                      key={div?.id}
+                      value={div?.id}
+                    >
                       {div?.nama}
                     </Option>
                   ))}
@@ -459,7 +593,10 @@ const TabKegiatan = () => {
             <div className="w-[45%] mb-5 flex flex-col">
               <label htmlFor="waktuKegiatan">Waktu</label>
 
-              <Space direction="vertical" size={10}>
+              <Space
+                direction="vertical"
+                size={10}
+              >
                 <DatePicker
                   className="w-full mt-2"
                   value={waktuKegiatan ? dayjs(waktuKegiatan) : null}
@@ -571,7 +708,10 @@ const TabKegiatan = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Kegaitan"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Kegaitan"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"

@@ -16,6 +16,7 @@ import {
   Menu,
   Dropdown,
   message,
+  Modal,
 } from "antd";
 
 import {
@@ -38,6 +39,7 @@ import {
   updateDivisi,
   updateStatusDivisi,
 } from "../../store/action/divisi";
+import ModalsColumn from "../modals/ModalsColumn";
 
 const TabDivisi = () => {
   const dispatch = useDispatch();
@@ -105,6 +107,16 @@ const TabDivisi = () => {
     await dispatch(getAllDivisi(value));
   };
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+
+  const showModal = (content, title) => {
+    setModalContent(content);
+    setModalTitle(title);
+    setIsModalVisible(true);
+  };
+
   const ColumsDivisi = [
     {
       title: "Nama",
@@ -137,13 +149,7 @@ const TabDivisi = () => {
         return data.catatan;
       },
     },
-    {
-      title: "deskripsi",
-      align: "center",
-      render: (data) => {
-        return data.deskripsi;
-      },
-    },
+    ModalsColumn("Deskripsi Divisi", "deskripsi", showModal),
     {
       title: "Status Aktif",
       align: "center",
@@ -161,7 +167,10 @@ const TabDivisi = () => {
 
         const menu = (
           <Menu className="w-28">
-            <Menu.Item key="aktif" onClick={() => handleStatusChange(true)}>
+            <Menu.Item
+              key="aktif"
+              onClick={() => handleStatusChange(true)}
+            >
               Aktif
             </Menu.Item>
             <Menu.Item
@@ -174,7 +183,10 @@ const TabDivisi = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <a
               className="ant-dropdown-link"
               onClick={(e) => e.preventDefault()}
@@ -183,7 +195,10 @@ const TabDivisi = () => {
                 {data.status_aktif ? (
                   <Tag color="success">Aktif</Tag>
                 ) : (
-                  <Tag color="error" style={{ color: "red" }}>
+                  <Tag
+                    color="error"
+                    style={{ color: "red" }}
+                  >
                     Tidak Aktif
                   </Tag>
                 )}
@@ -233,7 +248,10 @@ const TabDivisi = () => {
             <Menu.Item key="edit">
               <EditOutlined /> Edit
             </Menu.Item>
-            <Menu.Item key="delete" style={{ color: "red" }}>
+            <Menu.Item
+              key="delete"
+              style={{ color: "red" }}
+            >
               <DeleteOutlined />
               Hapus
             </Menu.Item>
@@ -241,7 +259,10 @@ const TabDivisi = () => {
         );
 
         return (
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown
+            overlay={menu}
+            trigger={["click"]}
+          >
             <div>
               <a
                 className="ant-dropdown-link"
@@ -375,7 +396,10 @@ const TabDivisi = () => {
                 width: 400,
               }}
             />
-            <Tooltip placement="top" title={"Tambahkan Divisi"}>
+            <Tooltip
+              placement="top"
+              title={"Tambahkan Divisi"}
+            >
               <Button
                 icon={<PlusOutlined />}
                 className="bg-primaryLight text-white"
@@ -400,6 +424,18 @@ const TabDivisi = () => {
               }}
               rowKey={Divisis.id}
             />
+          </div>
+          <div>
+            <Modal
+              title={modalTitle}
+              visible={isModalVisible}
+              onCancel={() => setIsModalVisible(false)}
+              footer={null}
+            >
+              <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {modalContent}
+              </div>
+            </Modal>
           </div>
         </div>
       )}
